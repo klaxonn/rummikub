@@ -65,13 +65,13 @@ function onMessageRecuConnectes(payload) {
 	var messageServeur = JSON.parse(payload.body);
 	switch(messageServeur.typeMessage) {
 		case 'CONNEXION':
-			messageRecuConnexionDeconnexion(messageServeur,'Joindre partie');
+			messageRecuConnexionDeconnexion(messageServeur);
 			break;
 		case 'MESSAGE_CHAT':
 			messageRecuMessageChat(messageServeur);
 			break;
 		case 'DECONNEXION':
-			messageRecuConnexionDeconnexion(messageServeur,'Créer partie');
+			messageRecuConnexionDeconnexion(messageServeur);
 			break;
 		case 'JOINDRE_PARTIE':
 			messageRecuJoindrePartie(messageServeur);
@@ -81,7 +81,7 @@ function onMessageRecuConnectes(payload) {
 	}
 }
 
-function messageRecuConnexionDeconnexion(messageServeur,texteBoutonJoindre){
+function messageRecuConnexionDeconnexion(messageServeur){
 	var listeConnectes = document.getElementById("connectes");
 	var listeJoueurs = document.getElementById("joueurs");
 
@@ -91,9 +91,13 @@ function messageRecuConnexionDeconnexion(messageServeur,texteBoutonJoindre){
 
 	effacerListeJoueurs(listeJoueurs);
 	if(stringListesJoueurs[1]){
-		document.getElementById("joindre").value = texteBoutonJoindre;
+		document.getElementById("joindre").value = 'Joindre partie';
 		mettreAJourListeJoueurs(stringListesJoueurs[1],listeJoueurs);
 	}
+    else {
+        document.getElementById("joindre").value = 'Créer partie';
+        document.getElementById("joindre").disabled = false;
+     }   
 }
 
 function messageRecuMessageChat(messageServeur){
