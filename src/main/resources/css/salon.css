@@ -1,0 +1,13 @@
+h1{
+  align-items: center;
+}
+
+#main-section {
+  display: flex;
+  flex-direction: row;
+}
+
+#listes-section > div {
+  display: flex;
+  flex-direction: column;
+}
