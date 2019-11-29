@@ -11,20 +11,35 @@
     </header>
     <main id="main-section">
       <div id="chat-section">
-          <textarea name="chat" rows="30" cols="80" disabled readonly></textarea>
-          <form class="" action="" method="post">
-            <label for="">Message :
-              <input type="text" name="message" value="">
-            </label>
-          </form>
+        <h2>Chat :</h2>
+        <div id="messages-section">
+          <li name="chat">
+            <ul><h3>Vincent: Salut!</h3></ul>
+            <ul><h3>Kate: привет!</h3></ul>
+          </li>
+        </div>
+        <form class="" action="" method="post">
+          <label for="message">Message :
+            <input type="text" name="message" value="">
+            <input type="button" name="envoyer" value="Envoyer message">
+          </label>
+        </form>
       </div>
       <div id="listes-section">
         <div id="connectes-section">
-          <textarea name="connectes" rows="10" cols="80" disabled readonly></textarea>
+          <h2>Connectés :</h2>
+          <li name="connectes">
+            <ul><h3>Vincent</h3></ul>
+            <ul><h3>Kate</h3></ul>
+          </li>
           <input type="button" name="joindre" value="Joindre la partie">
         </div>
         <div id="joueurs-sections">
-          <textarea name="joueurs" rows="8" cols="80" disabled readonly></textarea>
+          <h2>Joueurs :</h2>
+          <li name="connectes">
+            <ul><h3>Vincent</h3></ul>
+            <ul><h3>Kate</h3></ul>
+          </li>
           <input type="button" name="demarrer" value="Je suis prêt !">
         </div>
       </div>

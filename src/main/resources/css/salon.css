@@ -4,10 +4,26 @@ h1{
 
 #main-section {
   display: flex;
-  flex-direction: row;
+  justify-content: space-around;
 }
 
-#listes-section > div {
+#chat-section {
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
+}
+
+#messages-section {
+  flex:4 200px;
+  border: 1px solid black;
+}
+
+#listes-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+#listes-section li {
+  border: 1px solid black;
 }
