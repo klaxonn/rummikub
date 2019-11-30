@@ -1,29 +1,37 @@
-h1{
-  align-items: center;
-}
-
 #main-section {
   display: flex;
-  justify-content: space-around;
+  max-width: 800px;
 }
 
 #chat-section {
   display: flex;
+  flex:2;
+  margin-right: 100px;
   flex-direction: column;
-  justify-content: space-around;
-}
-
-#messages-section {
-  flex:4 200px;
-  border: 1px solid black;
 }
 
 #listes-section {
   display: flex;
+  flex:1;
   flex-direction: column;
-  justify-content: space-around;
+}
+
+#messages-section {
+  border: 1px solid black;
 }
 
 #listes-section li {
   border: 1px solid black;
+}
+
+#listes-section > div {
+  margin-bottom: 50px;
+}
+
+.message:nth-child(odd){
+  color: rgb(255,0,0);
+}
+
+.message:nth-child(even){
+  color: rgb(0,0,255);
 }
