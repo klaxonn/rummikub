@@ -1,40 +1,23 @@
-apply plugin: 'java'
-apply plugin: 'jacoco'
-apply plugin: 'application'
-
-
-mainClassName = 'Rummikub.Main'
-
-jar {
-  manifest {
-    attributes(
-      'Main-Class': 'Rummikub.Main'
-    )
-  }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.2.1.RELEASE")
     }
 }
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
 
 repositories {
-    jcenter()
-}
-
-allprojects {
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-        }
-    }
-}
-
-test {
-    useJUnitPlatform()
+    mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
-	testCompile 'org.mockito:mockito-core:3.1.0'		
+    compile("org.springframework.boot:spring-boot-starter-web")
+    testCompile 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+	testCompile 'org.mockito:mockito-core:3.1.0'
 }
-
