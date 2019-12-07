@@ -16,7 +16,7 @@ public class Joueur {
      * partie.
      */
     public static final int SCORE_MINIMUM_POUR_COMMENCER = 30;
-    private final String nomJoueur;
+    private String nomJoueur;
     private List<Jeton> listeJetons;
     private int totalPointsJoues;
     private boolean peutJouer;
@@ -28,6 +28,11 @@ public class Joueur {
      */
     public Joueur(String nom) {
         nomJoueur = nom;
+        peutJouer = false;
+        totalPointsJoues = 0;
+    }
+
+    public Joueur() {
         peutJouer = false;
         totalPointsJoues = 0;
     }
@@ -68,6 +73,10 @@ public class Joueur {
      */
     public String getNom() {
         return nomJoueur;
+    }
+
+    public void setNom(String nom) {
+        nomJoueur = nom;
     }
 
     /**

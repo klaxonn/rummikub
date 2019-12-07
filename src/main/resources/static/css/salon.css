@@ -10,22 +10,8 @@
   flex-direction: column;
 }
 
-#listes-section {
-  display: flex;
-  flex:1;
-  flex-direction: column;
-}
-
 #messages-section {
   border: 1px solid black;
-}
-
-#listes-section li {
-  border: 1px solid black;
-}
-
-#listes-section > div {
-  margin-bottom: 50px;
 }
 
 .message:nth-child(odd){

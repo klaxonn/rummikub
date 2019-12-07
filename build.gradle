@@ -17,7 +17,9 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    compile 'org.webjars:stomp-websocket:2.3.3'
     testCompile 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 	testCompile 'org.mockito:mockito-core:3.1.0'
 }
