@@ -9,7 +9,8 @@ function initialiser(){
 function seConnecter(){
 	nomJoueur = document.getElementById("nomJoueur").value.trim();
 	if(nomJoueur) {
-		var socket = new WebSocket("ws://localhost:12345/chat/");
+		//var socket = new WebSocket("wss://localhost:12345/chat/");
+		var socket = new SockJS('/ws');
 		clientStomp = Stomp.over(socket);
 		clientStomp.connect({}, onConnecte, onErreur);
 	}
@@ -20,7 +21,13 @@ function onConnecte() {
     clientStomp.send("chat.ajouterJoueur",
         {},
         JSON.stringify({nomJoueur: nomJoueur, type: 'JOIN'})
-    )
+    );
 }
 
-window.addEventListener("load","initialiser");
+function onMessageRecu() {
+}
+
+function onErreur(){
+}
+
+window.addEventListener("load",initialiser);
