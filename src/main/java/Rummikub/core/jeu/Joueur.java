@@ -32,11 +32,6 @@ public class Joueur {
         totalPointsJoues = 0;
     }
 
-    public Joueur() {
-        peutJouer = false;
-        totalPointsJoues = 0;
-    }
-
     /**
      * Initialise les jetons du joueur.
      *
@@ -73,10 +68,6 @@ public class Joueur {
      */
     public String getNom() {
         return nomJoueur;
-    }
-
-    public void setNom(String nom) {
-        nomJoueur = nom;
     }
 
     /**

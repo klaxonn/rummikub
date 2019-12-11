@@ -32,7 +32,7 @@ public class WebSocketEventListener {
             logger.info("User Disconnected : " + nomJoueur);
 
             Message message = new Message();
-            message.setType(Message.TypeMessage.LEAVE);
+            message.setTypeMessage(Message.TypeMessage.LEAVE);
             message.setJoueur(nomJoueur);
 
             messagingTemplate.convertAndSend("/topic/public", message);

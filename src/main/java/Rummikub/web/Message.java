@@ -11,11 +11,11 @@ public class Message {
         LEAVE
     }
 
-    public TypeMessage getType() {
+    public TypeMessage getTypeMessage() {
         return typeMessage;
     }
 
-    public void setType(TypeMessage typeMessage) {
+    public void setTypeMessage(TypeMessage typeMessage) {
         this.typeMessage = typeMessage;
     }
 
