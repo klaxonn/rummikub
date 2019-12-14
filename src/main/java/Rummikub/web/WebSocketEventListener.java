@@ -18,25 +18,25 @@ public class WebSocketEventListener {
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
-    @EventListener
-    public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        logger.info("Received a new web socket connection");
-    }
 
-    @EventListener
+	@EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
         String nomJoueur = (String) headerAccessor.getSessionAttributes().get("nomJoueur");
         if(nomJoueur != null) {
-            logger.info("User Disconnected : " + nomJoueur);
+            logger.info("Joueur déconnecté : " + nomJoueur);
 
+			ListeJoueurs.retirerJoueur(nomJoueur);
+
+        	logger.info("Nombre de joueurs dans partie" + ListeJoueurs.nombreJoueursPrets());
             Message message = new Message();
-            message.setTypeMessage(Message.TypeMessage.LEAVE);
+            message.setTypeMessage(Message.TypeMessage.DECONNEXION);
             message.setJoueur(nomJoueur);
+			String listeJoueurs = ListeJoueurs.getJoueursConnectes();
+			message.setMessage(listeJoueurs);
 
-            messagingTemplate.convertAndSend("/topic/public", message);
+            messagingTemplate.convertAndSend("/joueursConnectes", message);
         }
     }
 }
-

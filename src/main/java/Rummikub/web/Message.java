@@ -6,9 +6,10 @@ public class Message {
     private String joueur;
 
     public enum TypeMessage {
-        CHAT,
-        JOIN,
-        LEAVE
+        MESSAGE_CHAT,
+        CONNEXION,
+		DECONNEXION,
+		JOINDRE_PARTIE
     }
 
     public TypeMessage getTypeMessage() {
