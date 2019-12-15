@@ -29,14 +29,19 @@ public class WebSocketEventListener {
 
 			ListeJoueurs.retirerJoueur(nomJoueur);
 
-        	logger.info("Nombre de joueurs dans partie" + ListeJoueurs.nombreJoueursPrets());
-            Message message = new Message();
-            message.setTypeMessage(Message.TypeMessage.DECONNEXION);
-            message.setJoueur(nomJoueur);
-			String listeJoueurs = ListeJoueurs.getJoueursConnectes();
-			message.setMessage(listeJoueurs);
-
-            messagingTemplate.convertAndSend("/joueursConnectes", message);
+			String listeJoueursConnectes = ListeJoueurs.getJoueursConnectes();
+			String listeJoueursPrets = ListeJoueurs.getJoueursPrets();
+			String listeAEnvoyer = listeJoueursConnectes + "," + listeJoueursPrets;
+        	logger.info("Liste des listes" + listeAEnvoyer);
+			envoiMessage(nomJoueur,listeAEnvoyer); 
         }
     }
+	
+	private void envoiMessage(String nomJoueur, String listeJoueurs){
+		Message message = new Message();
+        message.setTypeMessage(Message.TypeMessage.DECONNEXION);
+        message.setJoueur(nomJoueur);
+		message.setMessage(listeJoueurs);
+		messagingTemplate.convertAndSend("/joueursConnectes", message);
+	}
 }

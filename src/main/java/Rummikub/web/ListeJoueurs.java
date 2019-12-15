@@ -3,6 +3,7 @@ package Rummikub.web;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 import Rummikub.core.jeu.Joueur;
 
 public class ListeJoueurs {
@@ -19,6 +20,15 @@ public class ListeJoueurs {
 
 	public static String getJoueursConnectes() {
 		return listeJoueurs.keySet().toString();
+	}
+
+	public static String getJoueursPrets(){
+		String chaine = "";
+		chaine = listeJoueurs.keySet().stream()
+							 .filter(i ->listeJoueurs.get(i).equals(true))
+							 .collect(Collectors.toSet())
+							 .toString();
+		return chaine;
 	}
 
 	public static void setJoueurPret(String nomJoueur) {

@@ -39,7 +39,7 @@ public class ControleurChat {
                                SimpMessageHeaderAccessor headerAccessor) {
 		String listeJoueurs = ListeJoueurs.getJoueursConnectes();
 		message.setMessage(listeJoueurs);
-        logger.info("Liste des joueurs : " + listeJoueurs);
+        logger.info("Liste des joueurs connectés : " + listeJoueurs);
         return message;
     }
 
@@ -47,6 +47,9 @@ public class ControleurChat {
     @SendTo("/joueursConnectes")
     public Message ajouterJoueurPartie(@Payload Message message) {
 		ListeJoueurs.setJoueurPret(message.getJoueur());
+		String listeJoueurs = ListeJoueurs.getJoueursPrets();
+		logger.info("Liste des joueurs prêts : " + listeJoueurs);
+		message.setMessage(listeJoueurs);
         return message;
     }
 }

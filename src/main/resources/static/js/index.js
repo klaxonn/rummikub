@@ -49,7 +49,8 @@ function onErreur() {
 function onMessageRecuConnectes(payload) {
 	var messageServeur = JSON.parse(payload.body);
 	if(messageServeur.typeMessage === 'CONNEXION') {
-		mettreAJourListeJoueursConnectes(messageServeur);
+		var listeConnectes = document.getElementById("connectes");
+		mettreAJourListeJoueurs(messageServeur.message,listeConnectes);
 	}
 	else if(messageServeur.typeMessage === 'MESSAGE_CHAT') {
 		var listeMessagesElement = document.getElementById("chat");
@@ -58,30 +59,36 @@ function onMessageRecuConnectes(payload) {
 		messageElement.appendChild(document.createTextNode(messageDansChat));
 		listeMessagesElement.appendChild(messageElement);
 	}
-
 	else if(messageServeur.typeMessage === 'DECONNEXION') {
-		mettreAJourListeJoueursConnectes(messageServeur);
+		var listeConnectes = document.getElementById("connectes");
+		var listeJoueurs = document.getElementById("joueurs");
+		var arrayListesJoueurs = messageServeur.message.split(",");
+
+		mettreAJourListeJoueurs(arrayListesJoueurs[0],listeConnectes);
+		mettreAJourListeJoueurs(arrayListesJoueurs[1],listeJoueurs);
 	}
+	else if(messageServeur.typeMessage === 'JOINDRE_PARTIE') {
+		var listeJoueurs = document.getElementById("joueurs");
+		mettreAJourListeJoueurs(messageServeur.message,listeJoueurs);
+	}
+
 }
 
-function mettreAJourListeJoueursConnectes(messageServeur){
-
-	var listeConnectes = document.getElementById("connectes");
+function mettreAJourListeJoueurs(listeJoueurs,liste){
 
 	//On supprime les joueurs dans la liste
-	while (listeConnectes.firstChild) {
-    	listeConnectes.firstChild.remove();
+	while (liste.firstChild) {
+    	liste.firstChild.remove();
 	}
 
 	//On ajoute la liste des joueurs reçus
-	var listeJoueurs = messageServeur.message;
 	listeJoueurs = listeJoueurs.slice(1,-1);
 	var arrayListeJoueurs = listeJoueurs.split(",");
 	for (var i=0; i < arrayListeJoueurs.length; i++){
 		var nomJoueurListe = arrayListeJoueurs[i];
 		var joueurElement = document.createElement("li");
 		joueurElement.appendChild(document.createTextNode(nomJoueurListe));
-		listeConnectes.appendChild(joueurElement);
+		liste.appendChild(joueurElement);
 	}
 }
 
