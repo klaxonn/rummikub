@@ -9,7 +9,8 @@ public class Message {
         MESSAGE_CHAT,
         CONNEXION,
 		DECONNEXION,
-		JOINDRE_PARTIE
+		JOINDRE_PARTIE,
+		CREER_PARTIE
     }
 
     public TypeMessage getTypeMessage() {

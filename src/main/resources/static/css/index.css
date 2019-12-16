@@ -14,10 +14,14 @@
   border: 1px solid black;
 }
 
-.message:nth-child(odd){
+#chat:nth-child(odd){
   color: rgb(255,0,0);
 }
 
-.message:nth-child(even){
+#chat:nth-child(even){
   color: rgb(0,0,255);
+}
+
+#demarrer{
+	display: none;
 }

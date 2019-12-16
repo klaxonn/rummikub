@@ -44,12 +44,21 @@ public class ControleurChat {
     }
 
     @MessageMapping("/joindrePartie")
-    @SendTo("/joueursConnectes")
+    @SendTo("/JoueurAAjouter")
     public Message ajouterJoueurPartie(@Payload Message message) {
 		ListeJoueurs.setJoueurPret(message.getJoueur());
+		if(ListeJoueurs.nombreJoueursPrets() == 1){
+			message.setTypeMessage(Message.TypeMessage.CREER_PARTIE);
+		}
+        return message;
+    }
+    
+    @MessageMapping("/mettreAJourJoueursPrets")
+    @SendTo("/joueursConnectes")
+    public Message mettreAJourJoueursConnectes(@Payload Message message) {
 		String listeJoueurs = ListeJoueurs.getJoueursPrets();
-		logger.info("Liste des joueurs prêts : " + listeJoueurs);
 		message.setMessage(listeJoueurs);
+		logger.info("Liste des joueurs prêts : " + listeJoueurs);
         return message;
     }
 }

@@ -7,20 +7,19 @@ import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 @Component
-public class WebSocketEventListener {
+public class EvenementsWebSocket {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(EvenementsWebSocket.class);
 
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
 
 	@EventListener
-    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+    public void deconnexionWebSocket(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
         String nomJoueur = (String) headerAccessor.getSessionAttributes().get("nomJoueur");

@@ -1,6 +1,8 @@
 var clientStomp = null;
 var nomJoueur = null;
-var connexion = null;
+var canalConnexion = null;
+var canalJoindre = null;
+
 
 function initialiser(){
 	var boutonConnecter=document.getElementById("connecter");
@@ -21,7 +23,7 @@ function seConnecter(){
 }
 
 function onConnexion() {
-    connexion = clientStomp.subscribe('/connexionJoueur', onMessageRecuConnexion);
+    canalConnexion = clientStomp.subscribe('/connexionJoueur', onMessageRecuConnexion);
     clientStomp.send("/salon/ajouterJoueurConnecte",
         {},
         JSON.stringify({joueur: nomJoueur, typeMessage: 'CONNEXION'})
@@ -33,7 +35,7 @@ function onMessageRecuConnexion(payload) {
 	if(messageServeur.typeMessage === 'CONNEXION') {
 		//le serveur peut avoir changé le nom du joueur
 		nomJoueur = messageServeur.joueur;
-		connexion.unsubscribe();
+		canalConnexion.unsubscribe();
 		clientStomp.subscribe('/joueursConnectes', onMessageRecuConnectes);
 		clientStomp.send("/salon/mettreAJourJoueursConnectes",
         {},
@@ -71,7 +73,6 @@ function onMessageRecuConnectes(payload) {
 		var listeJoueurs = document.getElementById("joueurs");
 		mettreAJourListeJoueurs(messageServeur.message,listeJoueurs);
 	}
-
 }
 
 function mettreAJourListeJoueurs(listeJoueurs,liste){
@@ -108,6 +109,7 @@ function envoyerMessage(event) {
 
 function joindrePartie(event) {
     if(clientStomp) {
+		canalJoindre = clientStomp.subscribe('/JoueurAAjouter', onMessageRecuJoindrePartie);
         var messageServeurJoindre = {
             joueur: nomJoueur,
             typeMessage: 'JOINDRE_PARTIE'
@@ -115,6 +117,19 @@ function joindrePartie(event) {
         clientStomp.send("/salon/joindrePartie", {}, JSON.stringify(messageServeurJoindre));
     }
     event.preventDefault();
+}
+
+function onMessageRecuJoindrePartie(payload) {
+	var messageServeur = JSON.parse(payload.body);
+	if(messageServeur.typeMessage === 'CREER_PARTIE') {
+		var boutonDemarrer = document.getElementById("demarrer");
+		boutonDemarrer.style.display = "flex";
+	}
+	canalJoindre.unsubscribe();
+	clientStomp.send("/salon/mettreAJourJoueursPrets",
+		{},
+        JSON.stringify({joueur: nomJoueur, typeMessage: 'JOINDRE_PARTIE'})
+    );
 }
 
 window.addEventListener("load",initialiser);
