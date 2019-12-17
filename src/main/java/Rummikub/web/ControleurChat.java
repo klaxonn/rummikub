@@ -37,9 +37,12 @@ public class ControleurChat {
     @SendTo("/joueursConnectes")
     public Message mettreAJourJoueursConnectes(@Payload Message message, 
                                SimpMessageHeaderAccessor headerAccessor) {
-		String listeJoueurs = ListeJoueurs.getJoueursConnectes();
-		message.setMessage(listeJoueurs);
-        logger.info("Liste des joueurs connectés : " + listeJoueurs);
+		String listeAEnvoyer = ListeJoueurs.getJoueursConnectes();
+		if(ListeJoueurs.nombreJoueursPrets() > 0){
+			listeAEnvoyer += ";" + ListeJoueurs.getJoueursPrets();
+		}
+		message.setMessage(listeAEnvoyer);
+        logger.info("Liste des listes" + listeAEnvoyer);
         return message;
     }
 

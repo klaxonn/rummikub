@@ -30,7 +30,7 @@ public class EvenementsWebSocket {
 
 			String listeJoueursConnectes = ListeJoueurs.getJoueursConnectes();
 			String listeJoueursPrets = ListeJoueurs.getJoueursPrets();
-			String listeAEnvoyer = listeJoueursConnectes + "," + listeJoueursPrets;
+			String listeAEnvoyer = listeJoueursConnectes + ";" + listeJoueursPrets;
         	logger.info("Liste des listes" + listeAEnvoyer);
 			envoiMessage(nomJoueur,listeAEnvoyer); 
         }

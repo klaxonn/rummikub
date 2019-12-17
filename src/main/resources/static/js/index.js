@@ -52,7 +52,13 @@ function onMessageRecuConnectes(payload) {
 	var messageServeur = JSON.parse(payload.body);
 	if(messageServeur.typeMessage === 'CONNEXION') {
 		var listeConnectes = document.getElementById("connectes");
-		mettreAJourListeJoueurs(messageServeur.message,listeConnectes);
+		var listeJoueurs = document.getElementById("joueurs");
+		var arrayListesJoueurs = messageServeur.message.split(";");
+		mettreAJourListeJoueurs(arrayListesJoueurs[0],listeConnectes);
+		if(arrayListesJoueurs.length == 2){
+			mettreAJourListeJoueurs(arrayListesJoueurs[1],listeJoueurs);
+			document.getElementById("joindre").value = 'Joindre partie';
+		}
 	}
 	else if(messageServeur.typeMessage === 'MESSAGE_CHAT') {
 		var listeMessagesElement = document.getElementById("chat");
@@ -64,12 +70,13 @@ function onMessageRecuConnectes(payload) {
 	else if(messageServeur.typeMessage === 'DECONNEXION') {
 		var listeConnectes = document.getElementById("connectes");
 		var listeJoueurs = document.getElementById("joueurs");
-		var arrayListesJoueurs = messageServeur.message.split(",");
+		var arrayListesJoueurs = messageServeur.message.split(";");
 
 		mettreAJourListeJoueurs(arrayListesJoueurs[0],listeConnectes);
 		mettreAJourListeJoueurs(arrayListesJoueurs[1],listeJoueurs);
 	}
 	else if(messageServeur.typeMessage === 'JOINDRE_PARTIE') {
+		document.getElementById("joindre").value = 'Joindre partie';
 		var listeJoueurs = document.getElementById("joueurs");
 		mettreAJourListeJoueurs(messageServeur.message,listeJoueurs);
 	}
