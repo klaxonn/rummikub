@@ -1,4 +1,4 @@
-package rummikub.web;
+package Rummikub.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,12 +6,14 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class ControleurChat {
 		
 	private static final Logger logger = LoggerFactory.getLogger(ControleurChat.class);
+	private String nomJoueur;
 
     @MessageMapping("/envoyerMessageChat")
     @SendTo("/joueursConnectes")

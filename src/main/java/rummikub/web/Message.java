@@ -1,4 +1,4 @@
-package rummikub.web;
+package Rummikub.web;
 
 public class Message {
     private TypeMessage typeMessage;
