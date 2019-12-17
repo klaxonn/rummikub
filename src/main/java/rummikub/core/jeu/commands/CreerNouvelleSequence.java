@@ -1,9 +1,9 @@
-package Rummikub.core.jeu.commands;
+package rummikub.core.jeu.commands;
 
-import Rummikub.core.plateau.Plateau;
-import Rummikub.core.jeu.Joueur;
-import Rummikub.core.pieces.Jeton;
-import Rummikub.ihm.ControleurAbstrait;
+import rummikub.core.plateau.Plateau;
+import rummikub.core.jeu.Joueur;
+import rummikub.core.pieces.Jeton;
+import rummikub.ihm.ControleurAbstrait;
 import java.util.List;
 
 /**

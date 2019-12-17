@@ -1,10 +1,10 @@
-package Rummikub.core.jeu.commands;
+package rummikub.core.jeu.commands;
 
-import Rummikub.core.plateau.Plateau;
-import Rummikub.core.jeu.Joueur;
-import Rummikub.core.pieces.*;
-import Rummikub.ihm.ControleurAbstrait;
-import Rummikub.ihm.ControleurTexte;
+import rummikub.core.plateau.Plateau;
+import rummikub.core.jeu.Joueur;
+import rummikub.core.pieces.*;
+import rummikub.ihm.ControleurAbstrait;
+import rummikub.ihm.ControleurTexte;
 import java.util.List;
 import java.util.Arrays;
 import static org.mockito.Mockito.*;
@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DeplacerJetonTest {
 
     private Plateau plateau;
-    private Joueur joueur;
     private ControleurAbstrait controleur;
     private Command commande;
     private List<String> messages;
@@ -23,14 +22,13 @@ public class DeplacerJetonTest {
     @BeforeEach
     private void initialisation() {
         plateau = new Plateau();
-        joueur = new Joueur("Kate");
         Jeton jeton1 = new JetonNormal(1, Couleur.ROUGE);
         Jeton jeton2 = new JetonNormal(2, Couleur.ROUGE);
         Jeton jeton3 = new JetonNormal(3, Couleur.ROUGE);
         Jeton jeton4 = new JetonNormal(3, Couleur.JAUNE);
         Jeton jeton5 = new JetonNormal(3, Couleur.BLEU);
         controleur = mock(ControleurTexte.class);
-        commande = new DeplacerJeton(plateau, joueur, controleur);
+        commande = new DeplacerJeton(plateau, controleur);
         plateau.creerSequence(Arrays.asList(jeton1, jeton2, jeton3));
         plateau.creerSequence(Arrays.asList(jeton4, jeton5));
         messages = Arrays.asList("Numéro de la séquence qui contient le jeton : ",

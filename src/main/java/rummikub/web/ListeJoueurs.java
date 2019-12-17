@@ -1,15 +1,18 @@
-package Rummikub.web;
+package rummikub.web;
+
+import rummikub.core.jeu.Joueur;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
 import java.util.stream.Collectors;
-import Rummikub.core.jeu.Joueur;
 
-public class ListeJoueurs {
+public final class ListeJoueurs {
 
-	private static final HashMap<String,Boolean> listeJoueurs = new HashMap<>();
+	private static final Map<String,Boolean> listeJoueurs = new HashMap<>();
 	
+	private ListeJoueurs() {
+	}
+
 	public static String ajouterJoueurConnecte(String nomJoueur) {
 		if(listeJoueurs.containsKey(nomJoueur)){
 			 nomJoueur = nomJoueur + "-1";

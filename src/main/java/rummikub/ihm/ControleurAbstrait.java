@@ -1,7 +1,7 @@
-package Rummikub.ihm;
+package rummikub.ihm;
 
-import Rummikub.core.jeu.Joueur;
-import Rummikub.core.Actions;
+import rummikub.core.jeu.Joueur;
+import rummikub.core.Actions;
 import java.util.List;
 
 /**
@@ -14,62 +14,62 @@ public interface ControleurAbstrait {
     /**
      * Affiche une introduction avant le lancement d'une partie.
      */
-    public void afficherIntroduction();
+    void afficherIntroduction();
 
     /**
      * Retourne la liste des joueurs commençant la partie.
      * 
      * @return liste des joueurs
      */
-    public List<Joueur> listeDesJoueurs();
+    List<Joueur> listeDesJoueurs();
 
     /**
      * Affiche un message indicant le gagnant.
      *
      * @param joueur le gagnant
      */
-    public void afficherVictoireDe(Joueur joueur);
+    void afficherVictoireDe(Joueur joueur);
 
     /**
      * Affiche l'aide.
      *
      * Notamment les différentes actions possibles.
      */
-    public void afficherAide();
+    void afficherAide();
 
     /**
      * Change le joueur dont c'est le tour de jouer.
      * 
      * @param joueur le joueur courant
      */
-    public void changerJoueurCourant(Joueur joueur);
+    void changerJoueurCourant(Joueur joueur);
 
     /**
      * Affiche la partie en cours, dont le plateau et le joueur.
      *
      * @param plateau le plateau dans son état courant
      */
-    public void afficherPartie(String plateau);
+    void afficherPartie(String plateau);
 
     /**
      * Renvoie l'action choisie par le joueur.
      * @return l'action choisie par le joueur
      */
-    public Actions obtenirAction();
+    Actions obtenirAction();
 
     /**
      * Affiche un message au joueur en cours.
      *
      * @param message le message à envoyer
      */
-    public void afficherMessage(String message);
+    void afficherMessage(String message);
 
     /**
      * Renvoie la liste des index des jetons choisis pour créer une nouvelle
      * séquence.
      * @return la liste des index des jetons
      */
-    public List<Integer> obtenirListeJetons();
+    List<Integer> obtenirListeJetons();
 
     /**
      * Renvoie la liste des index répondant aux messages.
@@ -77,12 +77,12 @@ public interface ControleurAbstrait {
      * @param messages les questions pour accomplir les actions
      * @return la liste des réponses aux questions
      */
-    public List<Integer> obtenirIndexes(List<String> messages);
+    List<Integer> obtenirIndexes(List<String> messages);
 
     /**
      * Stoppe la partie quand un joueur abandonne.
      *
      * @param joueur le joueur qui a abandonné
      */
-    public void aQuittePartie(Joueur joueur);
+    void aQuittePartie(Joueur joueur);
 }

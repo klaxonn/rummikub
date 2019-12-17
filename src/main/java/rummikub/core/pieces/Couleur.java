@@ -1,4 +1,4 @@
-package Rummikub.core.pieces;
+package rummikub.core.pieces;
 
 /**
  * Couleurs possibles d'un jeton.

@@ -1,8 +1,8 @@
-package Rummikub.core.plateau;
+package rummikub.core.plateau;
 
-import Rummikub.core.pieces.Couleur;
-import Rummikub.core.pieces.Jeton;
-import Rummikub.core.pieces.JetonNormal;
+import rummikub.core.pieces.Couleur;
+import rummikub.core.pieces.Jeton;
+import rummikub.core.pieces.JetonNormal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;

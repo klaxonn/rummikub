@@ -1,10 +1,10 @@
-package Rummikub.core;
+package rummikub.core;
 
-import Rummikub.core.jeu.Joueur;
-import Rummikub.core.jeu.Pioche;
-import Rummikub.core.jeu.commands.*;
-import Rummikub.core.plateau.Plateau;
-import Rummikub.ihm.ControleurAbstrait;
+import rummikub.core.jeu.Joueur;
+import rummikub.core.jeu.Pioche;
+import rummikub.core.jeu.commands.*;
+import rummikub.core.plateau.Plateau;
+import rummikub.ihm.ControleurAbstrait;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,13 +84,13 @@ public class Partie {
                 executerAction(new AjouterJeton(plateau, joueurEnCours, controleur));
                 break;
             case FUSIONNER_SEQUENCES:
-                executerAction(new FusionnerSequences(plateau, joueurEnCours, controleur));
+                executerAction(new FusionnerSequences(plateau, controleur));
                 break;
             case COUPER_SEQUENCE:
-                executerAction(new CouperSequence(plateau, joueurEnCours, controleur));
+                executerAction(new CouperSequence(plateau, controleur));
                 break;
             case DEPLACER_JETON:
-                executerAction(new DeplacerJeton(plateau, joueurEnCours, controleur));
+                executerAction(new DeplacerJeton(plateau, controleur));
                 break;
             case REMPLACER_JOKER:
                 executerAction(new RemplacerJoker(plateau, joueurEnCours, controleur));
@@ -104,6 +104,9 @@ public class Partie {
             case ABANDONNER:
                 controleur.aQuittePartie(joueurEnCours);
                 break;
+            default:
+				controleur.afficherMessage("Action non reconnue");
+				break;
         }
     }
 

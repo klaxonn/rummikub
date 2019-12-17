@@ -1,8 +1,8 @@
-package Rummikub.core.plateau;
+package rummikub.core.plateau;
 
-import Rummikub.core.pieces.Couleur;
-import Rummikub.core.pieces.Jeton;
-import Rummikub.core.pieces.Joker;
+import rummikub.core.pieces.Couleur;
+import rummikub.core.pieces.Jeton;
+import rummikub.core.pieces.Joker;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +29,12 @@ class SequenceCouleur extends SequenceAbstraite {
     }
 
     @Override
-    public boolean IsCorrectSequence(List<Jeton> collectionJetons) {
+    public boolean isCorrectSequence(List<Jeton> collectionJetons) {
         if (collectionJetons.size() > Couleur.values().length) {
             return false;
-        } else if (collectionJetons.size() >= 1) {
+        } else if (!collectionJetons.isEmpty()) {
             int[] indexJokers = SequenceAbstraite.indexJokersSiExiste(collectionJetons);
-            for (int i = 0; i < indexJokers.length; i++) {
-                int indexJoker = indexJokers[i];
+            for (int indexJoker : indexJokers) {
                 Joker joker = (Joker) collectionJetons.get(indexJoker);
                 if (!joker.isUtilise()) {
                     initialiserJoker(collectionJetons, joker);
@@ -48,11 +47,11 @@ class SequenceCouleur extends SequenceAbstraite {
     }
 
     private void initialiserJoker(List<Jeton> collectionJetons, Joker joker) {
-        Couleur couleurJoker = calculerCouleurJoker(collectionJetons, joker);
+        Couleur couleurJoker = calculerCouleurJoker(collectionJetons);
         joker.setValeurAndCouleur(valeurDeSequence(collectionJetons), couleurJoker);
     }
 
-    private Couleur calculerCouleurJoker(List<Jeton> collectionJetons, Joker joker) {
+    private Couleur calculerCouleurJoker(List<Jeton> collectionJetons) {
         List<Couleur> couleursDansSequence = couleursDeLaSequence(collectionJetons);
         Couleur couleurJoker = null;
         for (Couleur couleurPossible : Couleur.values()) {

@@ -1,7 +1,7 @@
-package Rummikub.core.plateau;
+package rummikub.core.plateau;
 
-import Rummikub.core.pieces.Jeton;
-import Rummikub.core.pieces.Joker;
+import rummikub.core.pieces.Jeton;
+import rummikub.core.pieces.Joker;
 import java.util.ArrayList;
 import java.util.List;
 

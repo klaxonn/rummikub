@@ -1,4 +1,4 @@
-package Rummikub.core.jeu.commands;
+package rummikub.core.jeu.commands;
 
 /**
  * Représentation d'une commande agissant sur le plateau.
@@ -10,10 +10,10 @@ public interface Command {
      *
      * @return <code>true</code> si la commande a réussi
      */
-    public boolean doCommand();
+    boolean doCommand();
 
     /**
      * Annule les effets de la commande.
      */
-    public void undoCommand();
+    void undoCommand();
 }

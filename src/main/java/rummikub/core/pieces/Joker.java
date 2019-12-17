@@ -1,4 +1,4 @@
-package Rummikub.core.pieces;
+package rummikub.core.pieces;
 
 /**
  * Représentation d'un joker.
@@ -44,10 +44,7 @@ public class Joker extends Jeton {
      * @return <code>true</code> si le joker est utilisé
      */
     public boolean isUtilise() {
-        if (super.valeur == LIBRE) {
-            return false;
-        }
-        return true;
+        return super.valeur != LIBRE;
     }
 
     @Override

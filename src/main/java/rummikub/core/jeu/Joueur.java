@@ -1,6 +1,6 @@
-package Rummikub.core.jeu;
+package rummikub.core.jeu;
 
-import Rummikub.core.pieces.Jeton;
+import rummikub.core.pieces.Jeton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

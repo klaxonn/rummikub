@@ -1,7 +1,7 @@
-package Rummikub.ihm;
+package rummikub.ihm;
 
-import Rummikub.core.jeu.Joueur;
-import Rummikub.core.Actions;
+import rummikub.core.jeu.Joueur;
+import rummikub.core.Actions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -63,7 +63,7 @@ public class ControleurTexte implements ControleurAbstrait {
 
     @Override
     public void afficherPartie(String plateau) {
-        if (plateau.equals("")) {
+        if (plateau.isEmpty()) {
             System.out.println("\nPlateau vide\n");
         } else {
             System.out.println("\n" + "Plateau : \n" + plateau + "\n");

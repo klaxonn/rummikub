@@ -1,9 +1,9 @@
-package Rummikub.core.plateau;
+package rummikub.core.plateau;
 
-import Rummikub.core.pieces.Couleur;
-import Rummikub.core.pieces.Jeton;
-import Rummikub.core.jeu.Pioche;
-import Rummikub.core.pieces.Joker;
+import rummikub.core.pieces.Couleur;
+import rummikub.core.pieces.Jeton;
+import rummikub.core.jeu.Pioche;
+import rummikub.core.pieces.Joker;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,8 +31,8 @@ class Suite extends SequenceAbstraite {
     }
 
     @Override
-    public boolean IsCorrectSequence(List<Jeton> collectionJetons) {
-        if (collectionJetons.size() >= 1) {
+    public boolean isCorrectSequence(List<Jeton> collectionJetons) {
+        if (!collectionJetons.isEmpty()) {
             Collections.sort(collectionJetons);
             parcoursJokers(collectionJetons);
             return isMemeCouleur(collectionJetons) && isValeursASuite(collectionJetons);
@@ -43,8 +43,7 @@ class Suite extends SequenceAbstraite {
 
     private void parcoursJokers(List<Jeton> collectionJetons) {
         int[] indexJokers = SequenceAbstraite.indexJokersSiExiste(collectionJetons);
-        for (int i = 0; i < indexJokers.length; i++) {
-            int indexJoker = indexJokers[i];
+        for (int indexJoker : indexJokers) {
             Joker joker = (Joker) collectionJetons.get(indexJoker);
             if (!joker.isUtilise()) {
                 collectionJetons.remove(joker);
@@ -56,19 +55,19 @@ class Suite extends SequenceAbstraite {
     }
 
     private void initialiserJoker(List<Jeton> collectionJetons, Joker joker) {
-        int valeurJoker = calculeValeurJoker(collectionJetons, joker);
+        int valeurJoker = calculeValeurJoker(collectionJetons);
         joker.setValeurAndCouleur(valeurJoker, couleurDeSequence(collectionJetons));
     }
 
-    private int calculeValeurJoker(List<Jeton> collectionJetons, Joker joker) {
-        int valeurJoker = indexPremierTrouSiExiste(collectionJetons, joker);
+    private int calculeValeurJoker(List<Jeton> collectionJetons) {
+        int valeurJoker = indexPremierTrouSiExiste(collectionJetons);
         if (valeurJoker == Joker.LIBRE) {
-            valeurJoker = indexUneExtremitePossible(collectionJetons, joker);
+            valeurJoker = indexUneExtremitePossible(collectionJetons);
         }
         return valeurJoker;
     }
 
-    private int indexPremierTrouSiExiste(List<Jeton> collectionJetons, Joker joker) {
+    private int indexPremierTrouSiExiste(List<Jeton> collectionJetons) {
         int valeurInitiale = valeurPremierElement(collectionJetons);
         int valeurJoker = Joker.LIBRE;
         for (int i = 1; i < collectionJetons.size(); i++) {
@@ -80,7 +79,7 @@ class Suite extends SequenceAbstraite {
         return valeurJoker;
     }
 
-    private int indexUneExtremitePossible(List<Jeton> collectionJetons, Joker joker) {
+    private int indexUneExtremitePossible(List<Jeton> collectionJetons) {
         int valeurJoker = -1;
         if (valeurPremierElement(collectionJetons) > 1) {
             valeurJoker = valeurPremierElement(collectionJetons) - 1;

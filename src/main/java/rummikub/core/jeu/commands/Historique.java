@@ -1,4 +1,4 @@
-package Rummikub.core.jeu.commands;
+package rummikub.core.jeu.commands;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class Historique {
      * Annule la dernière action et la retire de l'historique.
      */
     public void annulerDerniereCommande() {
-        if (historique.size() >= 1) {
+        if (!historique.isEmpty()) {
             Command derniereCommande = historique.get(historique.size() - 1);
             derniereCommande.undoCommand();
             historique.remove(derniereCommande);

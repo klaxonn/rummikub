@@ -1,4 +1,4 @@
-package Rummikub.core.jeu.commands;
+package rummikub.core.jeu.commands;
 
 import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;

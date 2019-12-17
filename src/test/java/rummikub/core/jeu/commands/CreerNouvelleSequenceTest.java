@@ -1,10 +1,10 @@
-package Rummikub.core.jeu.commands;
+package rummikub.core.jeu.commands;
 
-import Rummikub.core.plateau.Plateau;
-import Rummikub.core.jeu.Joueur;
-import Rummikub.core.pieces.*;
-import Rummikub.ihm.ControleurAbstrait;
-import Rummikub.ihm.ControleurTexte;
+import rummikub.core.plateau.Plateau;
+import rummikub.core.jeu.Joueur;
+import rummikub.core.pieces.*;
+import rummikub.ihm.ControleurAbstrait;
+import rummikub.ihm.ControleurTexte;
 import java.util.Arrays;
 import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;

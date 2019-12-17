@@ -1,7 +1,7 @@
-package Rummikub.core.plateau;
+package rummikub.core.plateau;
 
-import Rummikub.core.pieces.Jeton;
-import Rummikub.core.pieces.Joker;
+import rummikub.core.pieces.Jeton;
+import rummikub.core.pieces.Joker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ public abstract class SequenceAbstraite {
      * @param collectionJetons la liste à parcourir
      * @return <code>true</code> si c'est une séquence valide
      */
-    public abstract boolean IsCorrectSequence(List<Jeton> collectionJetons);
+    public abstract boolean isCorrectSequence(List<Jeton> collectionJetons);
 
     /**
      * Détermine si on peut retirer le jeton à l'index donné.
@@ -40,7 +40,7 @@ public abstract class SequenceAbstraite {
      */
     protected SequenceAbstraite(List<Jeton> collectionJetons) {
         List<Jeton> copieCollectionJetons = new ArrayList<>(collectionJetons);
-        if (IsCorrectSequence(copieCollectionJetons)) {
+        if (isCorrectSequence(copieCollectionJetons)) {
             sequence = copieCollectionJetons;
         } else {
             SequenceAbstraite.reinitialiserJokersSiExiste(copieCollectionJetons);
@@ -55,8 +55,7 @@ public abstract class SequenceAbstraite {
      */
     public static void reinitialiserJokersSiExiste(List<Jeton> collectionJetons) {
         int[] indexJokers = indexJokersSiExiste(collectionJetons);
-        for (int i = 0; i < indexJokers.length; i++) {
-            int indexJoker = indexJokers[i];
+        for (int indexJoker : indexJokers) {
             Joker joker = (Joker) collectionJetons.get(indexJoker);
             joker.reinitialiser();
         }
@@ -152,8 +151,7 @@ public abstract class SequenceAbstraite {
      */
     public Joker remplacerJoker(Jeton jeton) {
         int[] indexJokers = indexJokersSiExiste(sequence);
-        for (int i = 0; i < indexJokers.length; i++) {
-            int indexJoker = indexJokers[i];
+        for (int indexJoker : indexJokers) {
             if (sequence.get(indexJoker).equals(jeton)) {
                 Joker joker = (Joker) sequence.get(indexJoker);
                 sequence.remove(joker);

@@ -1,8 +1,7 @@
-package Rummikub.core.jeu.commands;
+package rummikub.core.jeu.commands;
 
-import Rummikub.core.plateau.Plateau;
-import Rummikub.core.jeu.Joueur;
-import Rummikub.ihm.ControleurAbstrait;
+import rummikub.core.plateau.Plateau;
+import rummikub.ihm.ControleurAbstrait;
 import java.util.List;
 import java.util.Arrays;
 
@@ -11,7 +10,6 @@ import java.util.Arrays;
  */
 public class FusionnerSequences implements Command {
 
-    private final Joueur joueur;
     private final Plateau plateau;
     private final ControleurAbstrait controleur;
     private int indexSequenceAFusionner = 0;
@@ -21,12 +19,10 @@ public class FusionnerSequences implements Command {
      * Crée une action.
      *
      * @param plateau le plateau de jeu
-     * @param joueur le joueur qui fait l'action
      * @param controleur le controleur qui s'occupe de l'IHM
      */
-    public FusionnerSequences(Plateau plateau, Joueur joueur, ControleurAbstrait controleur) {
+    public FusionnerSequences(Plateau plateau, ControleurAbstrait controleur) {
         this.plateau = plateau;
-        this.joueur = joueur;
         this.controleur = controleur;
     }
 

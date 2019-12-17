@@ -1,4 +1,4 @@
-package Rummikub.core;
+package rummikub.core;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -57,7 +57,7 @@ public enum Actions {
         return indexActions.get(index);
     }
 
-    private Actions(int index, String action) {
+    Actions(int index, String action) {
         this.index = index;
         this.action = action;
     }

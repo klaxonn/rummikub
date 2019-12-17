@@ -1,8 +1,8 @@
-package Rummikub;
+package rummikub;
 
-import Rummikub.core.Partie;
-import Rummikub.ihm.ControleurAbstrait;
-import Rummikub.ihm.ControleurTexte;
+/*import rummikub.core.Partie;
+import rummikub.ihm.ControleurAbstrait;
+import rummikub.ihm.ControleurTexte;*/
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

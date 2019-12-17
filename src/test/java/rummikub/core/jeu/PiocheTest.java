@@ -1,7 +1,7 @@
-package Rummikub.core.jeu;
+package rummikub.core.jeu;
 
-import Rummikub.core.pieces.Couleur;
-import Rummikub.core.pieces.Jeton;
+import rummikub.core.pieces.Couleur;
+import rummikub.core.pieces.Jeton;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;

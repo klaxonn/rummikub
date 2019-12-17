@@ -1,6 +1,6 @@
-package Rummikub.core.plateau;
+package rummikub.core.plateau;
 
-import Rummikub.core.pieces.Jeton;
+import rummikub.core.pieces.Jeton;
 import java.util.List;
 
 /**
@@ -29,8 +29,7 @@ final class FabriqueSequence {
         for (TypeSequence type : TypeSequence.values()) {
             try {
                 Class<?> c = Class.forName(cheminModule + type.toString());
-                SequenceAbstraite t = (SequenceAbstraite) c.getConstructor(List.class).newInstance(jetons);
-                return t;
+                return (SequenceAbstraite) c.getConstructor(List.class).newInstance(jetons);
             } catch (ReflectiveOperationException e) {
                 //Ce type de sequence n'a pas pu etre créé, on essaie un autre type
                 continue;
@@ -40,7 +39,7 @@ final class FabriqueSequence {
     }
 
 	//enum contenant les classes implémentant SequenceAbstraite
-    private static enum TypeSequence {
+    private enum TypeSequence {
         SequenceCouleur, Suite
 
     }

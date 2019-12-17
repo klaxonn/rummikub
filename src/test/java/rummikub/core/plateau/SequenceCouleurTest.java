@@ -1,9 +1,9 @@
-package Rummikub.core.plateau;
+package rummikub.core.plateau;
 
-import Rummikub.core.pieces.Couleur;
-import Rummikub.core.pieces.Jeton;
-import Rummikub.core.pieces.JetonNormal;
-import Rummikub.core.pieces.Joker;
+import rummikub.core.pieces.Couleur;
+import rummikub.core.pieces.Jeton;
+import rummikub.core.pieces.JetonNormal;
+import rummikub.core.pieces.Joker;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
