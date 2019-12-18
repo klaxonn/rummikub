@@ -2,15 +2,18 @@ var clientStomp = null;
 var nomJoueur = null;
 var canalConnexion = null;
 var canalJoindre = null;
+var canalPartie = null;
 
 
 function initialiser(){
 	var boutonConnecter=document.getElementById("connecter");
 	var boutonEnvoyerMessage=document.getElementById("envoyer");
 	var boutonJoindrePartie=document.getElementById("joindre");
+	var boutonDemarrerPartie=document.getElementById("demarrer");
 	boutonConnecter.addEventListener("click",seConnecter);
 	boutonEnvoyerMessage.addEventListener("click",envoyerMessage);
 	boutonJoindrePartie.addEventListener("click",joindrePartie);
+	boutonDemarrerPartie.addEventListener("click",demarrerPartie);
 }
 
 function seConnecter(){
@@ -73,6 +76,9 @@ function onMessageRecuConnectes(payload) {
 		var arrayListesJoueurs = messageServeur.message.split(";");
 
 		mettreAJourListeJoueurs(arrayListesJoueurs[0],listeConnectes);
+		if(arrayListesJoueurs[1]){
+			document.getElementById("joindre").value = 'Créer partie';
+		}
 		mettreAJourListeJoueurs(arrayListesJoueurs[1],listeJoueurs);
 	}
 	else if(messageServeur.typeMessage === 'JOINDRE_PARTIE') {
@@ -94,9 +100,11 @@ function mettreAJourListeJoueurs(listeJoueurs,liste){
 	var arrayListeJoueurs = listeJoueurs.split(",");
 	for (var i=0; i < arrayListeJoueurs.length; i++){
 		var nomJoueurListe = arrayListeJoueurs[i];
-		var joueurElement = document.createElement("li");
-		joueurElement.appendChild(document.createTextNode(nomJoueurListe));
-		liste.appendChild(joueurElement);
+		if(nomJoueurListe){
+			var joueurElement = document.createElement("li");
+			joueurElement.appendChild(document.createTextNode(nomJoueurListe));
+			liste.appendChild(joueurElement);
+		}
 	}
 }
 
@@ -133,10 +141,28 @@ function onMessageRecuJoindrePartie(payload) {
 		boutonDemarrer.style.display = "flex";
 	}
 	canalJoindre.unsubscribe();
+	canalPartie = clientStomp.subscribe('/DemarrerPartie', onMessageRecuDemarrerPartie);
 	clientStomp.send("/salon/mettreAJourJoueursPrets",
 		{},
         JSON.stringify({joueur: nomJoueur, typeMessage: 'JOINDRE_PARTIE'})
     );
+}
+
+function demarrerPartie(event) {
+    if(clientStomp) {
+        var messageServeurDemarrer = {
+            joueur: nomJoueur
+        };
+        clientStomp.send("/salon/demarrerPartie", {}, JSON.stringify(messageServeurDemarrer));
+    }
+    event.preventDefault();
+}
+
+function onMessageRecuDemarrerPartie(payload) {
+	canalConnexion.unsubscribe();
+	canalPartie.unsubscribe();
+	clientStomp.disconnect();
+	window.location.href="partie.html";
 }
 
 window.addEventListener("load",initialiser);

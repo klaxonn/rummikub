@@ -1,5 +1,6 @@
 package rummikub.web;
 
+import rummikub.ihm.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -51,6 +52,13 @@ public class ControleurChat {
 		if(ListeJoueurs.nombreJoueursPrets() == 1){
 			message.setTypeMessage(Message.TypeMessage.CREER_PARTIE);
 		}
+        return message;
+    }
+
+    @MessageMapping("/demarrerPartie")
+    @SendTo("/DemarrerPartie")
+    public Message demarrerPartie(@Payload Message message) {
+		ControleurAbstrait controleur = new ControleurWeb(ListeJoueurs.creerListeJoueursPrets());
         return message;
     }
     
