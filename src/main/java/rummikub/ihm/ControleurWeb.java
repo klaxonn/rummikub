@@ -4,17 +4,20 @@ import rummikub.core.jeu.Joueur;
 import rummikub.core.Actions;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
+import org.springframework.stereotype.Controller;
 
 /** 
  * Implémentation web de l'interface.
  *
  */
+@Controller
 public class ControleurWeb implements ControleurAbstrait {
 
-    //private final List<Joueur> listeJoueurs;
+    private final List<Joueur> listeJoueurs;
 
     public ControleurWeb(Joueur[] arrayJoueurs) {
-		//listeJoueurs = new ArrayList<>(arrayJoueurs);
+		listeJoueurs = Arrays.asList(arrayJoueurs);
     }
 
     @Override
@@ -23,7 +26,7 @@ public class ControleurWeb implements ControleurAbstrait {
 
     @Override
     public List<Joueur> listeDesJoueurs() {
-        return null;
+        return listeJoueurs;
     }
 
     @Override

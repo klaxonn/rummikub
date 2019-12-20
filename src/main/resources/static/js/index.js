@@ -6,14 +6,21 @@ var canalPartie = null;
 
 
 function initialiser(){
-	var boutonConnecter=document.getElementById("connecter");
-	var boutonEnvoyerMessage=document.getElementById("envoyer");
-	var boutonJoindrePartie=document.getElementById("joindre");
-	var boutonDemarrerPartie=document.getElementById("demarrer");
-	boutonConnecter.addEventListener("click",seConnecter);
-	boutonEnvoyerMessage.addEventListener("click",envoyerMessage);
-	boutonJoindrePartie.addEventListener("click",joindrePartie);
-	boutonDemarrerPartie.addEventListener("click",demarrerPartie);
+	document.getElementById("connecter").addEventListener("click",seConnecter);
+	document.getElementById("envoyer").addEventListener("click",envoyerMessageChat);
+	document.getElementById("joindre").addEventListener("click",joindrePartie);
+	document.getElementById("demarrer").addEventListener("click",demarrerPartie);
+	document.getElementById("nomJoueur").addEventListener("keyup", 
+		function(event){appuyerEntreeChampTexte(event,seConnecter);});
+	document.getElementById("message").addEventListener("keyup", 
+		function(event){appuyerEntreeChampTexte(event,envoyerMessageChat);});
+}
+
+function appuyerEntreeChampTexte(event,fonction) {
+	//On appuie sur entrée
+	if (event.keyCode === 13) {
+    	fonction();
+	}
 }
 
 function seConnecter(){
@@ -27,135 +34,136 @@ function seConnecter(){
 
 function onConnexion() {
     canalConnexion = clientStomp.subscribe('/connexionJoueur', onMessageRecuConnexion);
-    clientStomp.send("/salon/ajouterJoueurConnecte",
-        {},
-        JSON.stringify({joueur: nomJoueur, typeMessage: 'CONNEXION'})
-    );
+	envoyerMessageServeur("/salon/ajouterJoueurConnecte",'CONNEXION',"");
+}
+
+function envoyerMessageServeur(lien,typeMessage,message) {
+	var messageServeur = {
+			typeMessage: typeMessage,
+            joueur: nomJoueur,
+			message: message
+        };
+    clientStomp.send(lien, {}, JSON.stringify(messageServeur));
+}
+
+function onErreur() {
 }
 
 function onMessageRecuConnexion(payload) {
 	var messageServeur = JSON.parse(payload.body);
 	if(messageServeur.typeMessage === 'CONNEXION') {
+		document.getElementById("connecter").disabled = true;
 		//le serveur peut avoir changé le nom du joueur
 		nomJoueur = messageServeur.joueur;
 		canalConnexion.unsubscribe();
 		clientStomp.subscribe('/joueursConnectes', onMessageRecuConnectes);
-		clientStomp.send("/salon/mettreAJourJoueursConnectes",
-        {},
-        JSON.stringify({joueur: nomJoueur, typeMessage: 'CONNEXION'})
-    );
+		envoyerMessageServeur("/salon/mettreAJourJoueursConnectes",'CONNEXION',"");
 	}
-}
-
-
-function onErreur() {
 }
 
 function onMessageRecuConnectes(payload) {
 	var messageServeur = JSON.parse(payload.body);
-	if(messageServeur.typeMessage === 'CONNEXION') {
-		var listeConnectes = document.getElementById("connectes");
-		var listeJoueurs = document.getElementById("joueurs");
-		var arrayListesJoueurs = messageServeur.message.split(";");
-		mettreAJourListeJoueurs(arrayListesJoueurs[0],listeConnectes);
-		if(arrayListesJoueurs.length == 2){
-			mettreAJourListeJoueurs(arrayListesJoueurs[1],listeJoueurs);
-			document.getElementById("joindre").value = 'Joindre partie';
-		}
-	}
-	else if(messageServeur.typeMessage === 'MESSAGE_CHAT') {
-		var listeMessagesElement = document.getElementById("chat");
-		var messageElement = document.createElement("li");
-		var messageDansChat = messageServeur.joueur + ": " + messageServeur.message;
-		messageElement.appendChild(document.createTextNode(messageDansChat));
-		listeMessagesElement.appendChild(messageElement);
-	}
-	else if(messageServeur.typeMessage === 'DECONNEXION') {
-		var listeConnectes = document.getElementById("connectes");
-		var listeJoueurs = document.getElementById("joueurs");
-		var arrayListesJoueurs = messageServeur.message.split(";");
-
-		mettreAJourListeJoueurs(arrayListesJoueurs[0],listeConnectes);
-		if(arrayListesJoueurs[1]){
-			document.getElementById("joindre").value = 'Créer partie';
-		}
-		mettreAJourListeJoueurs(arrayListesJoueurs[1],listeJoueurs);
-	}
-	else if(messageServeur.typeMessage === 'JOINDRE_PARTIE') {
-		document.getElementById("joindre").value = 'Joindre partie';
-		var listeJoueurs = document.getElementById("joueurs");
-		mettreAJourListeJoueurs(messageServeur.message,listeJoueurs);
+	switch(messageServeur.typeMessage) {
+		case 'CONNEXION':
+			messageRecuConnexionDeconnexion(messageServeur,'Joindre partie');
+			break;
+		case 'MESSAGE_CHAT':
+			messageRecuMessageChat(messageServeur);
+			break;
+		case 'DECONNEXION':
+			messageRecuConnexionDeconnexion(messageServeur,'Créer partie');
+			break;
+		case 'JOINDRE_PARTIE':
+			messageRecuJoindrePartie(messageServeur);
+			break;
+		default:
+			console.log('type message non reconnu');
 	}
 }
 
-function mettreAJourListeJoueurs(listeJoueurs,liste){
+function messageRecuConnexionDeconnexion(messageServeur,texteBoutonJoindre){
+	var listeConnectes = document.getElementById("connectes");
+	var listeJoueurs = document.getElementById("joueurs");
 
+	
+	var stringListesJoueurs = messageServeur.message.split(";");
+	mettreAJourListeJoueurs(stringListesJoueurs[0],listeConnectes);
+
+	effacerListeJoueurs(listeJoueurs);
+	if(stringListesJoueurs[1]){
+		document.getElementById("joindre").value = texteBoutonJoindre;
+		mettreAJourListeJoueurs(stringListesJoueurs[1],listeJoueurs);
+	}
+}
+
+function messageRecuMessageChat(messageServeur){
+	var listeMessagesElement = document.getElementById("chat");
+
+	var messageElement = document.createElement("li");
+	var messageDansChat = messageServeur.joueur + ": " + messageServeur.message;
+	messageElement.appendChild(document.createTextNode(messageDansChat));
+	listeMessagesElement.appendChild(messageElement);
+}
+
+function messageRecuJoindrePartie(messageServeur){
+	document.getElementById("joindre").value = 'Joindre partie';
+	var listeJoueurs = document.getElementById("joueurs");
+	mettreAJourListeJoueurs(messageServeur.message,listeJoueurs);
+}
+
+function mettreAJourListeJoueurs(listeJoueurs,liste){
+	
+	effacerListeJoueurs(liste);
+	
+	//On enlève les crochets
+	listeJoueurs = listeJoueurs.slice(1,-1);
+	var arrayListeJoueurs = listeJoueurs.split(",");
+	for (const nomJoueurListe of arrayListeJoueurs){
+		var joueurElement = document.createElement("li");
+		joueurElement.appendChild(document.createTextNode(nomJoueurListe));
+		liste.appendChild(joueurElement);
+	}
+}
+
+function effacerListeJoueurs(liste){
 	//On supprime les joueurs dans la liste
 	while (liste.firstChild) {
     	liste.firstChild.remove();
 	}
-
-	//On ajoute la liste des joueurs reçus
-	listeJoueurs = listeJoueurs.slice(1,-1);
-	var arrayListeJoueurs = listeJoueurs.split(",");
-	for (var i=0; i < arrayListeJoueurs.length; i++){
-		var nomJoueurListe = arrayListeJoueurs[i];
-		if(nomJoueurListe){
-			var joueurElement = document.createElement("li");
-			joueurElement.appendChild(document.createTextNode(nomJoueurListe));
-			liste.appendChild(joueurElement);
-		}
-	}
 }
 
-function envoyerMessage(event) {
+function envoyerMessageChat() {
     var message = document.getElementById("message").value;
     if(message && clientStomp) {
-        var messageServeurChat = {
-            joueur: nomJoueur,
-            message: message,
-            typeMessage: 'MESSAGE_CHAT'
-        };
-        clientStomp.send("/salon/envoyerMessageChat", {}, JSON.stringify(messageServeurChat));
+		envoyerMessageServeur("/salon/envoyerMessageChat",'MESSAGE_CHAT',message);
         document.getElementById("message").value = '';
     }
-    event.preventDefault();
 }
 
 function joindrePartie(event) {
     if(clientStomp) {
 		canalJoindre = clientStomp.subscribe('/JoueurAAjouter', onMessageRecuJoindrePartie);
-        var messageServeurJoindre = {
-            joueur: nomJoueur,
-            typeMessage: 'JOINDRE_PARTIE'
-        };
-        clientStomp.send("/salon/joindrePartie", {}, JSON.stringify(messageServeurJoindre));
+		envoyerMessageServeur("/salon/joindrePartie",'JOINDRE_PARTIE',"");
     }
-    event.preventDefault();
 }
 
 function onMessageRecuJoindrePartie(payload) {
 	var messageServeur = JSON.parse(payload.body);
+	//Le joueur a créé une partie, il a le pouvoir de la démarrer
 	if(messageServeur.typeMessage === 'CREER_PARTIE') {
 		var boutonDemarrer = document.getElementById("demarrer");
 		boutonDemarrer.style.display = "flex";
 	}
+	document.getElementById("joindre").disabled = true;
 	canalJoindre.unsubscribe();
 	canalPartie = clientStomp.subscribe('/DemarrerPartie', onMessageRecuDemarrerPartie);
-	clientStomp.send("/salon/mettreAJourJoueursPrets",
-		{},
-        JSON.stringify({joueur: nomJoueur, typeMessage: 'JOINDRE_PARTIE'})
-    );
+	envoyerMessageServeur("/salon/mettreAJourJoueursPartie",'JOINDRE_PARTIE',"");
 }
 
 function demarrerPartie(event) {
     if(clientStomp) {
-        var messageServeurDemarrer = {
-            joueur: nomJoueur
-        };
-        clientStomp.send("/salon/demarrerPartie", {}, JSON.stringify(messageServeurDemarrer));
+        envoyerMessageServeur("/salon/demarrerPartie","DEMARRER_PARTIE","");
     }
-    event.preventDefault();
 }
 
 function onMessageRecuDemarrerPartie(payload) {

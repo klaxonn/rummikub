@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 public final class ListeJoueurs {
 
 	private static final Map<String,Boolean> listeJoueurs = new HashMap<>();
+	private static String createurPartie = "";
 	
 	private ListeJoueurs() {
 	}
@@ -21,11 +22,23 @@ public final class ListeJoueurs {
 		return nomJoueur;
 	}
 
+	public static String getCreateurPartie() {
+		return createurPartie;
+	}
+
+	public static void setCreateurPartie(String nom) {
+		createurPartie = nom;
+	}
+
+	public static void supprimerJoueursPartie() {
+		listeJoueurs.forEach((k,v) ->listeJoueurs.replace(k,false));
+	}
+
 	public static String getJoueursConnectes() {
 		return listeJoueurs.keySet().toString();
 	}
 
-	public static String getJoueursPrets(){
+	public static String getJoueursPartie(){
 		String chaine = "";
 		chaine = listeJoueurs.keySet().stream()
 							 .filter(i ->listeJoueurs.get(i).equals(true))
@@ -34,7 +47,7 @@ public final class ListeJoueurs {
 		return chaine;
 	}
 
-	public static void setJoueurPret(String nomJoueur) {
+	public static void ajouteJoueurPartie(String nomJoueur) {
 		listeJoueurs.replace(nomJoueur,true);
 	}
 
@@ -42,7 +55,7 @@ public final class ListeJoueurs {
 		return listeJoueurs.size();
 	}
 
-	public static long nombreJoueursPrets(){
+	public static long nombreJoueursPartie(){
 		return listeJoueurs.keySet().stream()
 									.filter(i ->listeJoueurs.get(i).equals(true))
 									.count();
@@ -52,7 +65,7 @@ public final class ListeJoueurs {
 		listeJoueurs.remove(nomJoueur);
 	}
 
-	public static Joueur[] creerListeJoueursPrets(){
+	public static Joueur[] creerListeJoueursPartie(){
 		return listeJoueurs.keySet().stream()
 									.filter(i ->listeJoueurs.get(i).equals(true))
 									.map(i -> new Joueur(i))

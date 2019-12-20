@@ -10,7 +10,8 @@ public class Message {
         CONNEXION,
 		DECONNEXION,
 		JOINDRE_PARTIE,
-		CREER_PARTIE
+		CREER_PARTIE,
+		DEMARRER_PARTIE
     }
 
     public TypeMessage getTypeMessage() {

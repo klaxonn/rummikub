@@ -1,6 +1,7 @@
 package rummikub.web;
 
 import rummikub.ihm.*;
+import rummikub.core.Partie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -34,11 +35,10 @@ public class ControleurChat {
 
 	@MessageMapping("/mettreAJourJoueursConnectes")
     @SendTo("/joueursConnectes")
-    public Message mettreAJourJoueursConnectes(@Payload Message message, 
-                               SimpMessageHeaderAccessor headerAccessor) {
+    public Message mettreAJourJoueursConnectes(@Payload Message message) {
 		String listeAEnvoyer = ListeJoueurs.getJoueursConnectes();
-		if(ListeJoueurs.nombreJoueursPrets() > 0){
-			listeAEnvoyer += ";" + ListeJoueurs.getJoueursPrets();
+		if(ListeJoueurs.nombreJoueursPartie() > 0){
+			listeAEnvoyer += ";" + ListeJoueurs.getJoueursPartie();
 		}
 		message.setMessage(listeAEnvoyer);
         logger.info("Liste des listes" + listeAEnvoyer);
@@ -48,9 +48,10 @@ public class ControleurChat {
     @MessageMapping("/joindrePartie")
     @SendTo("/JoueurAAjouter")
     public Message ajouterJoueurPartie(@Payload Message message) {
-		ListeJoueurs.setJoueurPret(message.getJoueur());
-		if(ListeJoueurs.nombreJoueursPrets() == 1){
+		ListeJoueurs.ajouteJoueurPartie(message.getJoueur());
+		if(ListeJoueurs.nombreJoueursPartie() == 1){
 			message.setTypeMessage(Message.TypeMessage.CREER_PARTIE);
+			ListeJoueurs.setCreateurPartie(message.getJoueur());
 		}
         return message;
     }
@@ -58,16 +59,19 @@ public class ControleurChat {
     @MessageMapping("/demarrerPartie")
     @SendTo("/DemarrerPartie")
     public Message demarrerPartie(@Payload Message message) {
-		ControleurAbstrait controleur = new ControleurWeb(ListeJoueurs.creerListeJoueursPrets());
+		logger.info("Démarrage partie");
+		ControleurAbstrait controleur = new ControleurWeb(ListeJoueurs.creerListeJoueursPartie());
+        Partie partie = new Partie(controleur);
+        //partie.commencerPartie();
         return message;
     }
     
-    @MessageMapping("/mettreAJourJoueursPrets")
+    @MessageMapping("/mettreAJourJoueursPartie")
     @SendTo("/joueursConnectes")
-    public Message mettreAJourJoueursConnectes(@Payload Message message) {
-		String listeJoueurs = ListeJoueurs.getJoueursPrets();
+    public Message mettreAJourJoueursPartie(@Payload Message message) {
+		String listeJoueurs = ListeJoueurs.getJoueursPartie();
 		message.setMessage(listeJoueurs);
-		logger.info("Liste des joueurs prêts : " + listeJoueurs);
+		logger.info("Liste des joueurs dans la partie : " + listeJoueurs);
         return message;
     }
 }

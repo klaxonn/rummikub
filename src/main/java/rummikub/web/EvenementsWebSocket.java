@@ -25,12 +25,16 @@ public class EvenementsWebSocket {
         String nomJoueur = (String) headerAccessor.getSessionAttributes().get("nomJoueur");
         if(nomJoueur != null) {
             logger.info("Joueur déconnecté : " + nomJoueur);
-
+			
 			ListeJoueurs.retirerJoueur(nomJoueur);
+			if(ListeJoueurs.getCreateurPartie().equals(nomJoueur)){
+				ListeJoueurs.supprimerJoueursPartie();
+			}
 
-			String listeJoueursConnectes = ListeJoueurs.getJoueursConnectes();
-			String listeJoueursPrets = ListeJoueurs.getJoueursPrets();
-			String listeAEnvoyer = listeJoueursConnectes + ";" + listeJoueursPrets;
+			String listeAEnvoyer = ListeJoueurs.getJoueursConnectes();
+			if(ListeJoueurs.nombreJoueursPartie() > 0){
+				listeAEnvoyer += ";" + ListeJoueurs.getJoueursPartie();
+			}
         	logger.info("Liste des listes" + listeAEnvoyer);
 			envoiMessage(nomJoueur,listeAEnvoyer); 
         }

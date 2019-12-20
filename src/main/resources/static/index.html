@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Rummikub</title>
 	<script src="js/index.js"></script>
+	<script src="js/ws.js"></script>
     <link rel="stylesheet" href="css/index.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
@@ -11,12 +12,12 @@
   <body>
     <header>
         <h1>Rummikub</h1>
-      	<form form id="getNomJoueur" name="getNomJoueur">
-        	<label>Nom :
+	    <div id="login"> 
+			<label>Nom :
           		<input type="text" id="nomJoueur" name="nomJoueur" value=""/>
         	</label>
         	<input type="button" id="connecter" value="Ok"</input>
-      	</form>
+		</div>
     </header>
     <main id="main-section">
       <div id="chat-section">
@@ -25,25 +26,27 @@
           <li id="chat">
           </li>
         </div>
-        <form class="" action="" method="post">
+        <div id="texte-message">
           <label for="message">Message :
             <input type="text" id="message" value="">
             <input type="button" id="envoyer" value="Envoyer message">
           </label>
-        </form>
+        </div>
       </div>
-      <div id="connectes-section">
-      	<h2>Connectés :</h2>
-        <ul id="connectes">
-        </ul>
-        <input type="button" id="joindre" value="Créer partie">
-      </div>
-	  <div id="joueurs-section">
-      	<h2>Joueurs de la partie :</h2>
-        <ul id="joueurs">
-        </ul>
-		<input type="button" id="demarrer" value="Démarrer la partie">
-      </div>
+	  <div id="listes-section">
+		  <div id="connectes-section">
+		  	<h2>Connectés :</h2>
+		    <ul id="connectes">
+		    </ul>
+		    <input type="button" id="joindre" value="Créer partie">
+		  </div>
+		  <div id="joueurs-section">
+		  	<h2>Joueurs de la partie :</h2>
+		    <ul id="joueurs">
+		    </ul>
+			<input type="button" id="demarrer" value="Démarrer la partie">
+		  </div>
+	  </div>
     </main>
   </body>
 </html>

@@ -1,16 +1,23 @@
 #main-section {
   display: flex;
   max-width: 800px;
+	max-height: 600px;
 }
 
 #chat-section {
-  display: flex;
+  display: flex; 
   flex:2;
   margin-right: 100px;
   flex-direction: column;
 }
 
+#listes-section {
+  display: flex;
+  flex-direction: column;
+}
+
 #messages-section {
+  height: 200px;
   border: 1px solid black;
 }
 
@@ -25,3 +32,4 @@
 #demarrer{
 	display: none;
 }
+
