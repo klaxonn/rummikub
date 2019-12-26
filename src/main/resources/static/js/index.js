@@ -55,6 +55,11 @@ function onMessageRecuConnexion(payload) {
 		document.getElementById("connecter").disabled = true;
 		//le serveur peut avoir changé le nom du joueur
 		nomJoueur = messageServeur.joueur;
+
+		var login = document.getElementById("login");
+		effacerElements(login);
+		login.appendChild(document.createTextNode("Vous êtes connecté en tant que " + nomJoueur));
+		
 		canalConnexion.unsubscribe();
 		clientStomp.subscribe('/joueursConnectes', onMessageRecuConnectes);
 		envoyerMessageServeur("/salon/mettreAJourJoueursConnectes",'CONNEXION',"");
@@ -89,7 +94,7 @@ function messageRecuConnexionDeconnexion(messageServeur){
 	var stringListesJoueurs = messageServeur.message.split(";");
 	mettreAJourListeJoueurs(stringListesJoueurs[0],listeConnectes);
 
-	effacerListeJoueurs(listeJoueurs);
+	effacerElements(listeJoueurs);
 	if(stringListesJoueurs[1]){
 		document.getElementById("joindre").value = 'Joindre partie';
 		mettreAJourListeJoueurs(stringListesJoueurs[1],listeJoueurs);
@@ -117,7 +122,7 @@ function messageRecuJoindrePartie(messageServeur){
 
 function mettreAJourListeJoueurs(listeJoueurs,liste){
 	
-	effacerListeJoueurs(liste);
+	effacerElements(liste);
 	
 	//On enlève les crochets
 	listeJoueurs = listeJoueurs.slice(1,-1);
@@ -129,10 +134,10 @@ function mettreAJourListeJoueurs(listeJoueurs,liste){
 	}
 }
 
-function effacerListeJoueurs(liste){
+function effacerElements(elementContenant){
 	//On supprime les joueurs dans la liste
-	while (liste.firstChild) {
-    	liste.firstChild.remove();
+	while (elementContenant.firstChild) {
+    	elementContenant.firstChild.remove();
 	}
 }
 
