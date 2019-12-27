@@ -3,6 +3,7 @@ var nomJoueur = null;
 var canalConnexion = null;
 var canalJoindre = null;
 var canalPartie = null;
+var nomJoueurRegEx = /^[a-z0-9\xC0-\xFF]+$/i;
 
 
 function initialiser(){
@@ -25,11 +26,20 @@ function appuyerEntreeChampTexte(event,fonction) {
 
 function seConnecter(){
 	nomJoueur = document.getElementById("nomJoueur").value.trim();
-	if(nomJoueur) {
+	if(valideNomJoueur(nomJoueur)) {
 		var socket = new SockJS('/ws');
 		clientStomp = Stomp.over(socket);
 		clientStomp.connect({}, onConnexion, onErreur);
 	}
+	else {
+		alert("Nom invalide");
+		document.getElementById("nomJoueur").value = "";
+	}
+}
+
+function valideNomJoueur(nomJoueur) {
+	return 	nomJoueur.length > 0 && nomJoueur.length < 15
+			&& nomJoueurRegEx.test(nomJoueur);
 }
 
 function onConnexion() {
@@ -95,26 +105,34 @@ function messageRecuConnexionDeconnexion(messageServeur){
 	mettreAJourListeJoueurs(stringListesJoueurs[0],listeConnectes);
 
 	effacerElements(listeJoueurs);
+
+	var boutonJoindre = document.getElementById("joindre");
+	var sectionJoueurs = document.getElementById("joueurs-section");
 	if(stringListesJoueurs[1]){
-		document.getElementById("joindre").value = 'Joindre partie';
+		sectionJoueurs.style.display = "flex";
+		boutonJoindre.value = 'Joindre partie';
 		mettreAJourListeJoueurs(stringListesJoueurs[1],listeJoueurs);
 	}
     else {
-        document.getElementById("joindre").value = 'Créer partie';
-        document.getElementById("joindre").disabled = false;
+		sectionJoueurs.style.display = "none";
+        boutonJoindre.value = 'Créer partie';
+        boutonJoindre.disabled = false;
      }   
 }
 
 function messageRecuMessageChat(messageServeur){
 	var listeMessagesElement = document.getElementById("chat");
-
+	var listeMessages = document.getElementById("messages-section");
 	var messageElement = document.createElement("li");
 	var messageDansChat = messageServeur.joueur + ": " + messageServeur.message;
 	messageElement.appendChild(document.createTextNode(messageDansChat));
 	listeMessagesElement.appendChild(messageElement);
+	//affiche toujours le dernier message envoyé
+	listeMessages.scrollTop = listeMessages.scrollHeight;
 }
 
 function messageRecuJoindrePartie(messageServeur){
+	document.getElementById("joueurs-section").style.display = "flex";
 	document.getElementById("joindre").value = 'Joindre partie';
 	var listeJoueurs = document.getElementById("joueurs");
 	mettreAJourListeJoueurs(messageServeur.message,listeJoueurs);

@@ -19,6 +19,8 @@
 #messages-section {
   height: 200px;
   border: 1px solid black;
+  overflow:auto;
+
 }
 
 #chat:nth-child(odd){
@@ -31,5 +33,10 @@
 
 #demarrer{
 	display: none;
+}
+
+#joueurs-section{
+	display: none;
+	flex-direction: column;
 }
 
