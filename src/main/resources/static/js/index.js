@@ -27,7 +27,7 @@ function appuyerEntreeChampTexte(event,fonction) {
 function seConnecter(){
 	nomJoueur = document.getElementById("nomJoueur").value.trim();
 	if(valideNomJoueur(nomJoueur)) {
-		var socket = new SockJS('/ws');
+		var socket = new SockJS('/wss');
 		clientStomp = Stomp.over(socket);
 		clientStomp.connect({}, onConnexion, onErreur);
 	}

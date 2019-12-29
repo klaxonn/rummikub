@@ -25,7 +25,7 @@ final class FabriqueSequence {
      * de séquence valide
      */
     public static SequenceAbstraite creerNouvelleSequence(List<Jeton> jetons) {
-        final String cheminModule = "Rummikub.core.plateau.";
+        final String cheminModule = "rummikub.core.plateau.";
         for (TypeSequence type : TypeSequence.values()) {
             try {
                 Class<?> c = Class.forName(cheminModule + type.toString());

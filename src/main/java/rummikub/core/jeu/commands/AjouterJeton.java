@@ -4,7 +4,6 @@ import rummikub.core.plateau.Plateau;
 import rummikub.core.jeu.Joueur;
 import rummikub.core.pieces.Joker;
 import rummikub.core.pieces.Jeton;
-import rummikub.ihm.ControleurAbstrait;
 import java.util.List;
 import java.util.Arrays;
 
@@ -15,7 +14,7 @@ public class AjouterJeton implements Command {
 
     private final Joueur joueur;
     private final Plateau plateau;
-    private final ControleurAbstrait controleur;
+    private final List<Integer> indexes;
     private int indexArrivee = 0;
     private int indexJeton = 0;
 
@@ -24,19 +23,18 @@ public class AjouterJeton implements Command {
      *
      * @param plateau le plateau de jeu
      * @param joueur le joueur qui fait l'action
-     * @param controleur le controleur qui s'occupe de l'IHM
+     * @param indexes les indexes du jeton à ajouter et de la séquence
      */
-    public AjouterJeton(Plateau plateau, Joueur joueur, ControleurAbstrait controleur) {
+    public AjouterJeton(Plateau plateau, Joueur joueur, List<Integer> indexes) {
         this.plateau = plateau;
         this.joueur = joueur;
-        this.controleur = controleur;
+        this.indexes = indexes;
     }
 
     @Override
     public boolean doCommand() {
-        List<String> messages = Arrays.asList("Numéro du jeton à ajouter : ",
-                "Numéro de la séquence d'arrivée : ");
-        List<Integer> indexes = controleur.obtenirIndexes(messages);
+        /*List<String> messages = Arrays.asList("Numéro du jeton à ajouter : ",
+                "Numéro de la séquence d'arrivée : ");*/
         int indexJetonJoueur = indexes.get(0);
         indexArrivee = indexes.get(1);
 
@@ -44,7 +42,6 @@ public class AjouterJeton implements Command {
         try {
             jetonAAjouter = joueur.utiliseJeton(indexJetonJoueur);
         } catch (IndexOutOfBoundsException e) {
-            controleur.afficherMessage(e.getMessage());
             return false;
         }
         try {
@@ -52,7 +49,6 @@ public class AjouterJeton implements Command {
             return true;
         } catch (Exception e) {
             joueur.ajouteJeton(jetonAAjouter);
-            controleur.afficherMessage(e.getMessage());
             return false;
         }
     }

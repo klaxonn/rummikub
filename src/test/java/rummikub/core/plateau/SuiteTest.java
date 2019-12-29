@@ -17,8 +17,9 @@ public class SuiteTest {
     public void newSuite() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2));
-        assertEquals("1bleu 2bleu", suite1.toString());
+		Jeton jeton3 = new JetonNormal(3, Couleur.BLEU);
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2,jeton3));
+        assertEquals("1bleu 2bleu 3bleu", suite1.toString());
     }
 
     @Test

@@ -3,11 +3,7 @@ package rummikub.core.jeu.commands;
 import rummikub.core.plateau.Plateau;
 import rummikub.core.jeu.Joueur;
 import rummikub.core.pieces.*;
-import rummikub.ihm.ControleurAbstrait;
-import rummikub.ihm.ControleurTexte;
-import java.util.List;
 import java.util.Arrays;
-import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,9 +12,7 @@ public class RemplacerJokerTest {
 
     private Plateau plateau;
     private Joueur joueur;
-    private ControleurAbstrait controleur;
     private Command commande;
-    private List<String> messages;
 
     @BeforeEach
     private void initialisation() {
@@ -29,17 +23,13 @@ public class RemplacerJokerTest {
         Jeton jeton3 = new JetonNormal(3, Couleur.ROUGE);
         Jeton jeton4 = new JetonNormal(4, Couleur.ROUGE);
         Joker joker = new Joker();
-        controleur = mock(ControleurTexte.class);
-        commande = new RemplacerJoker(plateau, joueur, controleur);
         plateau.creerSequence(Arrays.asList(jeton1, jeton2, joker));
         joueur.setPiocheInitiale(Arrays.asList(jeton3, jeton4));
-        messages = Arrays.asList("Numéro du jeton à uiliser : ",
-                "Numéro de la séquence d'arrivée : ");
     }
 
     @Test
     public void remplacerJoker() {
-        when(controleur.obtenirIndexes(messages)).thenReturn(Arrays.asList(1, 1));
+		commande = new RemplacerJoker(plateau, joueur, Arrays.asList(1, 1));
         boolean resultat = commande.doCommand();
         assertEquals("1rouge 2rouge 3rouge", plateau.toString());
         assertEquals("4rouge *", joueur.afficheJetonsJoueur());
@@ -51,7 +41,7 @@ public class RemplacerJokerTest {
 
     @Test
     public void remplacerJokerFail() {
-        when(controleur.obtenirIndexes(messages)).thenReturn(Arrays.asList(2, 1));
+		commande = new RemplacerJoker(plateau, joueur, Arrays.asList(2, 1));
         boolean resultat = commande.doCommand();
         assertEquals("1rouge 2rouge 3rouge*", plateau.toString());
         assertEquals("3rouge 4rouge", joueur.afficheJetonsJoueur());
@@ -60,7 +50,7 @@ public class RemplacerJokerTest {
 
     @Test
     public void remplacerJokerMauvaisIndexJoueur() {
-        when(controleur.obtenirIndexes(messages)).thenReturn(Arrays.asList(0, 1));
+		commande = new RemplacerJoker(plateau, joueur, Arrays.asList(0, 1));
         boolean resultat = commande.doCommand();
         assertEquals("1rouge 2rouge 3rouge*", plateau.toString());
         assertEquals("3rouge 4rouge", joueur.afficheJetonsJoueur());

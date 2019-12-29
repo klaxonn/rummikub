@@ -1,7 +1,6 @@
 package rummikub.core.jeu.commands;
 
 import rummikub.core.plateau.Plateau;
-import rummikub.ihm.ControleurAbstrait;
 import java.util.List;
 import java.util.Arrays;
 
@@ -11,7 +10,7 @@ import java.util.Arrays;
 public class DeplacerJeton implements Command {
 
     private final Plateau plateau;
-    private final ControleurAbstrait controleur;
+    private final List<Integer> indexes;
     private int indexSequenceDepart = 0;
     private int indexSequenceArrivee = 0;
     private int indexNouvellePositionJeton = 0;
@@ -20,19 +19,19 @@ public class DeplacerJeton implements Command {
      * Crée une action.
      *
      * @param plateau le plateau de jeu
-     * @param controleur le controleur qui s'occupe de l'IHM
+     * @param indexes les indexes de la séquence de départ, du jeton d'arrivée 
+     * et de la séquence d'arrivée 
      */
-    public DeplacerJeton(Plateau plateau, ControleurAbstrait controleur) {
+    public DeplacerJeton(Plateau plateau, List<Integer> indexes) {
         this.plateau = plateau;
-        this.controleur = controleur;
+        this.indexes = indexes;
     }
 
     @Override
     public boolean doCommand() {
-        List<String> messages = Arrays.asList("Numéro de la séquence qui contient le jeton : ",
+        /*List<String> messages = Arrays.asList("Numéro de la séquence qui contient le jeton : ",
                 "Numéro du jeton à déplacer : ",
-                "Numéro de la séquence d'arrivée : ");
-        List<Integer> indexes = controleur.obtenirIndexes(messages);
+                "Numéro de la séquence d'arrivée : ");*/
         indexSequenceDepart = indexes.get(0);
         int indexJeton = indexes.get(1);
         indexSequenceArrivee = indexes.get(2);
@@ -40,7 +39,6 @@ public class DeplacerJeton implements Command {
             indexNouvellePositionJeton = plateau.deplacerJeton(indexSequenceDepart, indexJeton, indexSequenceArrivee);
             return true;
         } catch (Exception e) {
-            controleur.afficherMessage(e.getMessage());
             return false;
         }
     }

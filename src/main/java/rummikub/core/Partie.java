@@ -4,141 +4,115 @@ import rummikub.core.jeu.Joueur;
 import rummikub.core.jeu.Pioche;
 import rummikub.core.jeu.commands.*;
 import rummikub.core.plateau.Plateau;
-import rummikub.ihm.ControleurAbstrait;
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Représentation d'une partie.
- *
- */
 public class Partie {
 
     private final Pioche pioche;
     private final Plateau plateau;
     private List<Joueur> listeJoueurs;
     private Joueur joueurEnCours;
-    private final ControleurAbstrait controleur;
-    private boolean tourTermine;
+    private int numJoueur;
     private final Historique historique;
 
-    /**
-     * Crée une nouvelle partie.
-     *
-     * @param controleur le controleur utilisé pour l'IHM
-     */
-    public Partie(ControleurAbstrait controleur) {
+    public Partie(List<Joueur> listeJoueurs) {
         pioche = new Pioche();
         plateau = new Plateau();
-        listeJoueurs = new ArrayList<>();
-        this.controleur = controleur;
         historique = new Historique();
-        tourTermine = false;
+        this.listeJoueurs = listeJoueurs;
+        numJoueur = 0;
     }
 
-    /**
-     * Démarre une partie et la poursuit jusqu'à sa fin.
-     *
-     */
     public void commencerPartie() {
-        controleur.afficherIntroduction();
         initialiserJoueurs();
-        int numJoueur = 0;
-        do {
-            joueurEnCours = listeJoueurs.get(numJoueur);
-            joueurEnCours.initialiserNouveauTour();
-            tourTermine = false;
-            joueTour();
-            numJoueur = (numJoueur + 1) % listeJoueurs.size();
-            historique.reinitialiserHistorique();
-        } while (!joueurEnCours.aGagne());
-        controleur.afficherVictoireDe(joueurEnCours);
+		debutDuTour();
     }
-
+    
     private void initialiserJoueurs() {
-        listeJoueurs = controleur.listeDesJoueurs();
         listeJoueurs.forEach((joueur) -> {
             joueur.setPiocheInitiale(pioche.piocheInitiale());
         });
     }
+    
+    private void debutDuTour() {
+		numJoueur = (numJoueur + 1) % listeJoueurs.size();
+		joueurEnCours = listeJoueurs.get(numJoueur);
+		joueurEnCours.initialiserNouveauTour();
+        historique.reinitialiserHistorique();	
+	}
+	
+	public Joueur getJoueurEnCours(){
+		return joueurEnCours;
+	}
 
-    private void joueTour() {
-        Actions action;
-        do {
-            controleur.changerJoueurCourant(joueurEnCours);
-            controleur.afficherPartie(plateau.toString());
-            action = controleur.obtenirAction();
-            gestionChoixAction(action);
-        } while (!tourTermine);
+	public void creerNouvelleSequence(List<Integer> listeIndexJetons) {
+        executerAction(new CreerNouvelleSequence(plateau, joueurEnCours, listeIndexJetons));
+    }
+    
+    public void ajouterJeton(List<Integer> indexes) {
+        executerAction(new AjouterJeton(plateau, joueurEnCours, indexes));
+    }
+    
+    public void fusionnerSequence(List<Integer> indexes) {
+		executerAction(new FusionnerSequences(plateau, indexes));    
     }
 
-    private void gestionChoixAction(Actions action) {
-        switch (action) {
-            case AFFICHER_AIDE:
-                controleur.afficherAide();
-                break;
-            case NOUVELLE_SEQUENCE:
-                executerAction(new CreerNouvelleSequence(plateau, joueurEnCours, controleur));
-                break;
-            case AJOUTER_JETON:
-                executerAction(new AjouterJeton(plateau, joueurEnCours, controleur));
-                break;
-            case FUSIONNER_SEQUENCES:
-                executerAction(new FusionnerSequences(plateau, controleur));
-                break;
-            case COUPER_SEQUENCE:
-                executerAction(new CouperSequence(plateau, controleur));
-                break;
-            case DEPLACER_JETON:
-                executerAction(new DeplacerJeton(plateau, controleur));
-                break;
-            case REMPLACER_JOKER:
-                executerAction(new RemplacerJoker(plateau, joueurEnCours, controleur));
-                break;
-            case ANNULER_DERNIERE_ACTION:
-                historique.annulerDerniereCommande();
-                break;
-            case TERMINER_TOUR:
-                terminerTour();
-                break;
-            case ABANDONNER:
-                controleur.aQuittePartie(joueurEnCours);
-                break;
-            default:
-				controleur.afficherMessage("Action non reconnue");
-				break;
-        }
+    public void couperSequence(List<Integer> indexes) {
+		executerAction(new CouperSequence(plateau, indexes));    
     }
-
+    
+    public void deplacerJeton(List<Integer> indexes) {
+		executerAction(new DeplacerJeton(plateau, indexes));    
+    }
+    
+    public void remplacerJoker(List<Integer> indexes) {
+		executerAction(new RemplacerJoker(plateau, joueurEnCours, indexes));    
+    }
+    
     private void executerAction(Command action) {
         boolean aReussi = action.doCommand();
         if (aReussi) {
             historique.ajouterCommande(action);
         }
     }
-
-    private void terminerTour() {
-        if (plateau.isValide()) {
+    
+    public void annulerDerniereAction() {
+		historique.annulerDerniereCommande();    
+    }
+    
+    public void terminerTour() {
+		if (plateau.isValide()) {
             if (joueurEnCours.aJoueAuMoins1Jeton()) {
                 joueurAJoue();
             } else {
                 piocher();
             }
         } else {
-            controleur.afficherMessage("Plateau non valide");
-        }
+            //plateau non valide
+        }    
     }
-
+    
     private void joueurAJoue() {
         if (joueurEnCours.isAutoriseAterminerLeTour()) {
-            tourTermine = true;
-        } else {
-            controleur.afficherMessage("Pas assez de points");
+			if(joueurEnCours.aGagne()){
+				//fin de la partie
+			}
+			else {
+				debutDuTour();
+			}
+        }  
+        else {
+           //pas assez de point pour terminer la partie
         }
     }
 
     private void piocher() {
         joueurEnCours.ajouteJeton(pioche.piocher1Jeton());
-        tourTermine = true;
+        debutDuTour();
+    }
+
+	public void abandonner() {
+		//joueur abandonne    
     }
 }
+

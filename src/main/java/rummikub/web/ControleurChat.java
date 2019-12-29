@@ -1,7 +1,10 @@
 package rummikub.web;
 
-import rummikub.ihm.*;
+import rummikub.core.jeu.Joueur;
 import rummikub.core.Partie;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -60,9 +63,9 @@ public class ControleurChat {
     @SendTo("/DemarrerPartie")
     public Message demarrerPartie(@Payload Message message) {
 		logger.info("Démarrage partie");
-		ControleurAbstrait controleur = new ControleurWeb(ListeJoueurs.creerListeJoueursPartie());
-        Partie partie = new Partie(controleur);
-        //partie.commencerPartie();
+		List<Joueur> listeJoueurs = Arrays.asList(ListeJoueurs.creerListeJoueursPartie());
+        Partie partie = new Partie(listeJoueurs);
+        partie.commencerPartie();
         return message;
     }
     

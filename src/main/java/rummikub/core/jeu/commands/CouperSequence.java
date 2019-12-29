@@ -1,7 +1,6 @@
 package rummikub.core.jeu.commands;
 
 import rummikub.core.plateau.Plateau;
-import rummikub.ihm.ControleurAbstrait;
 import java.util.List;
 import java.util.Arrays;
 
@@ -11,7 +10,7 @@ import java.util.Arrays;
 public class CouperSequence implements Command {
 
     private final Plateau plateau;
-    private final ControleurAbstrait controleur;
+    private final List<Integer> indexes;
     private int indexSequenceACouper = 0;
     private int indexNouvelleSequence = 0;
 
@@ -19,18 +18,17 @@ public class CouperSequence implements Command {
      * Crée une action.
      *
      * @param plateau le plateau de jeu
-     * @param controleur le controleur qui s'occupe de l'IHM
+     * @param indexes les indexes de la séquence à couper et du jeton
      */
-    public CouperSequence(Plateau plateau, ControleurAbstrait controleur) {
+    public CouperSequence(Plateau plateau, List<Integer> indexes) {
         this.plateau = plateau;
-        this.controleur = controleur;
+        this.indexes = indexes;
     }
 
     @Override
     public boolean doCommand() {
-        List<String> messages = Arrays.asList("Numéro de la séquence à couper : ",
-                "Numéro du jeton où couper : ");
-        List<Integer> indexes = controleur.obtenirIndexes(messages);
+        /*List<String> messages = Arrays.asList("Numéro de la séquence à couper : ",
+                "Numéro du jeton où couper : ");*/
         indexSequenceACouper = indexes.get(0);
         int indexJeton = indexes.get(1);
 
@@ -38,7 +36,6 @@ public class CouperSequence implements Command {
             indexNouvelleSequence = plateau.couperSequence(indexSequenceACouper, indexJeton);
             return true;
         } catch (Exception e) {
-            controleur.afficherMessage(e.getMessage());
             return false;
         }
     }
