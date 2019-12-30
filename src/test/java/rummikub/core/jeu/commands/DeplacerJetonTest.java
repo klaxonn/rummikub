@@ -28,9 +28,8 @@ public class DeplacerJetonTest {
     @Test
     public void deplacerJeton() {
 		commande = new DeplacerJeton(plateau, Arrays.asList(1, 3, 2));
-        boolean resultat = commande.doCommand();
+        commande.doCommand();
         assertEquals("1rouge 2rouge\n3jaune 3bleu 3rouge", plateau.toString());
-        assertTrue(resultat);
         commande.undoCommand();
         assertEquals("1rouge 2rouge 3rouge\n3jaune 3bleu", plateau.toString());
     }
@@ -38,8 +37,9 @@ public class DeplacerJetonTest {
     @Test
     public void deplacerJetonFail() {
 		commande = new DeplacerJeton(plateau, Arrays.asList(2, 2, 1));
-        boolean resultat = commande.doCommand();
+		assertThrows(UnsupportedOperationException.class, () -> {
+            commande.doCommand();
+        });
         assertEquals("1rouge 2rouge 3rouge\n3jaune 3bleu", plateau.toString());
-        assertFalse(resultat);
     }
 }

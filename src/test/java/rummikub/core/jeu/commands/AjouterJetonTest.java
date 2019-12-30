@@ -31,10 +31,9 @@ public class AjouterJetonTest {
     @Test
     public void ajouterJeton() {
         commande = new AjouterJeton(plateau, joueur, Arrays.asList(1, 1));
-        boolean resultat = commande.doCommand();
+        commande.doCommand();
         assertEquals("1rouge 2rouge 3rouge 4rouge", plateau.toString());
         assertEquals("6rouge *", joueur.afficheJetonsJoueur());
-        assertTrue(resultat);
         commande.undoCommand();
         assertEquals("1rouge 2rouge 3rouge", plateau.toString());
         assertEquals("6rouge * 4rouge", joueur.afficheJetonsJoueur());
@@ -43,19 +42,21 @@ public class AjouterJetonTest {
     @Test
     public void ajouterJetonFail() {
         commande = new AjouterJeton(plateau, joueur, Arrays.asList(2, 1));
-        boolean resultat = commande.doCommand();
+		assertThrows(UnsupportedOperationException.class, () -> {
+            commande.doCommand();
+        });
         assertEquals("1rouge 2rouge 3rouge", plateau.toString());
         assertEquals("4rouge * 6rouge", joueur.afficheJetonsJoueur());
-        assertFalse(resultat);
     }
 
     @Test
     public void ajouterJetonMauvaisIndexJoueur() {
         commande = new AjouterJeton(plateau, joueur, Arrays.asList(0, 1));
-        boolean resultat = commande.doCommand();
+		assertThrows(IndexOutOfBoundsException.class, () -> {
+            commande.doCommand();
+        });
         assertEquals("1rouge 2rouge 3rouge", plateau.toString());
         assertEquals("4rouge 6rouge *", joueur.afficheJetonsJoueur());
-        assertFalse(resultat);
     }
 
     @Test

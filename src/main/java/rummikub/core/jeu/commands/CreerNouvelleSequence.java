@@ -30,19 +30,14 @@ public class CreerNouvelleSequence implements Command {
     }
 
     @Override
-    public boolean doCommand() {
+    public void doCommand() {
         List<Jeton> listeJetons;
-        try {
-            listeJetons = joueur.utiliseJetons(listeIndexJetons);
-        } catch (IndexOutOfBoundsException e) {
-            return false;
-        }
+        listeJetons = joueur.utiliseJetons(listeIndexJetons);
         try {
             indexSequence = plateau.creerSequence(listeJetons);
-            return true;
         } catch (Exception e) {
             joueur.ajouteJetons(listeJetons);
-            return false;
+            throw e;
         }
     }
 

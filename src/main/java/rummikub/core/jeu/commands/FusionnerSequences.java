@@ -26,18 +26,13 @@ public class FusionnerSequences implements Command {
     }
 
     @Override
-    public boolean doCommand() {
+    public void doCommand() {
         /*List<String> messages = Arrays.asList("Numéro de la séquence de départ : ",
                 "Numéro de la séquence d'arrivée : ");*/
         indexSequenceAFusionner = indexes.get(0);
         int indexSequence = indexes.get(1);
 
-        try {
-            indexDebutSequenceFusionnee = plateau.fusionnerSequences(indexSequenceAFusionner, indexSequence);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        indexDebutSequenceFusionnee = plateau.fusionnerSequences(indexSequenceAFusionner, indexSequence);
     }
 
     @Override

@@ -32,24 +32,19 @@ public class AjouterJeton implements Command {
     }
 
     @Override
-    public boolean doCommand() {
+    public void doCommand() {
         /*List<String> messages = Arrays.asList("Numéro du jeton à ajouter : ",
                 "Numéro de la séquence d'arrivée : ");*/
         int indexJetonJoueur = indexes.get(0);
         indexArrivee = indexes.get(1);
 
         Jeton jetonAAjouter = null;
-        try {
-            jetonAAjouter = joueur.utiliseJeton(indexJetonJoueur);
-        } catch (IndexOutOfBoundsException e) {
-            return false;
-        }
+        jetonAAjouter = joueur.utiliseJeton(indexJetonJoueur);
         try {
             indexJeton = plateau.ajouterJeton(indexArrivee, jetonAAjouter);
-            return true;
         } catch (Exception e) {
             joueur.ajouteJeton(jetonAAjouter);
-            return false;
+           	throw e;
         }
     }
 

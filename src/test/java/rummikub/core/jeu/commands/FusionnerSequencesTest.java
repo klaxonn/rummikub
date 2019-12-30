@@ -28,9 +28,8 @@ public class FusionnerSequencesTest {
     @Test
     public void fusionnerSequences() {
 		commande = new FusionnerSequences(plateau, Arrays.asList(1, 2));
-        boolean resultat = commande.doCommand();
+        commande.doCommand();
         assertEquals("1rouge 2rouge 3rouge 4rouge 5rouge", plateau.toString());
-        assertTrue(resultat);
         commande.undoCommand();
         assertEquals("1rouge 2rouge 3rouge\n4rouge 5rouge", plateau.toString());
     }
@@ -38,8 +37,9 @@ public class FusionnerSequencesTest {
     @Test
     public void fusionnerSequencesFail() {
 		commande = new FusionnerSequences(plateau, Arrays.asList(1, 3));
-        boolean resultat = commande.doCommand();
+		assertThrows(IndexOutOfBoundsException.class, () -> {
+            commande.doCommand();
+        });
         assertEquals("1rouge 2rouge 3rouge\n4rouge 5rouge", plateau.toString());
-        assertFalse(resultat);
     }
 }

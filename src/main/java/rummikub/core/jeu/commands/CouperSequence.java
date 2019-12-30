@@ -26,18 +26,13 @@ public class CouperSequence implements Command {
     }
 
     @Override
-    public boolean doCommand() {
+    public void doCommand() {
         /*List<String> messages = Arrays.asList("Numéro de la séquence à couper : ",
                 "Numéro du jeton où couper : ");*/
         indexSequenceACouper = indexes.get(0);
         int indexJeton = indexes.get(1);
 
-        try {
-            indexNouvelleSequence = plateau.couperSequence(indexSequenceACouper, indexJeton);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        indexNouvelleSequence = plateau.couperSequence(indexSequenceACouper, indexJeton);
     }
 
     @Override

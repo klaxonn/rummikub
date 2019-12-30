@@ -195,7 +195,7 @@ public class Plateau {
             } catch (UnsupportedOperationException e) {
                 SequenceAbstraite sequenceApresAjout = sequenceDepart.ajouterJeton(jetonADeplacer);
                 mettreAJourSequence(indexSequenceDepart, sequenceDepart, sequenceApresAjout);
-                throw new UnsupportedOperationException("Impossible de déplacer ce jeton");
+                throw e;
             }
         } else {
             throw new UnsupportedOperationException("Impossible de déplacer ce jeton");
@@ -216,7 +216,7 @@ public class Plateau {
             jetons.add(jetonADeplacer);
             SequenceAbstraite nouvelleSequence = FabriqueSequence.creerNouvelleSequence(jetons);
             plateau.add(nouvelleSequence);
-            return 1;
+            return nouvelleSequence.longueur();
         } else {
             throw new UnsupportedOperationException("Impossible de déplacer ce jeton");
         }

@@ -28,19 +28,14 @@ public class DeplacerJeton implements Command {
     }
 
     @Override
-    public boolean doCommand() {
+    public void doCommand() {
         /*List<String> messages = Arrays.asList("Numéro de la séquence qui contient le jeton : ",
                 "Numéro du jeton à déplacer : ",
                 "Numéro de la séquence d'arrivée : ");*/
         indexSequenceDepart = indexes.get(0);
         int indexJeton = indexes.get(1);
         indexSequenceArrivee = indexes.get(2);
-        try {
-            indexNouvellePositionJeton = plateau.deplacerJeton(indexSequenceDepart, indexJeton, indexSequenceArrivee);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        indexNouvellePositionJeton = plateau.deplacerJeton(indexSequenceDepart, indexJeton, indexSequenceArrivee);
     }
 
     @Override

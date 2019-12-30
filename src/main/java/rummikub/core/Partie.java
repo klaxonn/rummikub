@@ -45,50 +45,55 @@ public class Partie {
 		return joueurEnCours;
 	}
 
-	public void creerNouvelleSequence(List<Integer> listeIndexJetons) {
-        executerAction(new CreerNouvelleSequence(plateau, joueurEnCours, listeIndexJetons));
+	public String[] creerNouvelleSequence(List<Integer> listeIndexJetons) {
+        return executerAction(new CreerNouvelleSequence(plateau, joueurEnCours, listeIndexJetons));
     }
     
-    public void ajouterJeton(List<Integer> indexes) {
-        executerAction(new AjouterJeton(plateau, joueurEnCours, indexes));
+    public String[] ajouterJeton(List<Integer> indexes) {
+        return executerAction(new AjouterJeton(plateau, joueurEnCours, indexes));
     }
     
-    public void fusionnerSequence(List<Integer> indexes) {
-		executerAction(new FusionnerSequences(plateau, indexes));    
+    public String[] fusionnerSequence(List<Integer> indexes) {
+		return executerAction(new FusionnerSequences(plateau, indexes));
     }
 
-    public void couperSequence(List<Integer> indexes) {
-		executerAction(new CouperSequence(plateau, indexes));    
+    public String[] couperSequence(List<Integer> indexes) {
+		return executerAction(new CouperSequence(plateau, indexes));
     }
     
-    public void deplacerJeton(List<Integer> indexes) {
-		executerAction(new DeplacerJeton(plateau, indexes));    
+    public String[] deplacerJeton(List<Integer> indexes) {
+		return executerAction(new DeplacerJeton(plateau, indexes));
     }
     
-    public void remplacerJoker(List<Integer> indexes) {
-		executerAction(new RemplacerJoker(plateau, joueurEnCours, indexes));    
+    public String[] remplacerJoker(List<Integer> indexes) {
+		return executerAction(new RemplacerJoker(plateau, joueurEnCours, indexes));
     }
     
-    private void executerAction(Command action) {
-        boolean aReussi = action.doCommand();
-        if (aReussi) {
-            historique.ajouterCommande(action);
-        }
+    private String[] executerAction(Command action) {
+        action.doCommand();
+        historique.ajouterCommande(action);
+		return informationsPartie();
+    }
+
+	private String[] informationsPartie() {
+		return new String[]{plateau.toString(),joueurEnCours.afficheJetonsJoueur()};
+	}
+    
+    public String[] annulerDerniereAction() {
+		historique.annulerDerniereCommande();
+		return informationsPartie();
     }
     
-    public void annulerDerniereAction() {
-		historique.annulerDerniereCommande();    
-    }
-    
-    public void terminerTour() {
+    public String[] terminerTour() throws UnsupportedOperationException {
 		if (plateau.isValide()) {
             if (joueurEnCours.aJoueAuMoins1Jeton()) {
                 joueurAJoue();
             } else {
                 piocher();
             }
+			return informationsPartie();
         } else {
-            //plateau non valide
+            throw new UnsupportedOperationException("plateau non valide");
         }    
     }
     
@@ -102,7 +107,7 @@ public class Partie {
 			}
         }  
         else {
-           //pas assez de point pour terminer la partie
+			throw new UnsupportedOperationException("Pas assez de point pour terminer la partie");
         }
     }
 

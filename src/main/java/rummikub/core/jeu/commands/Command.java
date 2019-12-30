@@ -10,7 +10,7 @@ public interface Command {
      *
      * @return <code>true</code> si la commande a réussi
      */
-    boolean doCommand();
+    void doCommand();
 
     /**
      * Annule les effets de la commande.

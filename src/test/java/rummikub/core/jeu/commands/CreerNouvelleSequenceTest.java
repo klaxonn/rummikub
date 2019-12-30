@@ -29,10 +29,9 @@ public class CreerNouvelleSequenceTest {
     @Test
     public void creerSuite() {
         commande = new CreerNouvelleSequence(plateau, joueur, Arrays.asList(1, 2, 3));
-        boolean resultat = commande.doCommand();
+        commande.doCommand();
         assertEquals("1rouge 2rouge 3rouge", plateau.toString());
         assertEquals("4rouge *", joueur.afficheJetonsJoueur());
-        assertTrue(resultat);
         commande.undoCommand();
         assertEquals("", plateau.toString());
         assertEquals("4rouge * 1rouge 2rouge 3rouge", joueur.afficheJetonsJoueur());
@@ -41,8 +40,9 @@ public class CreerNouvelleSequenceTest {
     @Test
     public void creerSuiteFail() {
         commande = new CreerNouvelleSequence(plateau, joueur, Arrays.asList(1, 3));
-        boolean resultat = commande.doCommand();
-        assertFalse(resultat);
+		assertThrows(UnsupportedOperationException.class, () -> {
+            commande.doCommand();
+        });
         assertEquals("", plateau.toString());
         assertEquals("2rouge 4rouge * 3rouge 1rouge", joueur.afficheJetonsJoueur());
     }
@@ -50,8 +50,9 @@ public class CreerNouvelleSequenceTest {
     @Test
     public void creerSuiteMauvaisIndexJoueur() {
         commande = new CreerNouvelleSequence(plateau, joueur, Arrays.asList(0, 3));
-        boolean resultat = commande.doCommand();
-        assertFalse(resultat);
+		assertThrows(IndexOutOfBoundsException.class, () -> {
+            commande.doCommand();
+        });
         assertEquals("", plateau.toString());
         assertEquals("1rouge 2rouge 4rouge * 3rouge", joueur.afficheJetonsJoueur());
     }
@@ -84,7 +85,9 @@ public class CreerNouvelleSequenceTest {
     @Test
     public void creerSuiteAvecJokerFail() {
 		commande = new CreerNouvelleSequence(plateau, joueur, Arrays.asList(1, 4, 5));
-        commande.doCommand();
+		assertThrows(UnsupportedOperationException.class, () -> {
+            commande.doCommand();
+        });
         assertEquals("", plateau.toString());
         assertEquals("2rouge 3rouge * 4rouge 1rouge", joueur.afficheJetonsJoueur());
     }

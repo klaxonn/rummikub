@@ -33,24 +33,19 @@ public class RemplacerJoker implements Command {
     }
 
     @Override
-    public boolean doCommand() {
+    public void doCommand() {
         /*List<String> messages = Arrays.asList("Numéro du jeton à uiliser : ",
                 "Numéro de la séquence d'arrivée : ");*/
         int indexJeton = indexes.get(0);
         indexSequenceArrivee = indexes.get(1);
 
-        try {
-            jetonAAjouter = joueur.utiliseJeton(indexJeton);
-        } catch (IndexOutOfBoundsException e) {
-            return false;
-        }
+        jetonAAjouter = joueur.utiliseJeton(indexJeton);
         try {
             Joker joker = plateau.remplacerJoker(indexSequenceArrivee, jetonAAjouter);
             joueur.ajouteJeton(joker);
-            return true;
         } catch (Exception e) {
             joueur.ajouteJeton(jetonAAjouter);
-            return false;
+            throw e;
         }
     }
 

@@ -30,10 +30,9 @@ public class RemplacerJokerTest {
     @Test
     public void remplacerJoker() {
 		commande = new RemplacerJoker(plateau, joueur, Arrays.asList(1, 1));
-        boolean resultat = commande.doCommand();
+        commande.doCommand();
         assertEquals("1rouge 2rouge 3rouge", plateau.toString());
         assertEquals("4rouge *", joueur.afficheJetonsJoueur());
-        assertTrue(resultat);
         commande.undoCommand();
         assertEquals("1rouge 2rouge 3rouge*", plateau.toString());
         assertEquals("4rouge 3rouge", joueur.afficheJetonsJoueur());
@@ -42,18 +41,20 @@ public class RemplacerJokerTest {
     @Test
     public void remplacerJokerFail() {
 		commande = new RemplacerJoker(plateau, joueur, Arrays.asList(2, 1));
-        boolean resultat = commande.doCommand();
+		assertThrows(UnsupportedOperationException.class, () -> {
+            commande.doCommand();
+        });
         assertEquals("1rouge 2rouge 3rouge*", plateau.toString());
         assertEquals("3rouge 4rouge", joueur.afficheJetonsJoueur());
-        assertFalse(resultat);
     }
 
     @Test
     public void remplacerJokerMauvaisIndexJoueur() {
 		commande = new RemplacerJoker(plateau, joueur, Arrays.asList(0, 1));
-        boolean resultat = commande.doCommand();
+		assertThrows(IndexOutOfBoundsException.class, () -> {
+            commande.doCommand();
+        });
         assertEquals("1rouge 2rouge 3rouge*", plateau.toString());
         assertEquals("3rouge 4rouge", joueur.afficheJetonsJoueur());
-        assertFalse(resultat);
     }
 }
