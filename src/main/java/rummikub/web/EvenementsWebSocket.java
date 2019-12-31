@@ -31,9 +31,9 @@ public class EvenementsWebSocket {
 				ListeJoueurs.supprimerJoueursPartie();
 			}
 
-			String listeAEnvoyer = ListeJoueurs.getJoueursConnectes();
+			String listeAEnvoyer = ListeJoueurs.getJoueursConnectes().toString();
 			if(ListeJoueurs.nombreJoueursPartie() > 0){
-				listeAEnvoyer += ";" + ListeJoueurs.getJoueursPartie();
+				listeAEnvoyer += ";" + ListeJoueurs.getJoueursPartie().toString();
 			}
         	logger.info("Liste des listes" + listeAEnvoyer);
 			envoiMessage(nomJoueur,listeAEnvoyer); 
@@ -41,8 +41,8 @@ public class EvenementsWebSocket {
     }
 	
 	private void envoiMessage(String nomJoueur, String listeJoueurs){
-		Message message = new Message();
-        message.setTypeMessage(Message.TypeMessage.DECONNEXION);
+		MessageChat message = new MessageChat();
+        message.setTypeMessage(MessageChat.TypeMessage.DECONNEXION);
         message.setJoueur(nomJoueur);
 		message.setMessage(listeJoueurs);
 		messagingTemplate.convertAndSend("/joueursConnectes", message);

@@ -5,7 +5,6 @@ import rummikub.core.jeu.Joueur;
 import rummikub.core.pieces.Joker;
 import rummikub.core.pieces.Jeton;
 import java.util.List;
-import java.util.Arrays;
 
 /**
  * Action représentant l'ajout d'un jeton à une séquence.
@@ -33,8 +32,6 @@ public class AjouterJeton implements Command {
 
     @Override
     public void doCommand() {
-        /*List<String> messages = Arrays.asList("Numéro du jeton à ajouter : ",
-                "Numéro de la séquence d'arrivée : ");*/
         int indexJetonJoueur = indexes.get(0);
         indexArrivee = indexes.get(1);
 

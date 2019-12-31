@@ -1,6 +1,6 @@
 package rummikub.web;
 
-public class Message {
+public class MessageChat {
     private TypeMessage typeMessage;
     private String message;
     private String joueur;

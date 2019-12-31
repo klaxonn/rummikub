@@ -5,7 +5,6 @@ import rummikub.core.jeu.Joueur;
 import rummikub.core.pieces.Jeton;
 import rummikub.core.pieces.Joker;
 import java.util.List;
-import java.util.Arrays;
 
 /**
  * Action représentant le remplacement d'un joker par un jeton.
@@ -34,8 +33,6 @@ public class RemplacerJoker implements Command {
 
     @Override
     public void doCommand() {
-        /*List<String> messages = Arrays.asList("Numéro du jeton à uiliser : ",
-                "Numéro de la séquence d'arrivée : ");*/
         int indexJeton = indexes.get(0);
         indexSequenceArrivee = indexes.get(1);
 

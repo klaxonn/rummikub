@@ -2,7 +2,6 @@ package rummikub.core.jeu.commands;
 
 import rummikub.core.plateau.Plateau;
 import java.util.List;
-import java.util.Arrays;
 
 /**
  * Action représentant le découpage d'une séquence.
@@ -27,8 +26,6 @@ public class CouperSequence implements Command {
 
     @Override
     public void doCommand() {
-        /*List<String> messages = Arrays.asList("Numéro de la séquence à couper : ",
-                "Numéro du jeton où couper : ");*/
         indexSequenceACouper = indexes.get(0);
         int indexJeton = indexes.get(1);
 

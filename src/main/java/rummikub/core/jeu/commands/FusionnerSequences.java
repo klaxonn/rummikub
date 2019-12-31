@@ -2,7 +2,6 @@ package rummikub.core.jeu.commands;
 
 import rummikub.core.plateau.Plateau;
 import java.util.List;
-import java.util.Arrays;
 
 /**
  * Action représentant la fusion de deux séquences.
@@ -27,8 +26,6 @@ public class FusionnerSequences implements Command {
 
     @Override
     public void doCommand() {
-        /*List<String> messages = Arrays.asList("Numéro de la séquence de départ : ",
-                "Numéro de la séquence d'arrivée : ");*/
         indexSequenceAFusionner = indexes.get(0);
         int indexSequence = indexes.get(1);
 

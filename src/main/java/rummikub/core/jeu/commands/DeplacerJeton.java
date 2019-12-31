@@ -2,7 +2,6 @@ package rummikub.core.jeu.commands;
 
 import rummikub.core.plateau.Plateau;
 import java.util.List;
-import java.util.Arrays;
 
 /**
  * Action représentant le déplacement d'un jeton d'une séquence à une autre.
@@ -29,9 +28,6 @@ public class DeplacerJeton implements Command {
 
     @Override
     public void doCommand() {
-        /*List<String> messages = Arrays.asList("Numéro de la séquence qui contient le jeton : ",
-                "Numéro du jeton à déplacer : ",
-                "Numéro de la séquence d'arrivée : ");*/
         indexSequenceDepart = indexes.get(0);
         int indexJeton = indexes.get(1);
         indexSequenceArrivee = indexes.get(2);

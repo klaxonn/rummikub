@@ -4,6 +4,7 @@ import rummikub.core.jeu.Joueur;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class ListeJoueurs {
@@ -34,21 +35,22 @@ public final class ListeJoueurs {
 		listeJoueurs.forEach((k,v) ->listeJoueurs.replace(k,false));
 	}
 
-	public static String getJoueursConnectes() {
-		return listeJoueurs.keySet().toString();
+	public static Set<String> getJoueursConnectes() {
+		return listeJoueurs.keySet();
 	}
 
-	public static String getJoueursPartie(){
-		String chaine = "";
-		chaine = listeJoueurs.keySet().stream()
+	public static Set<String> getJoueursPartie(){
+		return listeJoueurs.keySet().stream()
 							 .filter(i ->listeJoueurs.get(i).equals(true))
-							 .collect(Collectors.toSet())
-							 .toString();
-		return chaine;
+							 .collect(Collectors.toSet());
 	}
 
 	public static void ajouteJoueurPartie(String nomJoueur) {
 		listeJoueurs.replace(nomJoueur,true);
+	}
+
+	public static void retirerJoueur(String nomJoueur){
+		listeJoueurs.remove(nomJoueur);
 	}
 
 	public static int nombreJoueursConnectes(){
@@ -60,17 +62,5 @@ public final class ListeJoueurs {
 									.filter(i ->listeJoueurs.get(i).equals(true))
 									.count();
 	}
-
-	public static void retirerJoueur(String nomJoueur){
-		listeJoueurs.remove(nomJoueur);
-	}
-
-	public static Joueur[] creerListeJoueursPartie(){
-		return listeJoueurs.keySet().stream()
-									.filter(i ->listeJoueurs.get(i).equals(true))
-									.map(i -> new Joueur(i))
-									.toArray(Joueur[]::new);
-	}
-
 }
 
