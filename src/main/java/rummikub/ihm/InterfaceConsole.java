@@ -90,6 +90,7 @@ public class InterfaceConsole {
 				break;
 			default:
 				System.out.println("message non reconnu");
+				break;
 		}			
     }
 
@@ -169,6 +170,7 @@ public class InterfaceConsole {
 				break;
 			default:
 				System.out.println("Action non reconnue");
+				break;
 		}		
     }
 

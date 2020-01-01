@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 public class PlateauTestFail {
 
     private List<Jeton> suiteTest;
-    private List<Jeton> suiteTest2;
     private List<Jeton> couleurSequenceTest;
     private Plateau plateau;
 
@@ -87,7 +86,6 @@ public class PlateauTestFail {
     @Test
     public void supprime1JetonPasDansSequence() {
         plateau.creerSequence(suiteTest);
-        Jeton jeton = new JetonNormal(5, Couleur.ROUGE);
         assertThrows(UnsupportedOperationException.class, () -> {
             plateau.retirerJeton(1, 9);
         });

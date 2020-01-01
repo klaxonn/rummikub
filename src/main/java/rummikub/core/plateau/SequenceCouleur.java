@@ -32,8 +32,12 @@ class SequenceCouleur extends SequenceAbstraite {
     public boolean isCorrectSequence(List<Jeton> collectionJetons) {
         if (collectionJetons.size() > Couleur.values().length) {
             return false;
-        } else if (!collectionJetons.isEmpty()) {
-            int[] indexJokers = SequenceAbstraite.indexJokersSiExiste(collectionJetons);
+        }
+		else if (collectionJetons.isEmpty()) {
+			return false;
+        }
+		else {
+			int[] indexJokers = SequenceAbstraite.indexJokersSiExiste(collectionJetons);
             for (int indexJoker : indexJokers) {
                 Joker joker = (Joker) collectionJetons.get(indexJoker);
                 if (!joker.isUtilise()) {
@@ -41,8 +45,6 @@ class SequenceCouleur extends SequenceAbstraite {
                 }
             }
             return isMemeValeur(collectionJetons) && allColorsDifferent(collectionJetons);
-        } else {
-            return false;
         }
     }
 
@@ -53,7 +55,8 @@ class SequenceCouleur extends SequenceAbstraite {
 
     private Couleur calculerCouleurJoker(List<Jeton> collectionJetons) {
         List<Couleur> couleursDansSequence = couleursDeLaSequence(collectionJetons);
-        Couleur couleurJoker = null;
+		//Couleur par défaut, si toutes les couleurs sont déjà présentes, le test échouera
+        Couleur couleurJoker = Couleur.BLEU;
         for (Couleur couleurPossible : Couleur.values()) {
             if (!couleursDansSequence.contains(couleurPossible)) {
                 couleurJoker = couleurPossible;

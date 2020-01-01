@@ -13,13 +13,9 @@ public class PiocheTest {
     final static int NB_COULEURS = Couleur.values().length;
     final static int NOMBRE_TOTAL_JETONS = Pioche.VALEUR_MAX * Pioche.NB_JEUX_JETONS * NB_COULEURS + Pioche.NB_JOKERS;
 
-    @BeforeEach
-    private void initialisation() {
-        pioche = new Pioche();
-    }
-
     @Test
     public void piocheInitiale() {
+		pioche = new Pioche();
         assertEquals(NOMBRE_TOTAL_JETONS, pioche.nombreJetonsRestants());
         List<Jeton> piocheJoueur = pioche.piocheInitiale();
         assertEquals(Pioche.NB_INITIAL_JETONS, piocheJoueur.size());

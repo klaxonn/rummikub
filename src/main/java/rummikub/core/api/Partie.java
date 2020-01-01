@@ -16,7 +16,7 @@ public interface Partie {
      *
      * @return le message contenant les informations
      */
-    public MessagePartie commencerPartie();
+    MessagePartie commencerPartie();
 
     /**
      * Créé une nouvelle séquence.
@@ -34,7 +34,7 @@ public interface Partie {
 	 * dans le jeu du joueur utilisés pour la séquence
      * @return le message contenant les informations
      */
-	public MessagePartie creerNouvelleSequence(List<Integer> indexes);
+	MessagePartie creerNouvelleSequence(List<Integer> indexes);
     
     /**
      * Ajoute un nouveau jeton.
@@ -52,7 +52,7 @@ public interface Partie {
 	 * et l'index de la séquence
      * @return le message contenant les informations
      */
-    public MessagePartie ajouterJeton(List<Integer> indexes);
+    MessagePartie ajouterJeton(List<Integer> indexes);
     
     /**
      * Fusionne deux séquences.
@@ -70,7 +70,7 @@ public interface Partie {
 	 * séquences à fusionner
      * @return le message contenant les informations
      */
-    public MessagePartie fusionnerSequence(List<Integer> indexes);
+    MessagePartie fusionnerSequence(List<Integer> indexes);
 
     /**
      * Coupe une séquence.
@@ -88,7 +88,7 @@ public interface Partie {
 	 * à couper et l'index du jeton qui débutera la nouvelle séquence
      * @return le message contenant les informations
      */
-    public MessagePartie couperSequence(List<Integer> indexes);
+    MessagePartie couperSequence(List<Integer> indexes);
     
     /**
      * Déplace un jeton.
@@ -106,7 +106,7 @@ public interface Partie {
 	 * l'index du jeton à déplacer et l'index de la séquence d'arrivée
      * @return le message contenant les informations
      */
-    public MessagePartie deplacerJeton(List<Integer> indexes);
+    MessagePartie deplacerJeton(List<Integer> indexes);
     
     /**
      * Remplace un joker.
@@ -124,7 +124,7 @@ public interface Partie {
 	 * et l'index de la séquence contenant le joker
      * @return le message contenant les informations
      */
-    public MessagePartie remplacerJoker(List<Integer> indexes);
+    MessagePartie remplacerJoker(List<Integer> indexes);
 
     /**
      * Annule l'action précédente.
@@ -134,7 +134,7 @@ public interface Partie {
 	 *
      * @return le message contenant les informations
      */
-    public MessagePartie annulerDerniereAction();
+    MessagePartie annulerDerniereAction();
     
     /**
      * Termine un tour.
@@ -154,6 +154,6 @@ public interface Partie {
 	 * 
      * @return le message contenant les informations
      */
-    public MessagePartie terminerTour();
+    MessagePartie terminerTour();
 }
 

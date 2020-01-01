@@ -1,7 +1,5 @@
 package rummikub.salon;
 
-import rummikub.core.jeu.Joueur;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -16,11 +14,12 @@ public final class ListeJoueurs {
 	}
 
 	public static String ajouterJoueurConnecte(String nomJoueur) {
+		String nom = nomJoueur;
 		if(listeJoueurs.containsKey(nomJoueur)){
-			 nomJoueur = nomJoueur + "-1";
+			 nom = nomJoueur + "-1";
 		}
 		listeJoueurs.put(nomJoueur,false);
-		return nomJoueur;
+		return nom;
 	}
 
 	public static String getCreateurPartie() {

@@ -35,8 +35,7 @@ public class AjouterJeton implements Command {
         int indexJetonJoueur = indexes.get(0);
         indexArrivee = indexes.get(1);
 
-        Jeton jetonAAjouter = null;
-        jetonAAjouter = joueur.utiliseJeton(indexJetonJoueur);
+        Jeton jetonAAjouter = joueur.utiliseJeton(indexJetonJoueur);
         try {
             indexJeton = plateau.ajouterJeton(indexArrivee, jetonAAjouter);
         } catch (Exception e) {

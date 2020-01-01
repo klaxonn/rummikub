@@ -169,7 +169,7 @@ public class SequenceCouleurTest {
     }
 
     @Test
-    public void RemplacerJoker() {
+    public void remplacerJoker() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Joker joker = new Joker();
         joker.setValeurAndCouleur(1, Couleur.ROUGE);
@@ -185,7 +185,7 @@ public class SequenceCouleurTest {
     }
 
     @Test
-    public void RemplacerJokerAvecValeurDifferente() {
+    public void remplacerJokerAvecValeurDifferente() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Joker joker = new Joker();
         joker.setValeurAndCouleur(1, Couleur.ROUGE);
@@ -198,7 +198,7 @@ public class SequenceCouleurTest {
     }
 
     @Test
-    public void RemplacerJokerQuandPasDeJOker() {
+    public void remplacerJokerQuandPasDeJOker() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(1, Couleur.ROUGE);
         SequenceCouleur sequence1 = new SequenceCouleur(Arrays.asList(jeton1, jeton2));

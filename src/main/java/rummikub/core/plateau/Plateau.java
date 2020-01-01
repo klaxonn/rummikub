@@ -20,6 +20,8 @@ public class Plateau {
      */
     public static final int NOMBRE_JETONS_MINIMUM = 3;
 
+	private static final String ERREUR_SEQUENCE = "Index séquence non correct";
+
     /**
      * Crée un nouveau plateau.
      */
@@ -57,7 +59,7 @@ public class Plateau {
             plateau.remove(sequenceASupprimer);
             return jetons;
         } else {
-            throw new IndexOutOfBoundsException("Index séquence non correct");
+            throw new IndexOutOfBoundsException(ERREUR_SEQUENCE);
         }
     }
 
@@ -79,7 +81,7 @@ public class Plateau {
             return sequenceAvecJeton.indexJeton(jeton);
 
         } else {
-            throw new IndexOutOfBoundsException("Index séquence non correct");
+            throw new IndexOutOfBoundsException(ERREUR_SEQUENCE);
         }
     }
 
@@ -98,7 +100,7 @@ public class Plateau {
             SequenceAbstraite sequenceDepart = plateau.get(indexSequence - 1);
             return sequenceDepart.retirerJeton(indexJeton);
         } else {
-            throw new IndexOutOfBoundsException("Index séquence non correct");
+            throw new IndexOutOfBoundsException(ERREUR_SEQUENCE);
         }
     }
 
@@ -125,7 +127,7 @@ public class Plateau {
             plateau.remove(sequenceArrivee);
             return sequenceDepart.longueur() + 1;
         } else {
-            throw new IndexOutOfBoundsException("Index séquence non correct");
+            throw new IndexOutOfBoundsException(ERREUR_SEQUENCE);
         }
     }
 
@@ -148,7 +150,7 @@ public class Plateau {
             plateau.add(nouvelleSequence);
             return plateau.size();
         } else {
-            throw new IndexOutOfBoundsException("Index séquence non correct");
+            throw new IndexOutOfBoundsException(ERREUR_SEQUENCE);
         }
     }
 
@@ -240,7 +242,7 @@ public class Plateau {
             SequenceAbstraite sequence = plateau.get(indexSequence - 1);
             return sequence.remplacerJoker(jeton);
         } else {
-            throw new IndexOutOfBoundsException("Index séquence non correct");
+            throw new IndexOutOfBoundsException(ERREUR_SEQUENCE);
         }
     }
 
@@ -263,7 +265,7 @@ public class Plateau {
             SequenceAbstraite sequence = plateau.get(indexSequence - 1);
             return sequence.remplacerJetonParJoker(joker);
         } else {
-            throw new IndexOutOfBoundsException("Index séquence non correct");
+            throw new IndexOutOfBoundsException(ERREUR_SEQUENCE);
         }
     }
 

@@ -17,7 +17,7 @@ public class Joueur {
      * partie.
      */
     public static final int SCORE_MINIMUM_POUR_COMMENCER = 30;
-    private String nomJoueur;
+    private final String nomJoueur;
     private List<Jeton> listeJetons;
     private int totalPointsJoues;
     private boolean peutJouer;

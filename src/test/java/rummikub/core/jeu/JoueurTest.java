@@ -99,7 +99,7 @@ public class JoueurTest {
 
     @Test
     public void aGagne() {
-        List<Jeton> jetons = joueur.utiliseJetons(Arrays.asList(1, 2, 3, 4, 5, 6));
+        joueur.utiliseJetons(Arrays.asList(1, 2, 3, 4, 5, 6));
         assertTrue(joueur.aGagne());
         assertEquals(0, joueur.getScore());
     }
@@ -107,21 +107,21 @@ public class JoueurTest {
     @Test
     public void estAutoriseATerminerleTour() {
         assertFalse(joueur.isAutoriseAterminerLeTour());
-        List<Jeton> jetons = joueur.utiliseJetons(Arrays.asList(2, 3, 5));
+        joueur.utiliseJetons(Arrays.asList(2, 3, 5));
         assertTrue(joueur.isAutoriseAterminerLeTour());
         assertTrue(joueur.aJoueAuMoins1Jeton());
     }
 
     @Test
     public void pasAutoriseATerminerleTour() {
-        List<Jeton> jetons = joueur.utiliseJetons(Arrays.asList(2, 3));
+        joueur.utiliseJetons(Arrays.asList(2, 3));
         assertFalse(joueur.isAutoriseAterminerLeTour());
         assertEquals(9, joueur.pointsRestantsNecessaires());
     }
 
     @Test
     public void plusBesoinAutorisation() {
-        List<Jeton> jetons = joueur.utiliseJetons(Arrays.asList(2, 3, 5));
+        joueur.utiliseJetons(Arrays.asList(2, 3, 5));
         assertTrue(joueur.aJoueAuMoins1Jeton());
         assertTrue(joueur.isAutoriseAterminerLeTour());
         joueur.initialiserNouveauTour();

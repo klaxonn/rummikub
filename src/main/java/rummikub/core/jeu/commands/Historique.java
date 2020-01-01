@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class Historique {
 
-    List<Command> historique;
+    private List<Command> historique;
 
     /**
      * Crée un historique.

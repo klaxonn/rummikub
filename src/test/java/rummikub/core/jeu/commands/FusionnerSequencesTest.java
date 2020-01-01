@@ -1,7 +1,6 @@
 package rummikub.core.jeu.commands;
 
 import rummikub.core.plateau.Plateau;
-import rummikub.core.jeu.Joueur;
 import rummikub.core.pieces.*;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;

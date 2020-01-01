@@ -32,12 +32,12 @@ class Suite extends SequenceAbstraite {
 
     @Override
     public boolean isCorrectSequence(List<Jeton> collectionJetons) {
-        if (!collectionJetons.isEmpty()) {
+        if (collectionJetons.isEmpty()) {
+            return false;
+        } else {
             Collections.sort(collectionJetons);
             parcoursJokers(collectionJetons);
             return isMemeCouleur(collectionJetons) && isValeursASuite(collectionJetons);
-        } else {
-            return false;
         }
     }
 

@@ -8,6 +8,8 @@ import java.util.List;
  */
 final class FabriqueSequence {
 
+    private static final String cheminModule = "rummikub.core.plateau.";
+
     private FabriqueSequence() {
     }
 
@@ -25,7 +27,7 @@ final class FabriqueSequence {
      * de séquence valide
      */
     public static SequenceAbstraite creerNouvelleSequence(List<Jeton> jetons) {
-        final String cheminModule = "rummikub.core.plateau.";
+
         for (TypeSequence type : TypeSequence.values()) {
             try {
                 Class<?> c = Class.forName(cheminModule + type.toString());

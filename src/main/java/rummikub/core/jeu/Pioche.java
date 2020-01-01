@@ -67,14 +67,14 @@ public class Pioche {
      * @throws UnsupportedOperationException si la pioche est vide
      */
     public Jeton piocher1Jeton() {
-		if(listeJetons.size() > 0){
+		if(listeJetons.isEmpty()){
+			throw new UnsupportedOperationException("Pioche vide");
+		}
+		else {
 		    int index = ThreadLocalRandom.current().nextInt(listeJetons.size());
 		    Jeton jeton = listeJetons.get(index);
 		    listeJetons.remove(jeton);
 		    return jeton;
-		}
-		else {
-			throw new UnsupportedOperationException("Pioche vide");
 		}
     }
 
