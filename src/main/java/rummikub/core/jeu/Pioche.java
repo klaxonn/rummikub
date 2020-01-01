@@ -64,12 +64,18 @@ public class Pioche {
      *
      * @return un jeton aléatoire contenu dans la pioche
      *
+     * @throws UnsupportedOperationException si la pioche est vide
      */
     public Jeton piocher1Jeton() {
-        int index = ThreadLocalRandom.current().nextInt(listeJetons.size());
-        Jeton jeton = listeJetons.get(index);
-        listeJetons.remove(jeton);
-        return jeton;
+		if(listeJetons.size() > 0){
+		    int index = ThreadLocalRandom.current().nextInt(listeJetons.size());
+		    Jeton jeton = listeJetons.get(index);
+		    listeJetons.remove(jeton);
+		    return jeton;
+		}
+		else {
+			throw new UnsupportedOperationException("Pioche vide");
+		}
     }
 
     /**

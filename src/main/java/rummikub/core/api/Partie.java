@@ -1,154 +1,159 @@
 package rummikub.core.api;
 
-import rummikub.core.jeu.Joueur;
-import rummikub.core.jeu.Pioche;
-import rummikub.core.jeu.commands.*;
-import rummikub.core.plateau.Plateau;
 import java.util.List;
-import java.util.Set;
-import java.util.ArrayList;
 
-public class Partie {
+/**
+* Représentation d'une partie.
+*/
+public interface Partie {
 
-    private final Pioche pioche;
-    private final Plateau plateau;
-    private List<Joueur> listeJoueurs;
-    private Joueur joueurEnCours;
-    private int numJoueur;
-    private final Historique historique;
+    /**
+     * Commence la partie.
+	 * Le message envoyé est de type DEBUT_PARTIE.
+	 * Il contient la liste des noms des joueurs séparés par des virgules.
+	 * Il contient la liste des jeux des joueurs séparés par des virgules.
+	 * Il contient aussi le plateau.
+     *
+     * @return le message contenant les informations
+     */
+    public MessagePartie commencerPartie();
 
-    public Partie(Set<String> listeNomsJoueurs) {
-        pioche = new Pioche();
-        plateau = new Plateau();
-        historique = new Historique();
-        creerJoueurs(listeNomsJoueurs);
-        numJoueur = 0;
-    }
+    /**
+     * Créé une nouvelle séquence.
+	 * Le message envoyé peut être de deux types :
+	 * Le message envoyé est de type RESULTAT_ACTION.
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+	 *
+	 * Le message envoyé est de type ERREUR.
+	 * Il contient le message d'erreur
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
 
-    private void creerJoueurs(Set<String> listeNomsJoueurs) {
-		listeJoueurs = new ArrayList<>();
-        listeNomsJoueurs.forEach((nomJoueur) -> {
-            listeJoueurs.add(new Joueur(nomJoueur));
-        });
-    }
-
-    public MessagePartie commencerPartie() {
-        initialiserJoueurs();
-		return debutDuTour();
-		//return messageNouvellePartie();
-    }
+	 * @param indexes liste contenant les indexes des jetons 
+	 * dans le jeu du joueur utilisés pour la séquence
+     * @return le message contenant les informations
+     */
+	public MessagePartie creerNouvelleSequence(List<Integer> indexes);
     
-    private void initialiserJoueurs() {
-        listeJoueurs.forEach((joueur) -> {
-            joueur.setPiocheInitiale(pioche.piocheInitiale());
-        });
-    }
+    /**
+     * Ajoute un nouveau jeton.
+	 * Le message envoyé peut être de deux types :
+	 * Le message envoyé est de type RESULTAT_ACTION.
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+	 *
+	 * Le message envoyé est de type ERREUR.
+	 * Il contient le message d'erreur
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+     *
+	 * @param indexes liste contenant l'index du jeton dans le jeu du joueur
+	 * et l'index de la séquence
+     * @return le message contenant les informations
+     */
+    public MessagePartie ajouterJeton(List<Integer> indexes);
     
-    private MessagePartie debutDuTour() {
-		numJoueur = (numJoueur + 1) % listeJoueurs.size();
-		joueurEnCours = listeJoueurs.get(numJoueur);
-		joueurEnCours.initialiserNouveauTour();
-        historique.reinitialiserHistorique();
-		return nouveauMessage(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR, "");
-	}
+    /**
+     * Fusionne deux séquences.
+	 * Le message envoyé peut être de deux types :
+	 * Le message envoyé est de type RESULTAT_ACTION.
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+	 *
+	 * Le message envoyé est de type ERREUR.
+	 * Il contient le message d'erreur
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+     *
+	 * @param indexes liste contenant l'index des deux
+	 * séquences à fusionner
+     * @return le message contenant les informations
+     */
+    public MessagePartie fusionnerSequence(List<Integer> indexes);
 
-	private MessagePartie messageNouvellePartie() {
-		MessagePartie message = new MessagePartie();
-		message.setTypeMessage(MessagePartie.TypeMessage.DEBUT_PARTIE);
-		message.setNomJoueur("[" + nomsDesJoueurs() + "]");
-		message.setJeuJoueur("[" + jeuxDesJoueurs() + "]");
-		message.setPlateau(plateau.toString());
-		return message;		
-	}
+    /**
+     * Coupe une séquence.
+	 * Le message envoyé peut être de deux types :
+	 * Le message envoyé est de type RESULTAT_ACTION.
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+	 *
+	 * Le message envoyé est de type ERREUR.
+	 * Il contient le message d'erreur
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+     *
+	 * @param indexes liste contenant l'index de la séquence
+	 * à couper et l'index du jeton qui débutera la nouvelle séquence
+     * @return le message contenant les informations
+     */
+    public MessagePartie couperSequence(List<Integer> indexes);
+    
+    /**
+     * Déplace un jeton.
+	 * Le message envoyé peut être de deux types :
+	 * Le message envoyé est de type RESULTAT_ACTION.
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+	 *
+	 * Le message envoyé est de type ERREUR.
+	 * Il contient le message d'erreur
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+     *
+	 * @param indexes liste contenant l'index de séquence de départ,
+	 * l'index du jeton à déplacer et l'index de la séquence d'arrivée
+     * @return le message contenant les informations
+     */
+    public MessagePartie deplacerJeton(List<Integer> indexes);
+    
+    /**
+     * Remplace un joker.
+	 * Le message envoyé peut être de deux types :
+	 * Le message envoyé est de type RESULTAT_ACTION.
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+	 *
+	 * Le message envoyé est de type ERREUR.
+	 * Il contient le message d'erreur
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+     *
+	 * @param indexes liste contenant l'index du jeton dans le jeu du joueur
+	 * et l'index de la séquence contenant le joker
+     * @return le message contenant les informations
+     */
+    public MessagePartie remplacerJoker(List<Integer> indexes);
 
-	private String nomsDesJoueurs(){
-		return "";
-	}
-
-	private String jeuxDesJoueurs(){
-		return "";
-	}
-
-	private MessagePartie nouveauMessage(MessagePartie.TypeMessage type, String messageErreur){
-		MessagePartie message = new MessagePartie();
-		message.setTypeMessage(type);
-		message.setNomJoueur(joueurEnCours.getNom());
-		message.setJeuJoueur(joueurEnCours.afficheJetonsJoueur());
-		message.setPlateau(plateau.toString());
-		message.setMessage(messageErreur);
-		return message;
-	}	
-	
-	public MessagePartie creerNouvelleSequence(List<Integer> listeIndexJetons) {
-        return executerAction(new CreerNouvelleSequence(plateau, joueurEnCours, listeIndexJetons));
-    }
+    /**
+     * Annule l'action précédente.
+	 * Le message envoyé est de type RESULTAT_ACTION.
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+	 *
+     * @return le message contenant les informations
+     */
+    public MessagePartie annulerDerniereAction();
     
-    public MessagePartie ajouterJeton(List<Integer> indexes) {
-        return executerAction(new AjouterJeton(plateau, joueurEnCours, indexes));
-    }
-    
-    public MessagePartie fusionnerSequence(List<Integer> indexes) {
-		return executerAction(new FusionnerSequences(plateau, indexes));
-    }
-
-    public MessagePartie couperSequence(List<Integer> indexes) {
-		return executerAction(new CouperSequence(plateau, indexes));
-    }
-    
-    public MessagePartie deplacerJeton(List<Integer> indexes) {
-		return executerAction(new DeplacerJeton(plateau, indexes));
-    }
-    
-    public MessagePartie remplacerJoker(List<Integer> indexes) {
-		return executerAction(new RemplacerJoker(plateau, joueurEnCours, indexes));
-    }
-    
-    private MessagePartie executerAction(Command action) {
-		try{
-        	action.doCommand();
-        	historique.ajouterCommande(action);
-			return nouveauMessage(MessagePartie.TypeMessage.RESULTAT_ACTION, "");
-		}
-		catch(Exception e){
-			return nouveauMessage(MessagePartie.TypeMessage.ERREUR, e.getMessage());
-		}
-    }
-
-    public MessagePartie annulerDerniereAction() {
-		historique.annulerDerniereCommande();
-		return nouveauMessage(MessagePartie.TypeMessage.RESULTAT_ACTION, "");
-    }
-    
-    public MessagePartie terminerTour() throws UnsupportedOperationException {
-		if (plateau.isValide()) {
-            if (joueurEnCours.aJoueAuMoins1Jeton()) {
-                return joueurAJoue();
-            } else {
-                return piocher();
-            }
-        } else {
-			return nouveauMessage(MessagePartie.TypeMessage.ERREUR, "plateau non valide");
-        }    
-    }
-    
-    private MessagePartie joueurAJoue() {
-        if (joueurEnCours.isAutoriseAterminerLeTour()) {
-			if(joueurEnCours.aGagne()){
-				return nouveauMessage(MessagePartie.TypeMessage.FIN_DE_PARTIE, "");
-			}
-			else {
-				return debutDuTour();
-			}
-        }  
-        else {
-			String messageErreur = "" + joueurEnCours.pointsRestantsNecessaires() + " points restants nécessaires";
-			return nouveauMessage(MessagePartie.TypeMessage.ERREUR, messageErreur);
-        }
-    }
-
-    private MessagePartie piocher() {
-        joueurEnCours.ajouteJeton(pioche.piocher1Jeton());
-        return debutDuTour();
-    }
+    /**
+     * Termine un tour.
+	 * Le message envoyé peut être de trois types :
+	 * Le message envoyé est de type DEBUT_NOUVEAU_TOUR.
+	 * Il contient le nom du joueur qui suit et son jeu.
+	 * Il contient aussi le plateau.
+	 *
+	 * Le message envoyé est de type ERREUR.
+	 * Il contient le message d'erreur
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+     *
+	 * Le message envoyé est de type FIN_DE_PARTIE.
+	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient aussi le plateau.
+	 * 
+     * @return le message contenant les informations
+     */
+    public MessagePartie terminerTour();
 }
 

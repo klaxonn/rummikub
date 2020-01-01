@@ -10,7 +10,7 @@ public class Main implements CommandLineRunner {
 
 	@Override
     public void run(String... args) throws Exception {
-		new InterfaceConsole().DemarrerPartie();
+		new InterfaceConsole().demarrerPartie();
     }
 
     public static void main(String[] args) {

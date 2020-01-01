@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Représentation d'un ensemble de jetons.
@@ -266,9 +267,8 @@ public abstract class SequenceAbstraite {
      */
     @Override
     public String toString() {
-        String chaine = "";
-        chaine = sequence.stream().map((jeton) -> jeton.toString() + " ").reduce(chaine, String::concat);
-        return chaine.strip();
+        return sequence.stream().map((jeton) -> jeton.toString())
+							    .collect(Collectors.joining(" "));
     }
 
 }

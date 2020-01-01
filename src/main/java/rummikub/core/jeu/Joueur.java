@@ -4,6 +4,7 @@ import rummikub.core.pieces.Jeton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Représentation d'un joueur.
@@ -77,9 +78,8 @@ public class Joueur {
      *
      */
     public String afficheJetonsJoueur() {
-        return listeJetons.stream().map((jeton) -> jeton.toString() + " ")
-                .reduce("", String::concat)
-                .strip();
+        return listeJetons.stream().map((jeton) -> jeton.toString())
+								   .collect(Collectors.joining(" "));
     }
 
     /**
@@ -107,7 +107,7 @@ public class Joueur {
             totalPointsJoues += jeton.getValeur();
             return jeton;
         }
-        throw new IndexOutOfBoundsException("Index hors limite");
+        throw new IndexOutOfBoundsException("Index jeton hors limite");
     }
 
     /**
@@ -128,7 +128,7 @@ public class Joueur {
                 listeJetons.remove(indexJeton - 1);
             } else {
                 listeJetons.addAll(listeJetonsAUtiliser);
-                throw new IndexOutOfBoundsException("Index hors limite");
+                throw new IndexOutOfBoundsException("Index jeton hors limite");
             }
         });
         totalPointsJoues += calculerSommeValeurs(listeJetonsAUtiliser);

@@ -1,6 +1,7 @@
-package rummikub.web;
+package rummikub.salon;
 
 import rummikub.core.api.Partie;
+import rummikub.core.api.PartieImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
@@ -62,7 +63,7 @@ public class ControleurChat {
     @SendTo("/DemarrerPartie")
     public MessageChat demarrerPartie(@Payload MessageChat message) {
 		logger.info("Démarrage partie");
-        Partie partie = new Partie(ListeJoueurs.getJoueursPartie());
+        Partie partie = new PartieImpl(ListeJoueurs.getJoueursPartie());
         partie.commencerPartie();
         return message;
     }

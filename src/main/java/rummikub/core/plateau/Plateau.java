@@ -4,6 +4,7 @@ import rummikub.core.pieces.Jeton;
 import rummikub.core.pieces.Joker;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Représentation d'un plateau de jeu.
@@ -56,7 +57,7 @@ public class Plateau {
             plateau.remove(sequenceASupprimer);
             return jetons;
         } else {
-            throw new IndexOutOfBoundsException("Index non correct");
+            throw new IndexOutOfBoundsException("Index séquence non correct");
         }
     }
 
@@ -78,7 +79,7 @@ public class Plateau {
             return sequenceAvecJeton.indexJeton(jeton);
 
         } else {
-            throw new IndexOutOfBoundsException("Index non correct");
+            throw new IndexOutOfBoundsException("Index séquence non correct");
         }
     }
 
@@ -97,7 +98,7 @@ public class Plateau {
             SequenceAbstraite sequenceDepart = plateau.get(indexSequence - 1);
             return sequenceDepart.retirerJeton(indexJeton);
         } else {
-            throw new IndexOutOfBoundsException("Index non correct");
+            throw new IndexOutOfBoundsException("Index séquence non correct");
         }
     }
 
@@ -124,7 +125,7 @@ public class Plateau {
             plateau.remove(sequenceArrivee);
             return sequenceDepart.longueur() + 1;
         } else {
-            throw new IndexOutOfBoundsException("Index non correct");
+            throw new IndexOutOfBoundsException("Index séquence non correct");
         }
     }
 
@@ -147,7 +148,7 @@ public class Plateau {
             plateau.add(nouvelleSequence);
             return plateau.size();
         } else {
-            throw new IndexOutOfBoundsException("Index non correct");
+            throw new IndexOutOfBoundsException("Index séquence non correct");
         }
     }
 
@@ -173,10 +174,10 @@ public class Plateau {
             } else if (isIndexCorrect(indexSequenceArrivee)) {
                 return deplacerJetonVersSequenceExistante(indexSequenceDepart, indexJeton, indexSequenceArrivee);
             } else {
-                throw new IndexOutOfBoundsException("Index non correct");
+                throw new IndexOutOfBoundsException("Index séquence arrivée non correct");
             }
         } else {
-            throw new IndexOutOfBoundsException("Index non correct");
+            throw new IndexOutOfBoundsException("Index séquence départ non correct");
         }
     }
 
@@ -239,7 +240,7 @@ public class Plateau {
             SequenceAbstraite sequence = plateau.get(indexSequence - 1);
             return sequence.remplacerJoker(jeton);
         } else {
-            throw new IndexOutOfBoundsException("Jeton hors indice");
+            throw new IndexOutOfBoundsException("Index séquence non correct");
         }
     }
 
@@ -262,7 +263,7 @@ public class Plateau {
             SequenceAbstraite sequence = plateau.get(indexSequence - 1);
             return sequence.remplacerJetonParJoker(joker);
         } else {
-            throw new IndexOutOfBoundsException("Jeton hors indice");
+            throw new IndexOutOfBoundsException("Index séquence non correct");
         }
     }
 
@@ -290,9 +291,8 @@ public class Plateau {
      */
     @Override
     public String toString() {
-        String chaine = "";
-        chaine = plateau.stream().map((sequence) -> sequence.toString() + "\n").reduce(chaine, String::concat);
-        return chaine.trim();
+        return plateau.stream().map((sequence) -> sequence.toString())
+							   .collect(Collectors.joining("\n"));
     }
 
 }

@@ -1,4 +1,4 @@
-package rummikub.web;
+package rummikub.salon;
 
 public class MessageChat {
     private TypeMessage typeMessage;

@@ -25,27 +25,35 @@ public class InterfaceConsole {
 	private boolean finTour=false;
 	private boolean finPartie=false;
 
+    /**
+     * Crée une nouvelle partie console.
+     */
     public InterfaceConsole() {
         in = new Scanner(System.in);
     }
 
-	public void DemarrerPartie() {
+    /**
+     * Démarre une nouvelle partie console.
+     */
+	public void demarrerPartie() {
 		afficherIntroduction();
-		partie = new Partie(obtenirlisteDesJoueurs());
-		MessagePartie debutPartie = partie.commencerPartie();
-		traitementMessages(debutPartie);
+		partie = new PartieImpl(obtenirlisteDesJoueurs());
+		traitementMessages(partie.commencerPartie());
 		do {
 			finTour=false;
 			jouerTour();
 		}
 		while(!finPartie);
-		System.out.println("Félicitation vous avez gagné !");
+		afficherFindePartie();
 	}
 		
 	private void afficherIntroduction() {
         System.out.println("RUMMIKUB\n");
     }
 
+	private void afficherFindePartie() {
+		System.out.println("Félicitation vous avez gagné !");
+    }
     
     private Set<String> obtenirlisteDesJoueurs() {
 		HashSet<String> setJoueurs = new HashSet<>();
@@ -74,7 +82,7 @@ public class InterfaceConsole {
 				finPartie = true;
 				break;
 			case ERREUR:
-				System.out.println(message.getMessage());
+				System.out.println(message.getMessageErreur());
 				afficherPartie(message);
 				break;
 			case RESULTAT_ACTION:
@@ -98,7 +106,13 @@ public class InterfaceConsole {
 	}
 
 	private void afficherDebutPartie(MessagePartie message){
-		afficherPartie(message);
+		//On affiche qu'un joueur à la fois, 
+		//donc on extrait le premier joueur de la liste
+		String premierNomJoueur = message.getNomJoueur().split(",")[0];
+		String premierJeuJoueur = message.getJeuJoueur().split(",")[0];
+		message.setNomJoueur(premierNomJoueur);
+		message.setJeuJoueur(premierJeuJoueur);
+		afficherPartie(message);		
 	}
 
 
@@ -148,7 +162,7 @@ public class InterfaceConsole {
 				traitementMessages(partie.annulerDerniereAction());
 				break;
 			case 8:
-				terminerTour();
+				traitementMessages(partie.terminerTour());
 				break;
 			case 9:
 				System.exit(0);
@@ -160,7 +174,6 @@ public class InterfaceConsole {
 
 	private void creerNouvelleSequence() {
 		List<Integer> listeIndexJetons = obtenirListeJetons();
-		logger.info("Liste des index  " + listeIndexJetons);
 		traitementMessages(partie.creerNouvelleSequence(listeIndexJetons));	
 	}
 
@@ -193,10 +206,6 @@ public class InterfaceConsole {
 		List<Integer> indexes = obtenirIndexes(Arrays.asList("Numéro du jeton à uiliser : ",
                 "Numéro de la séquence d'arrivée : "));
 		traitementMessages(partie.remplacerJoker(indexes));	
-	}
-
-	private void terminerTour() {
-		traitementMessages(partie.terminerTour());
 	}
 
     private void afficherAide() {

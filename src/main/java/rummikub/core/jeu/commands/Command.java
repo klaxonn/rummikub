@@ -7,8 +7,6 @@ public interface Command {
 
     /**
      * Exécute la commande.
-     *
-     * @return <code>true</code> si la commande a réussi
      */
     void doCommand();
 

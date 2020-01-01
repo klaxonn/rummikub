@@ -1,4 +1,4 @@
-package rummikub.web;
+package rummikub.salon;
 
 import rummikub.core.jeu.Joueur;
 
