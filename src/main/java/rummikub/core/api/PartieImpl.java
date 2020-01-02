@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
 * Implémentation d'une partie.
 */
-public class PartieImpl implements Partie {
+class PartieImpl implements Partie {
 
     private final Pioche pioche;
     private final Plateau plateau;
@@ -26,10 +26,10 @@ public class PartieImpl implements Partie {
      *
      * @param listeNomsJoueurs la liste des noms des joueurs
      */
-    public PartieImpl(Set<String> listeNomsJoueurs) {
-        pioche = new Pioche();
-        plateau = new Plateau();
-        historique = new Historique();
+    public PartieImpl(Set<String> listeNomsJoueurs, Pioche pioche, Plateau plateau, Historique historique) {
+        this.pioche = pioche;
+        this.plateau = plateau;
+        this.historique = historique;
         creerJoueurs(listeNomsJoueurs);
         numJoueur = 0;
     }
@@ -67,6 +67,7 @@ public class PartieImpl implements Partie {
 		message.setNomJoueur(nomsDesJoueurs());
 		message.setJeuJoueur(jeuxDesJoueurs());
 		message.setPlateau(plateau.toString());
+		message.setMessageErreur("");
 		return message;		
 	}
 

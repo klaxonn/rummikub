@@ -1,7 +1,7 @@
 package rummikub.salon;
 
 import rummikub.core.api.Partie;
-import rummikub.core.api.PartieImpl;
+import rummikub.core.api.FabriquePartie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -60,7 +60,7 @@ public class ControleurChat {
     @SendTo("/DemarrerPartie")
     public MessageChat demarrerPartie(@Payload MessageChat message) {
 		logger.info("Démarrage partie");
-        Partie partie = new PartieImpl(ListeJoueurs.getJoueursPartie());
+		Partie partie = FabriquePartie.creerNouvellePartie(ListeJoueurs.getJoueursPartie());
         partie.commencerPartie();
         return message;
     }

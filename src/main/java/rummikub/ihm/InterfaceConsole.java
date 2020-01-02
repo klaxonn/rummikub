@@ -37,7 +37,7 @@ public class InterfaceConsole {
      */
 	public void demarrerPartie() {
 		afficherIntroduction();
-		partie = new PartieImpl(obtenirlisteDesJoueurs());
+		partie = FabriquePartie.creerNouvellePartie(obtenirlisteDesJoueurs());
 		traitementMessages(partie.commencerPartie());
 		do {
 			finTour=false;
