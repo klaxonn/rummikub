@@ -31,7 +31,8 @@ class PartieImpl implements Partie {
         this.plateau = plateau;
         this.historique = historique;
         creerJoueurs(listeNomsJoueurs);
-        numJoueur = 0;
+		//Pour que le joueur 0  soit le premier à commencer
+        numJoueur = -1;
     }
 
     private void creerJoueurs(Set<String> listeNomsJoueurs) {

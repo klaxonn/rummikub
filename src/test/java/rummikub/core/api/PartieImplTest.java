@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -47,28 +48,252 @@ public class PartieImplTest {
 
 	private List<Jeton> initialiserJoueur1() {
 		List<Jeton> jetons = new ArrayList<>();
-		jetons.add(new JetonNormal(6, Couleur.BLEU));
-        jetons.add(new JetonNormal(2, Couleur.ROUGE));
+		jetons.add(new JetonNormal(10, Couleur.BLEU));
+        jetons.add(new JetonNormal(11, Couleur.BLEU));
+        jetons.add(new JetonNormal(12, Couleur.BLEU));
+        jetons.add(new JetonNormal(13, Couleur.BLEU));
 		return jetons;
 	}
 
 	private List<Jeton> initialiserJoueur2() {
 		List<Jeton> jetons = new ArrayList<>();
         jetons.add(new JetonNormal(4, Couleur.JAUNE));
-        jetons.add(new JetonNormal(10, Couleur.VERT));
+        jetons.add(new JetonNormal(9, Couleur.BLEU));
 		return jetons;
 	}
 
 	@Test
-    public void commencerPartie() {
+    public void commencerPartieTest() {
 		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
 										 .thenReturn(jetonsPiochesJoueur2);
 		when(plateauMock.toString()).thenReturn("");
 		MessagePartie message = partie.commencerPartie();
 		assertEquals(MessagePartie.TypeMessage.DEBUT_PARTIE,message.getTypeMessage());
 		assertEquals("Vincent,Katya",message.getNomJoueur());
-		assertEquals("6bleu 2rouge,4jaune 10vert",message.getJeuJoueur());
+		assertEquals("10bleu 11bleu 12bleu 13bleu,4jaune 9bleu",message.getJeuJoueur());
 		assertEquals("",message.getPlateau());
+		assertEquals("",message.getMessageErreur());
+    }
+
+	@Test
+    public void creerNouvelleSequenceTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("10bleu 11bleu 12bleu");
+		partie.commencerPartie();
+		MessagePartie message = partie.creerNouvelleSequence(Arrays.asList(1,2,3));
+		assertEquals(MessagePartie.TypeMessage.RESULTAT_ACTION,message.getTypeMessage());
+		assertEquals("Vincent",message.getNomJoueur());
+		assertEquals("13bleu",message.getJeuJoueur());
+		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
+		assertEquals("",message.getMessageErreur());
+    }
+
+	@Test
+    public void finDeTourSansPiocheTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("10bleu 11bleu 12bleu");
+		when(plateauMock.isValide()).thenReturn(true);
+		partie.commencerPartie();
+		partie.creerNouvelleSequence(Arrays.asList(1,2,3));
+		MessagePartie message = partie.terminerTour();
+		assertEquals(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,message.getTypeMessage());
+		assertEquals("Katya",message.getNomJoueur());
+		assertEquals("4jaune 9bleu",message.getJeuJoueur());
+		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
+		assertEquals("",message.getMessageErreur());
+    }
+
+	@Test
+    public void ajouterJetonTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("10bleu 11bleu 12bleu\n4jaune");
+		when(plateauMock.isValide()).thenReturn(true).thenReturn(false);
+		partie.commencerPartie();
+		partie.creerNouvelleSequence(Arrays.asList(1,2,3));
+		partie.terminerTour();
+		MessagePartie message = partie.ajouterJeton(Arrays.asList(1,2));
+		assertEquals(MessagePartie.TypeMessage.RESULTAT_ACTION,message.getTypeMessage());
+		assertEquals("Katya",message.getNomJoueur());
+		assertEquals("9bleu",message.getJeuJoueur());
+		assertEquals("10bleu 11bleu 12bleu\n4jaune",message.getPlateau());
+		assertEquals("",message.getMessageErreur());
+    }
+
+	@Test
+    public void couperSequenceTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("10bleu\n11bleu 12bleu");
+		when(plateauMock.isValide()).thenReturn(true);
+		partie.commencerPartie();
+		partie.creerNouvelleSequence(Arrays.asList(1,2,3));
+		partie.terminerTour();
+		MessagePartie message = partie.couperSequence(Arrays.asList(1,2));
+		assertEquals(MessagePartie.TypeMessage.RESULTAT_ACTION,message.getTypeMessage());
+		assertEquals("Katya",message.getNomJoueur());
+		assertEquals("4jaune 9bleu",message.getJeuJoueur());
+		assertEquals("10bleu\n11bleu 12bleu",message.getPlateau());
+		assertEquals("",message.getMessageErreur());
+    }
+
+	@Test
+    public void deplacerJetonTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("10bleu 11bleu\n12bleu");
+		when(plateauMock.isValide()).thenReturn(true);
+		partie.commencerPartie();
+		partie.creerNouvelleSequence(Arrays.asList(1,2,3));
+		partie.terminerTour();
+		MessagePartie message = partie.deplacerJeton(Arrays.asList(1,3,2));
+		assertEquals(MessagePartie.TypeMessage.RESULTAT_ACTION,message.getTypeMessage());
+		assertEquals("Katya",message.getNomJoueur());
+		assertEquals("4jaune 9bleu",message.getJeuJoueur());
+		assertEquals("10bleu 11bleu\n12bleu",message.getPlateau());
+		assertEquals("",message.getMessageErreur());
+    }
+
+	@Test
+    public void annulerActionTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("10bleu 11bleu 12bleu");
+		when(plateauMock.isValide()).thenReturn(true);
+		partie.commencerPartie();
+		partie.creerNouvelleSequence(Arrays.asList(1,2,3));
+		partie.terminerTour();
+		partie.deplacerJeton(Arrays.asList(1,3,2));
+		MessagePartie message = partie.annulerDerniereAction();
+		assertEquals(MessagePartie.TypeMessage.RESULTAT_ACTION,message.getTypeMessage());
+		assertEquals("Katya",message.getNomJoueur());
+		assertEquals("4jaune 9bleu",message.getJeuJoueur());
+		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
+		assertEquals("",message.getMessageErreur());
+    }
+
+	@Test
+    public void fusionnerSequenceTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("10bleu 11bleu 12bleu");
+		when(plateauMock.isValide()).thenReturn(true);
+		partie.commencerPartie();
+		partie.creerNouvelleSequence(Arrays.asList(1,2,3));
+		partie.terminerTour();
+		partie.deplacerJeton(Arrays.asList(1,3,2));
+		MessagePartie message = partie.fusionnerSequence(Arrays.asList(1,4));
+		assertEquals(MessagePartie.TypeMessage.RESULTAT_ACTION,message.getTypeMessage());
+		assertEquals("Katya",message.getNomJoueur());
+		assertEquals("4jaune 9bleu",message.getJeuJoueur());
+		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
+		assertEquals("",message.getMessageErreur());
+    }
+
+	@Test
+    public void remplacerJokerFailTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("10bleu 11bleu 12bleu");
+		when(plateauMock.isValide()).thenReturn(true);
+		partie.commencerPartie();
+		partie.creerNouvelleSequence(Arrays.asList(1,2,3));
+		partie.terminerTour();
+		MessagePartie message = partie.remplacerJoker(Arrays.asList(3,1));
+		assertEquals(MessagePartie.TypeMessage.ERREUR,message.getTypeMessage());
+		assertEquals("Katya",message.getNomJoueur());
+		assertEquals("4jaune 9bleu",message.getJeuJoueur());
+		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
+		assertEquals("Index jeton hors limite",message.getMessageErreur());
+    }
+
+	@Test
+    public void finDeTourInvalideTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("10bleu 11bleu 12bleu\n4jaune");
+		when(plateauMock.isValide()).thenReturn(true).thenReturn(false);
+		partie.commencerPartie();
+		partie.creerNouvelleSequence(Arrays.asList(1,2,3));
+		partie.terminerTour();
+		partie.ajouterJeton(Arrays.asList(1,2));
+		MessagePartie message = partie.terminerTour();
+		assertEquals(MessagePartie.TypeMessage.ERREUR,message.getTypeMessage());
+		assertEquals("Katya",message.getNomJoueur());
+		assertEquals("9bleu",message.getJeuJoueur());
+		assertEquals("10bleu 11bleu 12bleu\n4jaune",message.getPlateau());
+		assertEquals("plateau non valide",message.getMessageErreur());
+    }
+
+	@Test
+    public void finDeTourPasAssezDePointsTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("9bleu 10bleu 11bleu 12bleu");
+		when(plateauMock.isValide()).thenReturn(true).thenReturn(true);
+		partie.commencerPartie();
+		partie.creerNouvelleSequence(Arrays.asList(1,2,3));
+		partie.terminerTour();
+		partie.ajouterJeton(Arrays.asList(2,1));
+		MessagePartie message = partie.terminerTour();
+		assertEquals(MessagePartie.TypeMessage.ERREUR,message.getTypeMessage());
+		assertEquals("Katya",message.getNomJoueur());
+		assertEquals("4jaune",message.getJeuJoueur());
+		assertEquals("9bleu 10bleu 11bleu 12bleu",message.getPlateau());
+		assertEquals("21 points restants nécessaires",message.getMessageErreur());
+    }
+
+	@Test
+    public void finDeTourAvecPiocheTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(piocheMock.piocher1Jeton()).thenReturn(new JetonNormal(10, Couleur.BLEU));
+		when(plateauMock.toString()).thenReturn("10bleu 11bleu 12bleu");
+		when(plateauMock.isValide()).thenReturn(true).thenReturn(true);
+		partie.commencerPartie();
+		partie.creerNouvelleSequence(Arrays.asList(1,2,3));
+		partie.terminerTour();
+		MessagePartie message = partie.terminerTour();
+		assertEquals(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,message.getTypeMessage());
+		assertEquals("Vincent",message.getNomJoueur());
+		assertEquals("13bleu",message.getJeuJoueur());
+		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
+		assertEquals("",message.getMessageErreur());
+    }
+
+	@Test
+    public void finDeTourAvecPiocheVideTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(piocheMock.piocher1Jeton()).thenThrow(UnsupportedOperationException.class);
+		when(plateauMock.toString()).thenReturn("10bleu 11bleu 12bleu");
+		when(plateauMock.isValide()).thenReturn(true).thenReturn(true);
+		partie.commencerPartie();
+		partie.creerNouvelleSequence(Arrays.asList(1,2,3));
+		partie.terminerTour();
+		MessagePartie message = partie.terminerTour();
+		assertEquals(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,message.getTypeMessage());
+		assertEquals("Vincent",message.getNomJoueur());
+		assertEquals("13bleu",message.getJeuJoueur());
+		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
+		assertEquals("",message.getMessageErreur());
+    }
+
+	@Test
+    public void finDePartieTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("10bleu 11bleu 12bleu 13bleu");
+		when(plateauMock.isValide()).thenReturn(true);
+		partie.commencerPartie();
+		partie.creerNouvelleSequence(Arrays.asList(1,2,3,4));
+		MessagePartie message = partie.terminerTour();
+		assertEquals(MessagePartie.TypeMessage.FIN_DE_PARTIE,message.getTypeMessage());
+		assertEquals("Vincent",message.getNomJoueur());
+		assertEquals("",message.getJeuJoueur());
+		assertEquals("10bleu 11bleu 12bleu 13bleu",message.getPlateau());
 		assertEquals("",message.getMessageErreur());
     }
 }

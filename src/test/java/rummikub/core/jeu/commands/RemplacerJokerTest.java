@@ -22,8 +22,10 @@ public class RemplacerJokerTest {
         Jeton jeton2 = new JetonNormal(2, Couleur.ROUGE);
         Jeton jeton3 = new JetonNormal(3, Couleur.ROUGE);
         Jeton jeton4 = new JetonNormal(4, Couleur.ROUGE);
+        Jeton jeton5 = new JetonNormal(5, Couleur.ROUGE);
         Joker joker = new Joker();
         plateau.creerSequence(Arrays.asList(jeton1, jeton2, joker));
+        plateau.creerSequence(Arrays.asList(jeton5));
         joueur.setPiocheInitiale(Arrays.asList(jeton3, jeton4));
     }
 
@@ -31,10 +33,10 @@ public class RemplacerJokerTest {
     public void remplacerJoker() {
 		commande = new RemplacerJoker(plateau, joueur, Arrays.asList(1, 1));
         commande.doCommand();
-        assertEquals("1rouge 2rouge 3rouge", plateau.toString());
+        assertEquals("1rouge 2rouge 3rouge\n5rouge", plateau.toString());
         assertEquals("4rouge *", joueur.afficheJetonsJoueur());
         commande.undoCommand();
-        assertEquals("1rouge 2rouge 3rouge*", plateau.toString());
+        assertEquals("1rouge 2rouge 3rouge*\n5rouge", plateau.toString());
         assertEquals("4rouge 3rouge", joueur.afficheJetonsJoueur());
     }
 
@@ -44,7 +46,7 @@ public class RemplacerJokerTest {
 		assertThrows(UnsupportedOperationException.class, () -> {
             commande.doCommand();
         });
-        assertEquals("1rouge 2rouge 3rouge*", plateau.toString());
+        assertEquals("1rouge 2rouge 3rouge*\n5rouge", plateau.toString());
         assertEquals("3rouge 4rouge", joueur.afficheJetonsJoueur());
     }
 
@@ -54,7 +56,17 @@ public class RemplacerJokerTest {
 		assertThrows(IndexOutOfBoundsException.class, () -> {
             commande.doCommand();
         });
-        assertEquals("1rouge 2rouge 3rouge*", plateau.toString());
+        assertEquals("1rouge 2rouge 3rouge*\n5rouge", plateau.toString());
         assertEquals("3rouge 4rouge", joueur.afficheJetonsJoueur());
+    }
+
+    @Test
+    public void pasdeJokerDansLaSequence() {
+		commande = new RemplacerJoker(plateau, joueur, Arrays.asList(1, 2));
+		assertThrows(UnsupportedOperationException.class, () -> {
+            commande.doCommand();
+        });
+        assertEquals("1rouge 2rouge 3rouge*\n5rouge", plateau.toString());
+        assertEquals("4rouge 3rouge", joueur.afficheJetonsJoueur());
     }
 }
