@@ -91,6 +91,9 @@ function onMessageRecuConnectes(payload) {
 		case 'JOINDRE_PARTIE':
 			messageRecuJoindrePartie(messageServeur);
 			break;
+		case 'ERREUR':
+			alert(messageServeur.message);
+			break;
 		default:
 			console.log('type message non reconnu');
 	}

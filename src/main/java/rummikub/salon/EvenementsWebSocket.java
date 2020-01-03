@@ -9,6 +9,10 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+
+/**
+ * Gestion des événements Web Socket.
+ */
 @Component
 public class EvenementsWebSocket {
 
@@ -18,25 +22,37 @@ public class EvenementsWebSocket {
     private SimpMessageSendingOperations messagingTemplate;
 
 
+	/**
+	 * Appelé quand un client est déconnecté.
+	 * Si le client déconnecté est le créateur de la partie,
+	 * tous les joueurs sont retirés de la partie.
+	 * Un message contenant les clients connectés et les joueurs
+	 * est envoyé.
+	 * @param evenement informations sur le client déconnecté.
+	 */
 	@EventListener
-    public void deconnexionWebSocket(SessionDisconnectEvent event) {
-        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+    public void deconnexionWebSocket(SessionDisconnectEvent evenement) {
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(evenement.getMessage());
 
         String nomJoueur = (String) headerAccessor.getSessionAttributes().get("nomJoueur");
         if(nomJoueur != null) {
             logger.info("Joueur déconnecté : " + nomJoueur);
-			
-			ListeJoueurs.retirerJoueur(nomJoueur);
-			if(ListeJoueurs.getCreateurPartie().equals(nomJoueur)){
-				ListeJoueurs.supprimerJoueursPartie();
-			}
+			try{
+				ListeJoueurs.retirerJoueur(nomJoueur);
+				if(ListeJoueurs.getCreateurPartie().equals(nomJoueur)){
+					ListeJoueurs.supprimerJoueursPartie();
+				}
 
-			String listeAEnvoyer = ListeJoueurs.getJoueursConnectes().toString();
-			if(ListeJoueurs.nombreJoueursPartie() > 0){
-				listeAEnvoyer += ";" + ListeJoueurs.getJoueursPartie().toString();
+				String listeAEnvoyer = ListeJoueurs.getJoueursConnectes().toString();
+				if(ListeJoueurs.nombreJoueursPartie() > 0){
+					listeAEnvoyer += ";" + ListeJoueurs.getJoueursPartie().toString();
+				}
+				logger.info("Liste des listes" + listeAEnvoyer);
+				envoiMessage(nomJoueur,listeAEnvoyer);
 			}
-        	logger.info("Liste des listes" + listeAEnvoyer);
-			envoiMessage(nomJoueur,listeAEnvoyer); 
+			catch(UnsupportedOperationException e){
+				logger.error(e.getMessage());
+			}
         }
     }
 	
