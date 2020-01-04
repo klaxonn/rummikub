@@ -39,9 +39,6 @@ public class EvenementsWebSocket {
             logger.info("Joueur déconnecté : " + nomJoueur);
 			try{
 				ListeJoueurs.retirerJoueur(nomJoueur);
-				if(ListeJoueurs.getCreateurPartie().equals(nomJoueur)){
-					ListeJoueurs.supprimerJoueursPartie();
-				}
 
 				String listeAEnvoyer = ListeJoueurs.getJoueursConnectes().toString();
 				if(ListeJoueurs.nombreJoueursPartie() > 0){

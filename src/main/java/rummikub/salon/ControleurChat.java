@@ -89,7 +89,6 @@ public class ControleurChat {
 				ListeJoueurs.ajouteJoueurPartie(message.getJoueur());
 				if(ListeJoueurs.nombreJoueursPartie() == 1){
 					message.setTypeMessage(MessageChat.TypeMessage.CREER_PARTIE);
-					ListeJoueurs.setCreateurPartie(message.getJoueur());
 				}
 			}
 			catch(UnsupportedOperationException e){

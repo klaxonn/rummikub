@@ -28,7 +28,7 @@ public final class ListeJoueurs {
 		if(listeJoueurs.containsKey(nomJoueur)){
 			 nom = nomJoueur + "-1";
 		}
-		listeJoueurs.put(nomJoueur,false);
+		listeJoueurs.put(nom,false);
 		return nom;
 	}
 
@@ -43,6 +43,8 @@ public final class ListeJoueurs {
 
 	/**
 	 * Retire un client.
+	 * Si le client est le créateur de la partie, 
+	 * tous les joueurs sont supprimés de la partie.
 	 *
 	 * @param nomJoueur le nom du joueur
      * @throws UnsupportedOperationException si le nom
@@ -51,10 +53,21 @@ public final class ListeJoueurs {
 	public static void retirerJoueur(String nomJoueur){
 		if(listeJoueurs.containsKey(nomJoueur)){
 			listeJoueurs.remove(nomJoueur);
+			if(nomJoueur.equals(createurPartie)){
+				supprimerJoueursPartie();
+			}
 		}
 		else {
             throw new UnsupportedOperationException("Le nom n'est pas un joueur connecté");
 		}
+	}
+	
+	/**
+	 * Retire tous les clients.
+	 */
+	public static void retirerTousJoueurs(){
+		listeJoueurs.clear();
+		createurPartie="";
 	}
 
 	/**
@@ -76,6 +89,9 @@ public final class ListeJoueurs {
 	public static void ajouteJoueurPartie(String nomJoueur) {
 		if(listeJoueurs.containsKey(nomJoueur)){
 			listeJoueurs.replace(nomJoueur,true);
+			if(nombreJoueursPartie() == 1){
+				createurPartie = nomJoueur;
+			}
 		}
 		else {
             throw new UnsupportedOperationException("Le nom n'est pas un joueur connecté");
@@ -98,6 +114,7 @@ public final class ListeJoueurs {
 	 */
 	public static void supprimerJoueursPartie() {
 		listeJoueurs.forEach((k,v) ->listeJoueurs.replace(k,false));
+		createurPartie = "";
 	}
 
 	/**
@@ -109,22 +126,6 @@ public final class ListeJoueurs {
 		return listeJoueurs.keySet().stream()
 									.filter(i ->listeJoueurs.get(i).equals(true))
 									.count();
-	}
-
-	/**
-	 * Promeut le joueur en tant que créateur de la partie.
-	 *
-	 * @param nomJoueur le nom du joueur
-     * @throws UnsupportedOperationException si le nom
-	 * n'est pas un client reconnu.
-	 */
-	public static void setCreateurPartie(String nomJoueur) {
-		if(listeJoueurs.containsKey(nomJoueur)){
-			createurPartie = nomJoueur;
-		}
-		else {
-            throw new UnsupportedOperationException("Le nom n'est pas un joueur connecté");
-		}
 	}
 
 	/**
