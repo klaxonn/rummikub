@@ -61,7 +61,7 @@ public final class ListeJoueurs {
             throw new UnsupportedOperationException("Le nom n'est pas un joueur connecté");
 		}
 	}
-	
+
 	/**
 	 * Retire tous les clients.
 	 */

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
-public final class ListeJoueursTest {
+public class ListeJoueursTest {
 	
 	@BeforeEach
 	public void initialisation() {
