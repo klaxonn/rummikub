@@ -92,56 +92,83 @@ class PartieImpl implements Partie {
 		return message;
 	}	
 	
-	public MessagePartie creerNouvelleSequence(List<Integer> indexes) {
-        return executerAction(new CreerNouvelleSequence(plateau, joueurEnCours, indexes));
+	public MessagePartie creerNouvelleSequence(int indexJoueur, List<Integer> indexes) {
+        return executerAction(indexJoueur, new CreerNouvelleSequence(plateau, joueurEnCours, indexes));
     }
     
-    public MessagePartie ajouterJeton(List<Integer> indexes) {
-        return executerAction(new AjouterJeton(plateau, joueurEnCours, indexes));
+    public MessagePartie ajouterJeton(int indexJoueur, List<Integer> indexes) {
+        return executerAction(indexJoueur, new AjouterJeton(plateau, joueurEnCours, indexes));
     }
     
-    public MessagePartie fusionnerSequence(List<Integer> indexes) {
-		return executerAction(new FusionnerSequences(plateau, indexes));
+    public MessagePartie fusionnerSequence(int indexJoueur, List<Integer> indexes) {
+		return executerAction(indexJoueur, new FusionnerSequences(plateau, indexes));
     }
 
-    public MessagePartie couperSequence(List<Integer> indexes) {
-		return executerAction(new CouperSequence(plateau, indexes));
+    public MessagePartie couperSequence(int indexJoueur, List<Integer> indexes) {
+		return executerAction(indexJoueur, new CouperSequence(plateau, indexes));
     }
     
-    public MessagePartie deplacerJeton(List<Integer> indexes) {
-		return executerAction(new DeplacerJeton(plateau, indexes));
+    public MessagePartie deplacerJeton(int indexJoueur, List<Integer> indexes) {
+		return executerAction(indexJoueur, new DeplacerJeton(plateau, indexes));
     }
     
-    public MessagePartie remplacerJoker(List<Integer> indexes) {
-		return executerAction(new RemplacerJoker(plateau, joueurEnCours, indexes));
+    public MessagePartie remplacerJoker(int indexJoueur, List<Integer> indexes) {
+		return executerAction(indexJoueur, new RemplacerJoker(plateau, joueurEnCours, indexes));
     }
-    
-    private MessagePartie executerAction(Command action) {
-		try{
-        	action.doCommand();
-        	historique.ajouterCommande(action);
+
+    private MessagePartie executerAction(int indexJoueur, Command action) {
+		if(isJoueurCourant(indexJoueur)){
+			try{
+				action.doCommand();
+				historique.ajouterCommande(action);
+				return nouveauMessage(MessagePartie.TypeMessage.RESULTAT_ACTION, "");
+			}
+			catch(Exception e){
+				return nouveauMessage(MessagePartie.TypeMessage.ERREUR, e.getMessage());
+			}
+		}
+		else {
+			return joueurIncorrect();
+		}
+    }
+
+    private boolean isJoueurCourant(int indexJoueur){
+		return indexJoueur == numJoueur + 1;
+	}
+
+	public MessagePartie joueurIncorrect() {
+		return nouveauMessage(MessagePartie.TypeMessage.ERREUR, "Ce n'est pas votre tour");
+    }
+
+    public MessagePartie annulerDerniereAction(int indexJoueur) {
+		if(isJoueurCourant(indexJoueur)){
+			historique.annulerDerniereCommande();
 			return nouveauMessage(MessagePartie.TypeMessage.RESULTAT_ACTION, "");
 		}
-		catch(Exception e){
-			return nouveauMessage(MessagePartie.TypeMessage.ERREUR, e.getMessage());
+		else {
+			return joueurIncorrect();
 		}
     }
-
-    public MessagePartie annulerDerniereAction() {
-		historique.annulerDerniereCommande();
-		return nouveauMessage(MessagePartie.TypeMessage.RESULTAT_ACTION, "");
-    }
     
-    public MessagePartie terminerTour() {
-		if (plateau.isValide()) {
-            if (joueurEnCours.aJoueAuMoins1Jeton()) {
-                return joueurAJoue();
-            } else {
-                return piocher();
-            }
-        } else {
-			return nouveauMessage(MessagePartie.TypeMessage.ERREUR, "plateau non valide");
-        }    
+    public int getIndexJoueurCourant(){
+		return numJoueur + 1;
+	}
+
+    public MessagePartie terminerTour(int indexJoueur) {
+		if(isJoueurCourant(indexJoueur)){
+			if (plateau.isValide()) {
+				if (joueurEnCours.aJoueAuMoins1Jeton()) {
+					return joueurAJoue();
+				} else {
+					return piocher();
+				}
+			} else {
+				return nouveauMessage(MessagePartie.TypeMessage.ERREUR, "plateau non valide");
+			}
+		}
+		else {
+			return joueurIncorrect();
+		}
     }
     
     private MessagePartie joueurAJoue() {

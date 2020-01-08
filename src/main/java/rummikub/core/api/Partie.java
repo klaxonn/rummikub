@@ -29,12 +29,13 @@ public interface Partie {
 	 * Il contient le message d'erreur
 	 * Il contient le nom du joueur courant et son jeu.
 	 * Il contient aussi le plateau.
-
+	 *
+	 * @param indexJoueur index du joueur qui souhaite effectuer l'action
 	 * @param indexes liste contenant les indexes des jetons 
 	 * dans le jeu du joueur utilisés pour la séquence
      * @return le message contenant les informations
      */
-	MessagePartie creerNouvelleSequence(List<Integer> indexes);
+	MessagePartie creerNouvelleSequence(int indexJoueur, List<Integer> indexes);
     
     /**
      * Ajoute un nouveau jeton.
@@ -48,11 +49,12 @@ public interface Partie {
 	 * Il contient le nom du joueur courant et son jeu.
 	 * Il contient aussi le plateau.
      *
+     * @param indexJoueur index du joueur qui souhaite effectuer l'action
 	 * @param indexes liste contenant l'index du jeton dans le jeu du joueur
 	 * et l'index de la séquence
      * @return le message contenant les informations
      */
-    MessagePartie ajouterJeton(List<Integer> indexes);
+    MessagePartie ajouterJeton(int indexJoueur, List<Integer> indexes);
     
     /**
      * Fusionne deux séquences.
@@ -66,11 +68,12 @@ public interface Partie {
 	 * Il contient le nom du joueur courant et son jeu.
 	 * Il contient aussi le plateau.
      *
+     * @param indexJoueur index du joueur qui souhaite effectuer l'action
 	 * @param indexes liste contenant l'index des deux
 	 * séquences à fusionner
      * @return le message contenant les informations
      */
-    MessagePartie fusionnerSequence(List<Integer> indexes);
+    MessagePartie fusionnerSequence(int indexJoueur, List<Integer> indexes);
 
     /**
      * Coupe une séquence.
@@ -84,11 +87,12 @@ public interface Partie {
 	 * Il contient le nom du joueur courant et son jeu.
 	 * Il contient aussi le plateau.
      *
+     * @param indexJoueur index du joueur qui souhaite effectuer l'action
 	 * @param indexes liste contenant l'index de la séquence
 	 * à couper et l'index du jeton qui débutera la nouvelle séquence
      * @return le message contenant les informations
      */
-    MessagePartie couperSequence(List<Integer> indexes);
+    MessagePartie couperSequence(int indexJoueur, List<Integer> indexes);
     
     /**
      * Déplace un jeton.
@@ -102,11 +106,12 @@ public interface Partie {
 	 * Il contient le nom du joueur courant et son jeu.
 	 * Il contient aussi le plateau.
      *
+     * @param indexJoueur index du joueur qui souhaite effectuer l'action
 	 * @param indexes liste contenant l'index de séquence de départ,
 	 * l'index du jeton à déplacer et l'index de la séquence d'arrivée
      * @return le message contenant les informations
      */
-    MessagePartie deplacerJeton(List<Integer> indexes);
+    MessagePartie deplacerJeton(int indexJoueur, List<Integer> indexes);
     
     /**
      * Remplace un joker.
@@ -120,11 +125,12 @@ public interface Partie {
 	 * Il contient le nom du joueur courant et son jeu.
 	 * Il contient aussi le plateau.
      *
+     * @param indexJoueur index du joueur qui souhaite effectuer l'action
 	 * @param indexes liste contenant l'index du jeton dans le jeu du joueur
 	 * et l'index de la séquence contenant le joker
      * @return le message contenant les informations
      */
-    MessagePartie remplacerJoker(List<Integer> indexes);
+    MessagePartie remplacerJoker(int indexJoueur, List<Integer> indexes);
 
     /**
      * Annule l'action précédente.
@@ -132,9 +138,10 @@ public interface Partie {
 	 * Il contient le nom du joueur courant et son jeu.
 	 * Il contient aussi le plateau.
 	 *
+	 * @param indexJoueur index du joueur qui souhaite effectuer l'action
      * @return le message contenant les informations
      */
-    MessagePartie annulerDerniereAction();
+    MessagePartie annulerDerniereAction(int indexJoueur);
     
     /**
      * Termine un tour.
@@ -152,8 +159,16 @@ public interface Partie {
 	 * Il contient le nom du joueur courant et son jeu.
 	 * Il contient aussi le plateau.
 	 * 
+	 * @param indexJoueur index du joueur qui souhaite effectuer l'action
      * @return le message contenant les informations
      */
-    MessagePartie terminerTour();
+    MessagePartie terminerTour(int indexJoueur);
+
+    /**
+     * Retourne l'index du joueur courant.
+	 *
+     * @return l'index
+     */
+    int getIndexJoueurCourant();
 }
 

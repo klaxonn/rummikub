@@ -11,7 +11,7 @@ import java.util.InputMismatchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** 
+/**
  * Implémentation textuelle de l'interface.
  *
  * Les communications se font par la console. Tous les joueurs partagent la même console.
@@ -24,6 +24,7 @@ public class InterfaceConsole {
 	private static final Logger logger = LoggerFactory.getLogger(InterfaceConsole.class);
 	private boolean finTour=false;
 	private boolean finPartie=false;
+	private int indexJoueurCourant = 1;
 
     /**
      * Crée une nouvelle partie console.
@@ -46,7 +47,7 @@ public class InterfaceConsole {
 		while(!finPartie);
 		afficherFindePartie();
 	}
-		
+
 	private void afficherIntroduction() {
         System.out.println("RUMMIKUB\n");
     }
@@ -54,7 +55,7 @@ public class InterfaceConsole {
 	private void afficherFindePartie() {
 		System.out.println("Félicitation vous avez gagné !");
     }
-    
+
     private Set<String> obtenirlisteDesJoueurs() {
 		HashSet<String> setJoueurs = new HashSet<>();
         System.out.print("Combien de joueurs ? ");
@@ -91,7 +92,7 @@ public class InterfaceConsole {
 			default:
 				System.out.println("message non reconnu");
 				break;
-		}			
+		}
     }
 
 	private void afficherPartie(MessagePartie message){
@@ -107,13 +108,13 @@ public class InterfaceConsole {
 	}
 
 	private void afficherDebutPartie(MessagePartie message){
-		//On affiche qu'un joueur à la fois, 
+		//On affiche qu'un joueur à la fois,
 		//donc on extrait le premier joueur de la liste
 		String premierNomJoueur = message.getNomJoueur().split(",")[0];
 		String premierJeuJoueur = message.getJeuJoueur().split(",")[0];
 		message.setNomJoueur(premierNomJoueur);
 		message.setJeuJoueur(premierJeuJoueur);
-		afficherPartie(message);		
+		afficherPartie(message);
 	}
 
 
@@ -124,7 +125,7 @@ public class InterfaceConsole {
             executerAction(index);
         } while (!finTour);
     }
-    
+
 	private int poserQuestionReponseInt() {
         for (;;) {
             try {
@@ -160,10 +161,11 @@ public class InterfaceConsole {
 				remplacerJoker();
 				break;
 			case 7:
-				traitementMessages(partie.annulerDerniereAction());
+				traitementMessages(partie.annulerDerniereAction(indexJoueurCourant));
 				break;
 			case 8:
-				traitementMessages(partie.terminerTour());
+				traitementMessages(partie.terminerTour(indexJoueurCourant));
+				indexJoueurCourant = partie.getIndexJoueurCourant();
 				break;
 			case 9:
 				System.exit(0);
@@ -171,43 +173,43 @@ public class InterfaceConsole {
 			default:
 				System.out.println("Action non reconnue");
 				break;
-		}		
+		}
     }
 
 	private void creerNouvelleSequence() {
 		List<Integer> listeIndexJetons = obtenirListeJetons();
-		traitementMessages(partie.creerNouvelleSequence(listeIndexJetons));	
+		traitementMessages(partie.creerNouvelleSequence(indexJoueurCourant,listeIndexJetons));
 	}
 
 	private void ajouterJeton() {
 		List<Integer> indexes = obtenirIndexes(Arrays.asList("Numéro du jeton à ajouter : ",
-                "Numéro de la séquence d'arrivée : "));	
-		traitementMessages(partie.ajouterJeton(indexes));
+                "Numéro de la séquence d'arrivée : "));
+		traitementMessages(partie.ajouterJeton(indexJoueurCourant, indexes));
 	}
 
 	private void fusionnerSequence() {
 		List<Integer> indexes = obtenirIndexes(Arrays.asList("Numéro de la séquence de départ : ",
-                "Numéro de la séquence d'arrivée : "));	
-		traitementMessages(partie.fusionnerSequence(indexes));	
+                "Numéro de la séquence d'arrivée : "));
+		traitementMessages(partie.fusionnerSequence(indexJoueurCourant, indexes));
 	}
 
 	private void couperSequence() {
 		List<Integer> indexes = obtenirIndexes(Arrays.asList("Numéro de la séquence à couper : ",
-                "Numéro du jeton où couper : "));	
-		traitementMessages(partie.couperSequence(indexes));	
+                "Numéro du jeton où couper : "));
+		traitementMessages(partie.couperSequence(indexJoueurCourant, indexes));
 	}
 
 	private void deplacerJeton() {
 		List<Integer> indexes = obtenirIndexes(Arrays.asList("Numéro de la séquence qui contient le jeton : ",
                 "Numéro du jeton à déplacer : ",
                 "Numéro de la séquence d'arrivée : "));
-		traitementMessages(partie.deplacerJeton(indexes));
+		traitementMessages(partie.deplacerJeton(indexJoueurCourant, indexes));
 	}
 
 	private void remplacerJoker() {
 		List<Integer> indexes = obtenirIndexes(Arrays.asList("Numéro du jeton à uiliser : ",
                 "Numéro de la séquence d'arrivée : "));
-		traitementMessages(partie.remplacerJoker(indexes));	
+		traitementMessages(partie.remplacerJoker(indexJoueurCourant, indexes));
 	}
 
     private void afficherAide() {
