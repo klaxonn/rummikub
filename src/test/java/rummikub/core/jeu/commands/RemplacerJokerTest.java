@@ -1,6 +1,7 @@
 package rummikub.core.jeu.commands;
 
 import rummikub.core.plateau.Plateau;
+import rummikub.core.plateau.PlateauImpl;
 import rummikub.core.jeu.Joueur;
 import rummikub.core.pieces.*;
 import java.util.Arrays;
@@ -16,7 +17,7 @@ public class RemplacerJokerTest {
 
     @BeforeEach
     private void initialisation() {
-        plateau = new Plateau();
+        plateau = new PlateauImpl();
         joueur = new Joueur("Kate");
         Jeton jeton1 = new JetonNormal(1, Couleur.ROUGE);
         Jeton jeton2 = new JetonNormal(2, Couleur.ROUGE);

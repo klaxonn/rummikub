@@ -19,7 +19,7 @@ public class PlateauTestFail {
 
     @BeforeEach
     private void initialisation() {
-        plateau = new Plateau();
+        plateau = new PlateauImpl();
 
         suiteTest = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {

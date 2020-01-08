@@ -18,8 +18,8 @@ public class DeplacerJeton implements Command {
      * Crée une action.
      *
      * @param plateau le plateau de jeu
-     * @param indexes les indexes de la séquence de départ, du jeton d'arrivée 
-     * et de la séquence d'arrivée 
+     * @param indexes les indexes de la séquence de départ, du jeton d'arrivée
+     * et de la séquence d'arrivée
      */
     public DeplacerJeton(Plateau plateau, List<Integer> indexes) {
         this.plateau = plateau;

@@ -26,7 +26,7 @@ public class CreerNouvelleSequence implements Command {
         this.plateau = plateau;
         this.joueur = joueur;
         this.listeIndexJetons = listeIndexJetons;
-        
+
     }
 
     @Override

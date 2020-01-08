@@ -2,6 +2,7 @@ package rummikub.core.api;
 
 import rummikub.core.jeu.Pioche;
 import rummikub.core.plateau.Plateau;
+import rummikub.core.plateau.PlateauImpl;
 import rummikub.core.jeu.commands.Historique;
 import rummikub.core.pieces.Couleur;
 import rummikub.core.pieces.Jeton;
@@ -36,7 +37,7 @@ public class PartieImplTest {
 		jetonsPiochesJoueur1 = initialiserJoueur1();
 		jetonsPiochesJoueur2 = initialiserJoueur2();
 		piocheMock = mock(Pioche.class);
-		plateauMock = mock(Plateau.class);
+		plateauMock = mock(PlateauImpl.class);
 		historique = new Historique();
 		partie = new PartieImpl(listejoueurs, piocheMock, plateauMock, historique);
 
@@ -78,14 +79,14 @@ public class PartieImplTest {
 		assertEquals("",message.getMessageErreur());
 		assertEquals(1,partie.getIndexJoueurCourant());
     }
-    
+
     @Test
     public void afficherPartieTest() {
 		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
 										 .thenReturn(jetonsPiochesJoueur2);
 		when(plateauMock.toString()).thenReturn("");
 		partie.commencerPartie();
-		MessagePartie message = partie.afficherPartie(JOUEUR1);		
+		MessagePartie message = partie.afficherPartie(JOUEUR1);
 		assertEquals(MessagePartie.TypeMessage.AFFICHER_PARTIE,message.getTypeMessage());
 		assertEquals("Vincent",message.getNomJoueur());
 		assertEquals("10bleu 11bleu 12bleu 13bleu",message.getJeuJoueur());
@@ -99,7 +100,7 @@ public class PartieImplTest {
 										 .thenReturn(jetonsPiochesJoueur2);
 		when(plateauMock.toString()).thenReturn("");
 		partie.commencerPartie();
-		MessagePartie message = partie.afficherPartie(JOUEUR_INCONNU);		
+		MessagePartie message = partie.afficherPartie(JOUEUR_INCONNU);
 		assertEquals(MessagePartie.TypeMessage.ERREUR,message.getTypeMessage());
 		assertEquals("",message.getNomJoueur());
 		assertEquals("",message.getJeuJoueur());

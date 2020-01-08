@@ -1,6 +1,7 @@
 package rummikub.core.jeu.commands;
 
 import rummikub.core.plateau.Plateau;
+import rummikub.core.plateau.PlateauImpl;
 import rummikub.core.pieces.*;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ public class CouperSequenceTest {
 
     @BeforeEach
     private void initialisation() {
-        plateau = new Plateau();
+        plateau = new PlateauImpl();
         Jeton jeton1 = new JetonNormal(1, Couleur.ROUGE);
         Jeton jeton2 = new JetonNormal(2, Couleur.ROUGE);
         Jeton jeton3 = new JetonNormal(3, Couleur.ROUGE);
