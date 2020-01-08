@@ -15,7 +15,7 @@ public class MessagePartie {
 	 * Types de messages possibles.
 	 */
     public enum TypeMessage {
-		DEBUT_PARTIE,
+		AFFICHER_PARTIE,
         RESULTAT_ACTION,
         DEBUT_NOUVEAU_TOUR,
 		FIN_DE_PARTIE,

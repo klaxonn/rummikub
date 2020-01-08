@@ -75,9 +75,6 @@ public class InterfaceConsole {
 				finTour = true;
 				afficherPartie(message);
 				break;
-			case DEBUT_PARTIE:
-				afficherDebutPartie(message);
-				break;
 			case FIN_DE_PARTIE:
 				finTour = true;
 				finPartie = true;
@@ -106,17 +103,6 @@ public class InterfaceConsole {
         System.out.println("Joueur : " + message.getNomJoueur());
 		System.out.println(message.getJeuJoueur());
 	}
-
-	private void afficherDebutPartie(MessagePartie message){
-		//On affiche qu'un joueur à la fois,
-		//donc on extrait le premier joueur de la liste
-		String premierNomJoueur = message.getNomJoueur().split(",")[0];
-		String premierJeuJoueur = message.getJeuJoueur().split(",")[0];
-		message.setNomJoueur(premierNomJoueur);
-		message.setJeuJoueur(premierJeuJoueur);
-		afficherPartie(message);
-	}
-
 
     private void jouerTour() {
         do {

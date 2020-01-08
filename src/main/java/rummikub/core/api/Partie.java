@@ -9,14 +9,24 @@ public interface Partie {
 
     /**
      * Commence la partie.
-	 * Le message envoyé est de type DEBUT_PARTIE.
-	 * Il contient la liste des noms des joueurs séparés par des virgules.
-	 * Il contient la liste des jeux des joueurs séparés par des virgules.
+	 * Le message envoyé est de type DEBUT_NOUVEAU_TOUR.
+	 * Il contient le nom du premier joueur et son jeu.
 	 * Il contient aussi le plateau.
      *
      * @return le message contenant les informations
      */
     MessagePartie commencerPartie();
+
+    /**
+     * Affiche la partie.
+	 * Le message envoyé est de type AFFICHER_PARTIE.
+	 * Il contient le nom du joueur donné en index et son jeu.
+	 * Il contient aussi le plateau.
+     *
+     * @param indexJoueur index du joueur qui souhaite afficher la partie
+     * @return le message contenant les informations
+     */
+    MessagePartie afficherPartie(int indexJoueur);
 
     /**
      * Créé une nouvelle séquence.
@@ -27,21 +37,21 @@ public interface Partie {
 	 *
 	 * Le message envoyé est de type ERREUR.
 	 * Il contient le message d'erreur
-	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient le nom du joueur et son jeu si c'est un joueur valide
 	 * Il contient aussi le plateau.
 	 *
 	 * @param indexJoueur index du joueur qui souhaite effectuer l'action
-	 * @param indexes liste contenant les indexes des jetons 
+	 * @param indexes liste contenant les indexes des jetons
 	 * dans le jeu du joueur utilisés pour la séquence
      * @return le message contenant les informations
      */
 	MessagePartie creerNouvelleSequence(int indexJoueur, List<Integer> indexes);
-    
+
     /**
      * Ajoute un nouveau jeton.
 	 * Le message envoyé peut être de deux types :
 	 * Le message envoyé est de type RESULTAT_ACTION.
-	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient le nom du joueur et son jeu si c'est un joueur valide
 	 * Il contient aussi le plateau.
 	 *
 	 * Le message envoyé est de type ERREUR.
@@ -55,7 +65,7 @@ public interface Partie {
      * @return le message contenant les informations
      */
     MessagePartie ajouterJeton(int indexJoueur, List<Integer> indexes);
-    
+
     /**
      * Fusionne deux séquences.
 	 * Le message envoyé peut être de deux types :
@@ -65,7 +75,7 @@ public interface Partie {
 	 *
 	 * Le message envoyé est de type ERREUR.
 	 * Il contient le message d'erreur
-	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient le nom du joueur et son jeu si c'est un joueur valide
 	 * Il contient aussi le plateau.
      *
      * @param indexJoueur index du joueur qui souhaite effectuer l'action
@@ -84,7 +94,7 @@ public interface Partie {
 	 *
 	 * Le message envoyé est de type ERREUR.
 	 * Il contient le message d'erreur
-	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient le nom du joueur et son jeu si c'est un joueur valide
 	 * Il contient aussi le plateau.
      *
      * @param indexJoueur index du joueur qui souhaite effectuer l'action
@@ -93,7 +103,7 @@ public interface Partie {
      * @return le message contenant les informations
      */
     MessagePartie couperSequence(int indexJoueur, List<Integer> indexes);
-    
+
     /**
      * Déplace un jeton.
 	 * Le message envoyé peut être de deux types :
@@ -103,7 +113,7 @@ public interface Partie {
 	 *
 	 * Le message envoyé est de type ERREUR.
 	 * Il contient le message d'erreur
-	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient le nom du joueur et son jeu si c'est un joueur valide
 	 * Il contient aussi le plateau.
      *
      * @param indexJoueur index du joueur qui souhaite effectuer l'action
@@ -112,17 +122,17 @@ public interface Partie {
      * @return le message contenant les informations
      */
     MessagePartie deplacerJeton(int indexJoueur, List<Integer> indexes);
-    
+
     /**
      * Remplace un joker.
 	 * Le message envoyé peut être de deux types :
 	 * Le message envoyé est de type RESULTAT_ACTION.
-	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient le nom du joueur et son jeu si c'est un joueur valide
 	 * Il contient aussi le plateau.
 	 *
 	 * Le message envoyé est de type ERREUR.
 	 * Il contient le message d'erreur
-	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient le nom du joueur et son jeu si c'est un joueur valide
 	 * Il contient aussi le plateau.
      *
      * @param indexJoueur index du joueur qui souhaite effectuer l'action
@@ -135,14 +145,14 @@ public interface Partie {
     /**
      * Annule l'action précédente.
 	 * Le message envoyé est de type RESULTAT_ACTION.
-	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient le nom du joueur et son jeu si c'est un joueur valide
 	 * Il contient aussi le plateau.
 	 *
 	 * @param indexJoueur index du joueur qui souhaite effectuer l'action
      * @return le message contenant les informations
      */
     MessagePartie annulerDerniereAction(int indexJoueur);
-    
+
     /**
      * Termine un tour.
 	 * Le message envoyé peut être de trois types :
@@ -152,13 +162,13 @@ public interface Partie {
 	 *
 	 * Le message envoyé est de type ERREUR.
 	 * Il contient le message d'erreur
-	 * Il contient le nom du joueur courant et son jeu.
+	 * Il contient le nom du joueur et son jeu si c'est un joueur valide
 	 * Il contient aussi le plateau.
      *
 	 * Le message envoyé est de type FIN_DE_PARTIE.
 	 * Il contient le nom du joueur courant et son jeu.
 	 * Il contient aussi le plateau.
-	 * 
+	 *
 	 * @param indexJoueur index du joueur qui souhaite effectuer l'action
      * @return le message contenant les informations
      */
