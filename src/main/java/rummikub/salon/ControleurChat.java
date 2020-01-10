@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
@@ -15,25 +16,11 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class ControleurChat {
-		
+
 	private static final Logger logger = LoggerFactory.getLogger(ControleurChat.class);
 
 	/** Le nombre maximum de joueurs dans une partie */
 	public static final int NOMBRE_MAX_JOUEURS_PARTIE = 4;
-
-	/**
-	 * Appelé quand un message de chat est envoyé.
-	 * Le message est retransmis à tous les clients
-	 *
-	 * @param message le message reçu du client
-	 * @return le même message
-	 */
-    @MessageMapping("/envoyerMessageChat")
-    @SendTo("/joueursConnectes")
-    public MessageChat envoyerMessage(@Payload MessageChat message) {
-		logger.info("Envoi message Chat");
-        return message;
-    }
 
 	/**
 	 * Appelé quand un nouveau client se connecte au salon.
@@ -44,10 +31,11 @@ public class ControleurChat {
 	 * @return le même message avec son nom à jour
 	 */
 	@MessageMapping("/ajouterJoueurConnecte")
-    @SendTo("/connexionJoueur")
-    public MessageChat ajouterJoueurConnecte(@Payload MessageChat message, 
+    @SendToUser("/queue/canalPersonel")
+    public MessageChat ajouterJoueurConnecte(@Payload MessageChat message,
                                SimpMessageHeaderAccessor headerAccessor) {
-		String nomJoueur = ListeJoueurs.ajouterJoueurConnecte(message.getJoueur());	
+		String nomJoueur = ListeJoueurs.ajouterJoueurConnecte(message.getJoueur());
+		logger.info("Ajout Joueur");
         headerAccessor.getSessionAttributes().put("nomJoueur", nomJoueur);
 		message.setJoueur(nomJoueur);
         return message;
@@ -61,7 +49,7 @@ public class ControleurChat {
 	 * @return le même message avec la liste des clients connectés
 	 */
 	@MessageMapping("/mettreAJourJoueursConnectes")
-    @SendTo("/joueursConnectes")
+    @SendTo("/topic/joueursConnectes")
     public MessageChat mettreAJourJoueursConnectes(@Payload MessageChat message) {
 		String listeAEnvoyer = ListeJoueurs.getJoueursConnectes().toString();
 		if(ListeJoueurs.nombreJoueursPartie() > 0){
@@ -82,7 +70,7 @@ public class ControleurChat {
 	 * @return le message.
 	 */
     @MessageMapping("/joindrePartie")
-    @SendTo("/JoueurAAjouter")
+    @SendToUser("/queue/canalPersonel")
     public MessageChat ajouterJoueurPartie(@Payload MessageChat message) {
 		if(ListeJoueurs.nombreJoueursPartie() < NOMBRE_MAX_JOUEURS_PARTIE) {
 			try{
@@ -115,7 +103,7 @@ public class ControleurChat {
 	 * @return le même message avec la liste des joueurs
 	 */
     @MessageMapping("/mettreAJourJoueursPartie")
-    @SendTo("/joueursConnectes")
+    @SendTo("/topic/joueursConnectes")
     public MessageChat mettreAJourJoueursPartie(@Payload MessageChat message) {
 		String listeJoueurs = ListeJoueurs.getJoueursPartie().toString();
 		message.setMessage(listeJoueurs);
@@ -130,13 +118,13 @@ public class ControleurChat {
 	 * @return le même message
 	 */
     @MessageMapping("/demarrerPartie")
-    @SendTo("/DemarrerPartie")
+    @SendTo("/topic/joueursPartie")
     public MessageChat demarrerPartie(@Payload MessageChat message) {
 		logger.info("Démarrage partie");
 		Partie partie = FabriquePartie.creerNouvellePartie(ListeJoueurs.getJoueursPartie());
         partie.commencerPartie();
         return message;
     }
-    
+
 }
 

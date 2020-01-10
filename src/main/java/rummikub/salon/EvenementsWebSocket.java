@@ -52,12 +52,12 @@ public class EvenementsWebSocket {
 			}
         }
     }
-	
+
 	private void envoiMessage(String nomJoueur, String listeJoueurs){
 		MessageChat message = new MessageChat();
         message.setTypeMessage(MessageChat.TypeMessage.DECONNEXION);
         message.setJoueur(nomJoueur);
 		message.setMessage(listeJoueurs);
-		messagingTemplate.convertAndSend("/joueursConnectes", message);
+		messagingTemplate.convertAndSend("/topic/joueursConnectes", message);
 	}
 }

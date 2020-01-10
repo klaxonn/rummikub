@@ -5,19 +5,19 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ListeJoueursTest {
-	
+
 	@BeforeEach
 	public void initialisation() {
 		ListeJoueurs.retirerTousJoueurs();
 	}
-	
+
     @Test
 	public void ajouterJoueurConnecteTest(){
 		ListeJoueurs.ajouterJoueurConnecte("Vincent");
 		assertEquals("[Vincent]",ListeJoueurs.getJoueursConnectes().toString());
 		assertEquals(1,ListeJoueurs.nombreJoueursConnectes());
 	}
-	
+
 	@Test
 	public void ajouterJoueurConnecteMemeNomTest(){
 		ListeJoueurs.ajouterJoueurConnecte("Vincent");
@@ -25,7 +25,7 @@ public class ListeJoueursTest {
 		assertEquals("[Vincent, Vincent-1]",ListeJoueurs.getJoueursConnectes().toString());
 		assertEquals(2,ListeJoueurs.nombreJoueursConnectes());
 	}
-	
+
 	@Test
 	public void retirerJoueurTest(){
 		ListeJoueurs.ajouterJoueurConnecte("Vincent");
@@ -33,7 +33,7 @@ public class ListeJoueursTest {
 		assertEquals("[]",ListeJoueurs.getJoueursConnectes().toString());
 		assertEquals(0,ListeJoueurs.nombreJoueursConnectes());
 	}
-	
+
 	@Test
 	public void retirerJoueurTestFail(){
 		ListeJoueurs.ajouterJoueurConnecte("Vincent");
@@ -43,7 +43,7 @@ public class ListeJoueursTest {
 		assertEquals("[Vincent]",ListeJoueurs.getJoueursConnectes().toString());
 		assertEquals(1,ListeJoueurs.nombreJoueursConnectes());
 	}
-	
+
 	@Test
 	public void ajouterJoueurPartie(){
 		ListeJoueurs.ajouterJoueurConnecte("Vincent");
@@ -57,7 +57,7 @@ public class ListeJoueursTest {
 		assertEquals("Vincent",ListeJoueurs.getCreateurPartie());
 
 	}
-	
+
 	@Test
 	public void ajouterJoueurPartieFail(){
 		ListeJoueurs.ajouterJoueurConnecte("Vincent");
@@ -67,7 +67,7 @@ public class ListeJoueursTest {
 		assertEquals("[]",ListeJoueurs.getJoueursPartie().toString());
 		assertEquals(0,ListeJoueurs.nombreJoueursPartie());
 	}
-	
+
 	@Test
 	public void supprimerJoueursPartieTest(){
 		ListeJoueurs.ajouterJoueurConnecte("Vincent");
@@ -77,7 +77,7 @@ public class ListeJoueursTest {
 		assertEquals(0,ListeJoueurs.nombreJoueursPartie());
 		assertEquals("",ListeJoueurs.getCreateurPartie());
 	}
-	
+
 	@Test
 	public void retirerCreateurPartie(){
 		ListeJoueurs.ajouterJoueurConnecte("Vincent");

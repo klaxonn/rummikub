@@ -12,7 +12,7 @@ public final class ListeJoueurs {
 
 	private static final Map<String,Boolean> listeJoueurs = new HashMap<>();
 	private static String createurPartie = "";
-	
+
 	private ListeJoueurs() {
 	}
 
@@ -43,7 +43,7 @@ public final class ListeJoueurs {
 
 	/**
 	 * Retire un client.
-	 * Si le client est le créateur de la partie, 
+	 * Si le client est le créateur de la partie,
 	 * tous les joueurs sont supprimés de la partie.
 	 *
 	 * @param nomJoueur le nom du joueur

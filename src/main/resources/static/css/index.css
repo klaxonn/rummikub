@@ -5,7 +5,7 @@
 }
 
 #chat-section {
-  display: flex; 
+  display: flex;
   flex:2;
   margin-right: 100px;
   flex-direction: column;

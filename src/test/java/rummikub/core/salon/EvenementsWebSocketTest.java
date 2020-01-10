@@ -17,7 +17,7 @@ public class EvenementsWebSocketTest {
 		ListeJoueurs.retirerTousJoueurs();
 	}
 
-	private MessageChat nouveauMessage(MessageChat.TypeMessage type, String joueur, String texteMessage){ 
+	private MessageChat nouveauMessage(MessageChat.TypeMessage type, String joueur, String texteMessage){
 		MessageChat message = new MessageChat();
 		message.setTypeMessage(type);
 		message.setMessage(texteMessage);
@@ -25,8 +25,8 @@ public class EvenementsWebSocketTest {
 		return message;
 	}
 
-	private boolean testContenuMessage(MessageChat message, MessageChat.TypeMessage type, String joueur, String texteMessage){ 
-		return message.getTypeMessage().equals(type) 
+	private boolean testContenuMessage(MessageChat message, MessageChat.TypeMessage type, String joueur, String texteMessage){
+		return message.getTypeMessage().equals(type)
 				&& message.getJoueur().equals(joueur)
 				&& message.getMessage().equals(texteMessage);
 	}

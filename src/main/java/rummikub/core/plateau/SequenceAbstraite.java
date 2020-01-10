@@ -256,7 +256,7 @@ public abstract class SequenceAbstraite {
      *
      */
     public List<Jeton> getJetons() {
-        return sequence;
+		return new ArrayList<Jeton>(sequence);
     }
 
     /**

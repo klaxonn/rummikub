@@ -6,12 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.CommandLineRunner;
 
 @SpringBootApplication
-public class Main implements CommandLineRunner {
+public class Main {//implements CommandLineRunner {
 
-	@Override
+	/*@Override
     public void run(String... args) throws Exception {
 		new InterfaceConsole().demarrerPartie();
-    }
+    }*/
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
