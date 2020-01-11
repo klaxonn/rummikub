@@ -10,16 +10,24 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 
 public class PlateauTestFail {
 
     private List<Jeton> suiteTest;
     private List<Jeton> couleurSequenceTest;
     private Plateau plateau;
+    private static FabriqueSequence fabrique;
+
+    @BeforeAll
+    public static void initialisation() {
+		fabrique = FabriqueSequence.obtenirFabrique();
+	}
+
 
     @BeforeEach
-    private void initialisation() {
-        plateau = new PlateauImpl();
+    private void initialisationTest() {
+        plateau = new PlateauImpl(fabrique);
 
         suiteTest = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {

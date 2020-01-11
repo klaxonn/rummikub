@@ -21,11 +21,12 @@ class SequenceCouleur extends SequenceAbstraite {
      * calculées pour obtenir une séquence valide si possible.
      *
      * @param collectionJetons la liste de jetons constituant la séquence
+     * @param fabrique la fabrique de séquences
      * @throws UnsupportedOperationException si les jetons ne forment pas une
      * séquence de couleurs valide
      */
-    public SequenceCouleur(List<Jeton> collectionJetons) {
-        super(collectionJetons);
+    public SequenceCouleur(List<Jeton> collectionJetons, FabriqueSequence fabrique) {
+        super(collectionJetons, fabrique);
     }
 
     @Override

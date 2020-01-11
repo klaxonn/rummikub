@@ -12,19 +12,23 @@ import java.util.stream.Collectors;
 public class PlateauImpl implements Plateau{
 
     private final List<SequenceAbstraite> plateau;
+    private final FabriqueSequence fabrique;
 
 	private static final String ERREUR_SEQUENCE = "Index séquence non correct";
 
     /**
      * Crée un nouveau plateau.
+     *
+     * @param fabrique la fabrique de sequences
      */
-    public PlateauImpl() {
+    public PlateauImpl(FabriqueSequence fabrique) {
         plateau = new ArrayList<>();
+        this.fabrique = fabrique;
     }
 
 	@Override
     public int creerSequence(List<Jeton> jetons) {
-        SequenceAbstraite nouvelleSequenceCouleur = FabriqueSequence.creerNouvelleSequence(jetons);
+        SequenceAbstraite nouvelleSequenceCouleur = fabrique.creerNouvelleSequence(jetons);
         plateau.add(nouvelleSequenceCouleur);
         return plateau.size();
     }
@@ -141,7 +145,7 @@ public class PlateauImpl implements Plateau{
             Jeton jetonADeplacer = sequenceDepart.retirerJeton(indexJeton);
             List<Jeton> jetons = new ArrayList<>();
             jetons.add(jetonADeplacer);
-            SequenceAbstraite nouvelleSequence = FabriqueSequence.creerNouvelleSequence(jetons);
+            SequenceAbstraite nouvelleSequence = fabrique.creerNouvelleSequence(jetons);
             plateau.add(nouvelleSequence);
             return nouvelleSequence.longueur();
         } else {

@@ -4,6 +4,7 @@ import rummikub.core.jeu.Joueur;
 import rummikub.core.jeu.Pioche;
 import rummikub.core.plateau.Plateau;
 import rummikub.core.plateau.PlateauImpl;
+import rummikub.core.plateau.FabriqueSequence;
 import rummikub.core.jeu.commands.Historique;
 import java.util.Set;
 
@@ -23,7 +24,8 @@ final public class FabriquePartie {
      */
     public static Partie creerNouvellePartie(Set<String> listeNomsJoueurs) {
     	Pioche pioche = new Pioche();
-		Plateau plateau = new PlateauImpl();
+		FabriqueSequence fabrique = FabriqueSequence.obtenirFabrique();
+		Plateau plateau = new PlateauImpl(fabrique);
 		Historique historique = new Historique();
 		return new PartieImpl(listeNomsJoueurs, pioche, plateau, historique);
     }

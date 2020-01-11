@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public abstract class SequenceAbstraite {
 
     protected final List<Jeton> sequence;
+    private FabriqueSequence fabrique;
 
     /**
      * Détermine si la liste de jetons est une séquence valide.
@@ -36,10 +37,12 @@ public abstract class SequenceAbstraite {
      * Crée une nouvelle séquence.
      *
      * @param collectionJetons la liste de jetons constituant la séquence
+     * @param fabrique la fabrique de séquences
      * @throws UnsupportedOperationException si les jetons ne forment pas une
      * séquence valide.
      */
-    protected SequenceAbstraite(List<Jeton> collectionJetons) {
+    protected SequenceAbstraite(List<Jeton> collectionJetons, FabriqueSequence fabrique) {
+		this.fabrique = fabrique;
         List<Jeton> copieCollectionJetons = new ArrayList<>(collectionJetons);
         if (isCorrectSequence(copieCollectionJetons)) {
             sequence = copieCollectionJetons;
@@ -93,7 +96,7 @@ public abstract class SequenceAbstraite {
             List<Jeton> sousListe = sequence.subList(indexDebutNouvelleSequence - 1, sequence.size());
             listeJetons.addAll(sousListe);
             sequence.removeAll(sousListe);
-            return FabriqueSequence.creerNouvelleSequence(listeJetons);
+            return fabrique.creerNouvelleSequence(listeJetons);
         }
         throw new UnsupportedOperationException("Impossible de couper la suite");
     }
@@ -138,7 +141,7 @@ public abstract class SequenceAbstraite {
         List<Jeton> jetonsNouvelleSequence = new ArrayList<>();
         jetonsNouvelleSequence.addAll(sequence);
         jetonsNouvelleSequence.addAll(collectionJetons);
-        return FabriqueSequence.creerNouvelleSequence(jetonsNouvelleSequence);
+        return fabrique.creerNouvelleSequence(jetonsNouvelleSequence);
     }
 
     /**

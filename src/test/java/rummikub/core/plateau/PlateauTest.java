@@ -10,17 +10,26 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+
 
 public class PlateauTest {
 
-    List<Jeton> suiteTest;
-    List<Jeton> suiteTest2;
-    List<Jeton> couleurSequenceTest;
-    Plateau plateau;
+    private List<Jeton> suiteTest;
+    private List<Jeton> suiteTest2;
+    private List<Jeton> couleurSequenceTest;
+    private Plateau plateau;
+    private static FabriqueSequence fabrique;
+
+    @BeforeAll
+    public static void initialisation() {
+		fabrique = FabriqueSequence.obtenirFabrique();
+	}
+
 
     @BeforeEach
-    public void initialisation() {
-        plateau = new PlateauImpl();
+    public void initialisationTest() {
+        plateau = new PlateauImpl(fabrique);
 
         suiteTest = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {

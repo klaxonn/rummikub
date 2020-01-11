@@ -8,8 +8,17 @@ import java.util.List;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+
 
 public class FabriqueSequenceTest {
+
+    private static FabriqueSequence fabrique;
+
+    @BeforeAll
+    public static void initialisation() {
+		fabrique = FabriqueSequence.obtenirFabrique();
+	}
 
     @Test
     public void creerSuite() {
@@ -18,7 +27,7 @@ public class FabriqueSequenceTest {
             Jeton jeton = new JetonNormal(i, Couleur.ROUGE);
             liste1.add(jeton);
         }
-        SequenceAbstraite sequence = FabriqueSequence.creerNouvelleSequence(liste1);
+        SequenceAbstraite sequence = fabrique.creerNouvelleSequence(liste1);
         assertEquals("1rouge 2rouge 3rouge 4rouge 5rouge", sequence.toString());
     }
 
@@ -29,7 +38,7 @@ public class FabriqueSequenceTest {
             Jeton jeton = new JetonNormal(2, couleur);
             liste2.add(jeton);
         }
-        SequenceAbstraite sequence = FabriqueSequence.creerNouvelleSequence(liste2);
+        SequenceAbstraite sequence = fabrique.creerNouvelleSequence(liste2);
         assertEquals("2bleu 2rouge 2vert 2jaune", sequence.toString());
     }
 
@@ -38,7 +47,7 @@ public class FabriqueSequenceTest {
         Jeton jeton = new JetonNormal(2, Couleur.ROUGE);
         Jeton jeton2 = new JetonNormal(1, Couleur.VERT);
         assertThrows(UnsupportedOperationException.class, () -> {
-            FabriqueSequence.creerNouvelleSequence(Arrays.asList(jeton, jeton2));
+            fabrique.creerNouvelleSequence(Arrays.asList(jeton, jeton2));
         });
     }
 }

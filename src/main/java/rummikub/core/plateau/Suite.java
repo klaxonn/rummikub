@@ -22,11 +22,12 @@ class Suite extends SequenceAbstraite {
      * obtenir une suite valide si possible.
      *
      * @param collectionJetons la liste de jetons constituant la suite
+     * @param fabrique la fabrique de séquences
      * @throws UnsupportedOperationException si les jetons ne forment pas une
      * suite valide
      */
-    public Suite(List<Jeton> collectionJetons) {
-        super(collectionJetons);
+    public Suite(List<Jeton> collectionJetons, FabriqueSequence fabrique) {
+        super(collectionJetons, fabrique);
         Collections.sort(sequence);
     }
 

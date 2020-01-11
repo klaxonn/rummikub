@@ -6,12 +6,27 @@ import java.util.List;
 /**
  * Fabrique de séquences.
  */
-final class FabriqueSequence {
+final public class FabriqueSequence {
 
     private static final String cheminModule = "rummikub.core.plateau.";
+    private static FabriqueSequence fabrique = null;
 
     private FabriqueSequence() {
     }
+
+	/**
+	 * Retourne une instance de la fabrique.
+	 *
+	 * @return la séquence obtenue
+	 */
+	public static FabriqueSequence obtenirFabrique()
+    {
+        if (fabrique == null) {
+            fabrique = new FabriqueSequence();
+		}
+        return fabrique;
+    }
+
 
     /**
      * Trouve un type de séquence qui correspond à la liste de jetons et
@@ -26,12 +41,11 @@ final class FabriqueSequence {
      * @throws UnsupportedOperationException si les jetons ne forment aucun type
      * de séquence valide
      */
-    public static SequenceAbstraite creerNouvelleSequence(List<Jeton> jetons) {
-
+    public SequenceAbstraite creerNouvelleSequence(List<Jeton> jetons) {
         for (TypeSequence type : TypeSequence.values()) {
             try {
                 Class<?> c = Class.forName(cheminModule + type.toString());
-                return (SequenceAbstraite) c.getConstructor(List.class).newInstance(jetons);
+                return (SequenceAbstraite) c.getConstructor(List.class, FabriqueSequence.class).newInstance(jetons, this);
             } catch (ReflectiveOperationException e) {
                 //Ce type de sequence n'a pas pu etre créé, on essaie un autre type
                 continue;

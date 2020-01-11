@@ -2,22 +2,30 @@ package rummikub.core.jeu.commands;
 
 import rummikub.core.plateau.Plateau;
 import rummikub.core.plateau.PlateauImpl;
+import rummikub.core.plateau.FabriqueSequence;
 import rummikub.core.jeu.Joueur;
 import rummikub.core.pieces.*;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
 
 public class AjouterJetonTest {
 
     private Plateau plateau;
     private Joueur joueur;
     private Command commande;
+    private static FabriqueSequence fabrique;
+
+    @BeforeAll
+    public static void initialisation() {
+		fabrique = FabriqueSequence.obtenirFabrique();
+	}
 
     @BeforeEach
-    private void initialisation() {
-        plateau = new PlateauImpl();
+    private void initialisationTest() {
+        plateau = new PlateauImpl(fabrique);
         joueur = new Joueur("Kate");
         Jeton jeton1 = new JetonNormal(1, Couleur.ROUGE);
         Jeton jeton2 = new JetonNormal(2, Couleur.ROUGE);

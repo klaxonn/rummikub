@@ -10,15 +10,23 @@ import java.util.List;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
 
 public class SuiteTest {
+
+	private static FabriqueSequence fabrique;
+
+    @BeforeAll
+    public static void initialisation() {
+		fabrique = FabriqueSequence.obtenirFabrique();
+	}
 
     @Test
     public void newSuite() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
 		Jeton jeton3 = new JetonNormal(3, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2,jeton3));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2,jeton3), fabrique);
         assertEquals("1bleu 2bleu 3bleu", suite1.toString());
     }
 
@@ -27,7 +35,7 @@ public class SuiteTest {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.ROUGE);
         assertThrows(UnsupportedOperationException.class, () -> {
-            new Suite(Arrays.asList(jeton1, jeton2));
+            new Suite(Arrays.asList(jeton1, jeton2), fabrique);
         });
 
     }
@@ -37,14 +45,14 @@ public class SuiteTest {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(1, Couleur.BLEU);
         assertThrows(UnsupportedOperationException.class, () -> {
-            new Suite(Arrays.asList(jeton1, jeton2));
+            new Suite(Arrays.asList(jeton1, jeton2), fabrique);
         });
     }
 
     @Test
     public void newSuitewithWithListeVide() {
         assertThrows(UnsupportedOperationException.class, () -> {
-            new Suite(Arrays.asList());
+            new Suite(Arrays.asList(), fabrique);
         });
     }
 
@@ -52,7 +60,7 @@ public class SuiteTest {
     public void newSuiteAvecJoker() {
         Jeton jeton1 = new JetonNormal(4, Couleur.BLEU);
         Joker joker = new Joker();
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, joker));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, joker), fabrique);
         assertEquals("3bleu* 4bleu", suite1.toString());
     }
 
@@ -60,7 +68,7 @@ public class SuiteTest {
     public void newSuiteAvecJokerBorneInf() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Joker joker = new Joker();
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, joker));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, joker), fabrique);
         assertEquals("1bleu 2bleu*", suite1.toString());
     }
 
@@ -68,7 +76,7 @@ public class SuiteTest {
     public void newSuiteAvecJokerBorneSup() {
         Jeton jeton1 = new JetonNormal(Pioche.VALEUR_MAX, Couleur.ROUGE);
         Joker joker = new Joker();
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, joker));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, joker), fabrique);
         assertEquals("12rouge* 13rouge", suite1.toString());
     }
 
@@ -77,7 +85,7 @@ public class SuiteTest {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(3, Couleur.BLEU);
         Joker joker = new Joker();
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2, joker));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2, joker), fabrique);
         assertEquals("1bleu 2bleu* 3bleu", suite1.toString());
     }
 
@@ -87,7 +95,7 @@ public class SuiteTest {
         Jeton jeton2 = new JetonNormal(4, Couleur.BLEU);
         Joker joker = new Joker();
         assertThrows(UnsupportedOperationException.class, () -> {
-            new Suite(Arrays.asList(jeton1, jeton2, joker));
+            new Suite(Arrays.asList(jeton1, jeton2, joker), fabrique);
         });
         assertFalse(joker.isUtilise());
     }
@@ -101,7 +109,7 @@ public class SuiteTest {
             jetons1.add(new JetonNormal(i, Couleur.BLEU));
         }
         assertThrows(UnsupportedOperationException.class, () -> {
-            new Suite(jetons1);
+            new Suite(jetons1, fabrique);
         });
         assertFalse(joker.isUtilise());
     }
@@ -110,7 +118,7 @@ public class SuiteTest {
     public void ajoutJeton() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2), fabrique);
         Jeton jeton3 = new JetonNormal(3, Couleur.BLEU);
         SequenceAbstraite suite2 = suite1.ajouterJeton(jeton3);
         assertEquals("1bleu 2bleu 3bleu", suite2.toString());
@@ -120,7 +128,7 @@ public class SuiteTest {
     public void ajoutMauvaisJeton() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2), fabrique);
         Jeton jeton3 = new JetonNormal(4, Couleur.BLEU);
         assertThrows(UnsupportedOperationException.class, () -> {
             suite1.ajouterJeton(jeton3);
@@ -133,8 +141,8 @@ public class SuiteTest {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
         Jeton jeton3 = new JetonNormal(3, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1));
-        SequenceAbstraite suite2 = new Suite(Arrays.asList(jeton2, jeton3));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1), fabrique);
+        SequenceAbstraite suite2 = new Suite(Arrays.asList(jeton2, jeton3), fabrique);
         SequenceAbstraite suite3 = suite1.fusionnerSequence(suite2);
         assertEquals("1bleu 2bleu 3bleu", suite3.toString());
     }
@@ -144,8 +152,8 @@ public class SuiteTest {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
         Jeton jeton3 = new JetonNormal(3, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton3));
-        SequenceAbstraite suite2 = new Suite(Arrays.asList(jeton1, jeton2));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton3), fabrique);
+        SequenceAbstraite suite2 = new Suite(Arrays.asList(jeton1, jeton2), fabrique);
         SequenceAbstraite suite3 = suite1.fusionnerSequence(suite2);
         assertEquals("1bleu 2bleu 3bleu", suite3.toString());
     }
@@ -155,8 +163,8 @@ public class SuiteTest {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.ROUGE);
         Jeton jeton3 = new JetonNormal(3, Couleur.ROUGE);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1));
-        SequenceAbstraite suite2 = new Suite(Arrays.asList(jeton2, jeton3));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1), fabrique);
+        SequenceAbstraite suite2 = new Suite(Arrays.asList(jeton2, jeton3), fabrique);
         assertThrows(UnsupportedOperationException.class, () -> {
             suite1.fusionnerSequence(suite2);
         });
@@ -169,8 +177,8 @@ public class SuiteTest {
         Jeton jeton1 = new JetonNormal(1, Couleur.ROUGE);
         Jeton jeton2 = new JetonNormal(3, Couleur.ROUGE);
         Jeton jeton3 = new JetonNormal(4, Couleur.ROUGE);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1));
-        SequenceAbstraite suite2 = new Suite(Arrays.asList(jeton2, jeton3));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1), fabrique);
+        SequenceAbstraite suite2 = new Suite(Arrays.asList(jeton2, jeton3), fabrique);
         assertThrows(UnsupportedOperationException.class, () -> {
             suite1.fusionnerSequence(suite2);
         });
@@ -182,7 +190,7 @@ public class SuiteTest {
     public void retirerJetonSup() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2), fabrique);
         Jeton jeton3 = suite1.retirerJeton(2);
         assertEquals("1bleu", suite1.toString());
         assertSame(jeton2, jeton3);
@@ -192,7 +200,7 @@ public class SuiteTest {
     public void retirerJetonInf() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2), fabrique);
         Jeton jeton3 = suite1.retirerJeton(1);
         assertEquals("2bleu", suite1.toString());
         assertSame(jeton1, jeton3);
@@ -202,7 +210,7 @@ public class SuiteTest {
     public void retirerJetonHorsLimite() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2), fabrique);
         assertThrows(UnsupportedOperationException.class, () -> {
             suite1.retirerJeton(3);
         });
@@ -217,7 +225,7 @@ public class SuiteTest {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
         Jeton jeton3 = new JetonNormal(3, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2, jeton3));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2, jeton3), fabrique);
         assertThrows(UnsupportedOperationException.class, () -> {
             suite1.retirerJeton(2);
         });
@@ -229,7 +237,7 @@ public class SuiteTest {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
         Jeton jeton3 = new JetonNormal(3, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2, jeton3));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2, jeton3), fabrique);
         SequenceAbstraite suite2 = suite1.couperSequence(2);
         assertEquals("1bleu", suite1.toString());
         assertEquals("2bleu 3bleu", suite2.toString());
@@ -239,7 +247,7 @@ public class SuiteTest {
     public void couperSequenceHorsLimites() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2), fabrique);
         assertThrows(UnsupportedOperationException.class, () -> {
             suite1.couperSequence(0);
         });
@@ -254,7 +262,7 @@ public class SuiteTest {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Joker joker = new Joker();
         joker.setValeurAndCouleur(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, joker));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, joker), fabrique);
         assertEquals("1bleu 2bleu*", suite1.toString());
 
         Jeton jeton3 = new JetonNormal(2, Couleur.BLEU);
@@ -269,7 +277,7 @@ public class SuiteTest {
     public void remplacerJeton() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2), fabrique);
         assertEquals("1bleu 2bleu", suite1.toString());
 
         Joker joker = new Joker();
@@ -283,7 +291,7 @@ public class SuiteTest {
     public void remplacerJetonJokerNonInitialise() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2), fabrique);
         assertEquals("1bleu 2bleu", suite1.toString());
 
         Joker joker = new Joker();
@@ -297,7 +305,7 @@ public class SuiteTest {
     public void remplacerJetonFail() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2), fabrique);
         assertEquals("1bleu 2bleu", suite1.toString());
 
         Joker joker = new Joker();
@@ -313,7 +321,7 @@ public class SuiteTest {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Joker joker = new Joker();
         joker.setValeurAndCouleur(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, joker));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, joker), fabrique);
         assertEquals("1bleu 2bleu*", suite1.toString());
 
         Jeton jeton2 = new JetonNormal(3, Couleur.BLEU);
@@ -328,7 +336,7 @@ public class SuiteTest {
     public void remplacerJokerQuandPasDeJoker() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
-        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2));
+        SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, jeton2), fabrique);
 
         Jeton jeton3 = new JetonNormal(2, Couleur.BLEU);
         assertThrows(UnsupportedOperationException.class, () -> {
