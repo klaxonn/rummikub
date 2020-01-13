@@ -6,6 +6,7 @@ import rummikub.core.jeu.Pioche;
 import rummikub.core.pieces.Joker;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Représentation d'une suite.
@@ -91,7 +92,12 @@ class Suite extends SequenceAbstraite {
     }
 
     private int valeurPremierElement(List<Jeton> collectionJetons) {
-        return SequenceAbstraite.premierJetonNonJoker(collectionJetons).getValeur();
+		try {
+			return SequenceAbstraite.premierJetonNonJoker(collectionJetons).getValeur();
+		}
+		catch(NoSuchElementException e) {
+			throw new UnsupportedOperationException("La séquence ne peut contenir que des jokers");
+		}
     }
 
     private int valeurDernierElement(List<Jeton> collectionJetons) {
@@ -99,7 +105,12 @@ class Suite extends SequenceAbstraite {
     }
 
     private Couleur couleurDeSequence(List<Jeton> collectionJetons) {
-        return SequenceAbstraite.premierJetonNonJoker(collectionJetons).getCouleur();
+		try {
+			return SequenceAbstraite.premierJetonNonJoker(collectionJetons).getCouleur();
+		}
+		catch(NoSuchElementException e) {
+			throw new UnsupportedOperationException("La séquence ne peut contenir que des jokers");
+		}
     }
 
     private boolean isMemeCouleur(List<Jeton> collectionJetons) {

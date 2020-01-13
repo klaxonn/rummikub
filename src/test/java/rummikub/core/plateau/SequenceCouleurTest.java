@@ -77,6 +77,25 @@ public class SequenceCouleurTest {
     }
 
     @Test
+    public void newSequenceJoker() {
+        Joker joker = new Joker();
+        assertThrows(UnsupportedOperationException.class, () -> {
+            new SequenceCouleur(Arrays.asList(joker), fabrique);
+        });
+        assertFalse(joker.isUtilise());
+    }
+
+    @Test
+    public void newSequence2Jokers() {
+        Joker joker = new Joker();
+        Joker joker2 = new Joker();
+        assertThrows(UnsupportedOperationException.class, () -> {
+            new SequenceCouleur(Arrays.asList(joker, joker2), fabrique);
+        });
+        assertFalse(joker.isUtilise());
+    }
+
+    @Test
     public void createWithEmptyCollection() {
         assertThrows(UnsupportedOperationException.class, () -> {
             new SequenceCouleur(Arrays.asList(), fabrique);

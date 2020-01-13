@@ -115,6 +115,25 @@ public class SuiteTest {
     }
 
     @Test
+    public void newSuiteJoker() {
+        Joker joker = new Joker();
+        assertThrows(UnsupportedOperationException.class, () -> {
+            new Suite(Arrays.asList(joker), fabrique);
+        });
+        assertFalse(joker.isUtilise());
+    }
+
+    @Test
+    public void newSuite2Jokers() {
+        Joker joker = new Joker();
+        Joker joker2 = new Joker();
+        assertThrows(UnsupportedOperationException.class, () -> {
+            new Suite(Arrays.asList(joker, joker2), fabrique);
+        });
+        assertFalse(joker.isUtilise());
+    }
+
+    @Test
     public void ajoutJeton() {
         Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
         Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);

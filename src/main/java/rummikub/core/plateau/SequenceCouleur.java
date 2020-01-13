@@ -5,6 +5,7 @@ import rummikub.core.pieces.Jeton;
 import rummikub.core.pieces.Joker;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Représentation d'une séquence de couleurs.
@@ -76,7 +77,12 @@ class SequenceCouleur extends SequenceAbstraite {
     }
 
     private int valeurDeSequence(List<Jeton> collectionJetons) {
-        return SequenceAbstraite.premierJetonNonJoker(collectionJetons).getValeur();
+		try {
+			return SequenceAbstraite.premierJetonNonJoker(collectionJetons).getValeur();
+		}
+		catch(NoSuchElementException e) {
+			throw new UnsupportedOperationException("La séquence ne peut contenir que des jokers");
+		}
     }
 
     private boolean isMemeValeur(List<Jeton> collectionJetons) {

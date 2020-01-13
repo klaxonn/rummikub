@@ -18,8 +18,6 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ControleurChatTest {
 
@@ -27,7 +25,6 @@ public class ControleurChatTest {
 	private CanalMessageTest canalSortie;
 	private CanalMessageTest canalEntree;
 	private ListeJoueurs listeJoueursMock = mock(ListeJoueurs.class);
-	private static final Logger logger = LoggerFactory.getLogger(ControleurChatTest.class);
 
 	@BeforeEach
 	public void initialisation() {
