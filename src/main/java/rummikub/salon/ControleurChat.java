@@ -10,6 +10,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Controleur du salon du connexion et du chat.
@@ -21,6 +22,13 @@ public class ControleurChat {
 
 	/** Le nombre maximum de joueurs dans une partie */
 	public static final int NOMBRE_MAX_JOUEURS_PARTIE = 4;
+
+	private final ListeJoueurs listeJoueurs;
+
+	@Autowired
+	public ControleurChat(ListeJoueurs listeJoueurs) {
+		this.listeJoueurs = listeJoueurs;
+	}
 
 	/**
 	 * Appelé quand un nouveau client se connecte au salon.
@@ -34,7 +42,7 @@ public class ControleurChat {
     @SendToUser("/queue/canalPersonel")
     public MessageChat ajouterJoueurConnecte(@Payload MessageChat message,
                                SimpMessageHeaderAccessor headerAccessor) {
-		String nomJoueur = ListeJoueurs.ajouterJoueurConnecte(message.getJoueur());
+		String nomJoueur = listeJoueurs.ajouterJoueurConnecte(message.getJoueur());
 		logger.info("Ajout Joueur");
         headerAccessor.getSessionAttributes().put("nomJoueur", nomJoueur);
 		message.setJoueur(nomJoueur);
@@ -51,9 +59,9 @@ public class ControleurChat {
 	@MessageMapping("/mettreAJourJoueursConnectes")
     @SendTo("/topic/joueursConnectes")
     public MessageChat mettreAJourJoueursConnectes(@Payload MessageChat message) {
-		String listeAEnvoyer = ListeJoueurs.getJoueursConnectes().toString();
-		if(ListeJoueurs.nombreJoueursPartie() > 0){
-			listeAEnvoyer += ";" + ListeJoueurs.getJoueursPartie().toString();
+		String listeAEnvoyer = listeJoueurs.getJoueursConnectes().toString();
+		if(listeJoueurs.nombreJoueursPartie() > 0){
+			listeAEnvoyer += ";" + listeJoueurs.getJoueursPartie().toString();
 		}
 		message.setMessage(listeAEnvoyer);
         logger.info("Liste des listes" + listeAEnvoyer);
@@ -72,10 +80,10 @@ public class ControleurChat {
     @MessageMapping("/joindrePartie")
     @SendToUser("/queue/canalPersonel")
     public MessageChat ajouterJoueurPartie(@Payload MessageChat message) {
-		if(ListeJoueurs.nombreJoueursPartie() < NOMBRE_MAX_JOUEURS_PARTIE) {
+		if(listeJoueurs.nombreJoueursPartie() < NOMBRE_MAX_JOUEURS_PARTIE) {
 			try{
-				ListeJoueurs.ajouteJoueurPartie(message.getJoueur());
-				if(ListeJoueurs.nombreJoueursPartie() == 1){
+				listeJoueurs.ajouterJoueurPartie(message.getJoueur());
+				if(listeJoueurs.nombreJoueursPartie() == 1){
 					message.setTypeMessage(MessageChat.TypeMessage.CREER_PARTIE);
 				}
 			}
@@ -105,9 +113,9 @@ public class ControleurChat {
     @MessageMapping("/mettreAJourJoueursPartie")
     @SendTo("/topic/joueursConnectes")
     public MessageChat mettreAJourJoueursPartie(@Payload MessageChat message) {
-		String listeJoueurs = ListeJoueurs.getJoueursPartie().toString();
-		message.setMessage(listeJoueurs);
-		logger.info("Liste des joueurs dans la partie : " + listeJoueurs);
+		String listeJoueursTexte = listeJoueurs.getJoueursPartie().toString();
+		message.setMessage(listeJoueursTexte);
+		logger.info("Liste des joueurs dans la partie : " + listeJoueursTexte);
         return message;
     }
 
@@ -121,7 +129,7 @@ public class ControleurChat {
     @SendTo("/topic/joueursPartie")
     public MessageChat demarrerPartie(@Payload MessageChat message) {
 		logger.info("Démarrage partie");
-		Partie partie = FabriquePartie.creerNouvellePartie(ListeJoueurs.getJoueursPartie());
+		Partie partie = FabriquePartie.creerNouvellePartie(listeJoueurs.getJoueursPartie());
         partie.commencerPartie();
         return message;
     }

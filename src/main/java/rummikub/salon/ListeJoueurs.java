@@ -4,16 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
 /**
  * Gestion de la liste des clients du salon.
  */
-public final class ListeJoueurs {
+@Component("listeJoueurs")
+public class ListeJoueurs {
 
-	private static final Map<String,Boolean> listeJoueurs = new HashMap<>();
-	private static String createurPartie = "";
+	private Map<String,Boolean> listeJoueurs;
+	private String createurPartie;
 
-	private ListeJoueurs() {
+	public ListeJoueurs() {
+		listeJoueurs = new HashMap<>();
+		createurPartie = "";
 	}
 
 	/**
@@ -23,7 +27,7 @@ public final class ListeJoueurs {
 	 * @param nomJoueur le nom du joueur
 	 * @return le nom du joueur éventuellement modifié
 	 */
-	public static String ajouterJoueurConnecte(String nomJoueur) {
+	public String ajouterJoueurConnecte(String nomJoueur) {
 		String nom = nomJoueur;
 		if(listeJoueurs.containsKey(nomJoueur)){
 			 nom = nomJoueur + "-1";
@@ -37,7 +41,7 @@ public final class ListeJoueurs {
 	 *
 	 * @return la liste
 	 */
-	public static Set<String> getJoueursConnectes() {
+	public Set<String> getJoueursConnectes() {
 		return listeJoueurs.keySet();
 	}
 
@@ -50,7 +54,7 @@ public final class ListeJoueurs {
      * @throws UnsupportedOperationException si le nom
 	 * n'est pas un client reconnu.
 	 */
-	public static void retirerJoueur(String nomJoueur){
+	public void retirerJoueur(String nomJoueur) {
 		if(listeJoueurs.containsKey(nomJoueur)){
 			listeJoueurs.remove(nomJoueur);
 			if(nomJoueur.equals(createurPartie)){
@@ -63,19 +67,11 @@ public final class ListeJoueurs {
 	}
 
 	/**
-	 * Retire tous les clients.
-	 */
-	public static void retirerTousJoueurs(){
-		listeJoueurs.clear();
-		createurPartie="";
-	}
-
-	/**
 	 * Retourne le nombre des clients connectés.
 	 *
 	 * @return la nombre
 	 */
-	public static int nombreJoueursConnectes(){
+	public int nombreJoueursConnectes() {
 		return listeJoueurs.size();
 	}
 
@@ -86,7 +82,7 @@ public final class ListeJoueurs {
      * @throws UnsupportedOperationException si le nom
 	 * n'est pas un client reconnu.
 	 */
-	public static void ajouteJoueurPartie(String nomJoueur) {
+	public void ajouterJoueurPartie(String nomJoueur) {
 		if(listeJoueurs.containsKey(nomJoueur)){
 			listeJoueurs.replace(nomJoueur,true);
 			if(nombreJoueursPartie() == 1){
@@ -103,7 +99,7 @@ public final class ListeJoueurs {
 	 *
 	 * @return la liste
 	 */
-	public static Set<String> getJoueursPartie(){
+	public Set<String> getJoueursPartie() {
 		return listeJoueurs.keySet().stream()
 							 .filter(i ->listeJoueurs.get(i).equals(true))
 							 .collect(Collectors.toSet());
@@ -112,7 +108,7 @@ public final class ListeJoueurs {
 	/**
 	 * Retire tous les clients de la partie.
 	 */
-	public static void supprimerJoueursPartie() {
+	public void supprimerJoueursPartie() {
 		listeJoueurs.forEach((k,v) ->listeJoueurs.replace(k,false));
 		createurPartie = "";
 	}
@@ -122,7 +118,7 @@ public final class ListeJoueurs {
 	 *
 	 * @return la nombre
 	 */
-	public static long nombreJoueursPartie(){
+	public long nombreJoueursPartie() {
 		return listeJoueurs.keySet().stream()
 									.filter(i ->listeJoueurs.get(i).equals(true))
 									.count();
@@ -133,7 +129,7 @@ public final class ListeJoueurs {
 	 *
 	 * @return le joueur
 	 */
-	public static String getCreateurPartie() {
+	public String getCreateurPartie() {
 		return createurPartie;
 	}
 }

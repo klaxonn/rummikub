@@ -6,89 +6,91 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ListeJoueursTest {
 
+	private ListeJoueurs listeJoueurs;
+
 	@BeforeEach
 	public void initialisation() {
-		ListeJoueurs.retirerTousJoueurs();
+		listeJoueurs = new ListeJoueurs();
 	}
 
     @Test
 	public void ajouterJoueurConnecteTest(){
-		ListeJoueurs.ajouterJoueurConnecte("Vincent");
-		assertEquals("[Vincent]",ListeJoueurs.getJoueursConnectes().toString());
-		assertEquals(1,ListeJoueurs.nombreJoueursConnectes());
+		listeJoueurs.ajouterJoueurConnecte("Vincent");
+		assertEquals("[Vincent]",listeJoueurs.getJoueursConnectes().toString());
+		assertEquals(1,listeJoueurs.nombreJoueursConnectes());
 	}
 
 	@Test
 	public void ajouterJoueurConnecteMemeNomTest(){
-		ListeJoueurs.ajouterJoueurConnecte("Vincent");
-		ListeJoueurs.ajouterJoueurConnecte("Vincent");
-		assertEquals("[Vincent, Vincent-1]",ListeJoueurs.getJoueursConnectes().toString());
-		assertEquals(2,ListeJoueurs.nombreJoueursConnectes());
+		listeJoueurs.ajouterJoueurConnecte("Vincent");
+		listeJoueurs.ajouterJoueurConnecte("Vincent");
+		assertEquals("[Vincent, Vincent-1]",listeJoueurs.getJoueursConnectes().toString());
+		assertEquals(2,listeJoueurs.nombreJoueursConnectes());
 	}
 
 	@Test
 	public void retirerJoueurTest(){
-		ListeJoueurs.ajouterJoueurConnecte("Vincent");
-		ListeJoueurs.retirerJoueur("Vincent");
-		assertEquals("[]",ListeJoueurs.getJoueursConnectes().toString());
-		assertEquals(0,ListeJoueurs.nombreJoueursConnectes());
+		listeJoueurs.ajouterJoueurConnecte("Vincent");
+		listeJoueurs.retirerJoueur("Vincent");
+		assertEquals("[]",listeJoueurs.getJoueursConnectes().toString());
+		assertEquals(0,listeJoueurs.nombreJoueursConnectes());
 	}
 
 	@Test
 	public void retirerJoueurTestFail(){
-		ListeJoueurs.ajouterJoueurConnecte("Vincent");
+		listeJoueurs.ajouterJoueurConnecte("Vincent");
 		assertThrows(UnsupportedOperationException.class, () -> {
-            ListeJoueurs.retirerJoueur("Katya");
+            listeJoueurs.retirerJoueur("Katya");
         });
-		assertEquals("[Vincent]",ListeJoueurs.getJoueursConnectes().toString());
-		assertEquals(1,ListeJoueurs.nombreJoueursConnectes());
+		assertEquals("[Vincent]",listeJoueurs.getJoueursConnectes().toString());
+		assertEquals(1,listeJoueurs.nombreJoueursConnectes());
 	}
 
 	@Test
 	public void ajouterJoueurPartie(){
-		ListeJoueurs.ajouterJoueurConnecte("Vincent");
-		ListeJoueurs.ajouteJoueurPartie("Vincent");
-		ListeJoueurs.ajouterJoueurConnecte("Katya");
-		ListeJoueurs.ajouteJoueurPartie("Katya");
-		assertEquals("[Vincent, Katya]",ListeJoueurs.getJoueursConnectes().toString());
-		assertEquals(2,ListeJoueurs.nombreJoueursConnectes());
-		assertEquals("[Vincent, Katya]",ListeJoueurs.getJoueursPartie().toString());
-		assertEquals(2,ListeJoueurs.nombreJoueursPartie());
-		assertEquals("Vincent",ListeJoueurs.getCreateurPartie());
+		listeJoueurs.ajouterJoueurConnecte("Vincent");
+		listeJoueurs.ajouterJoueurPartie("Vincent");
+		listeJoueurs.ajouterJoueurConnecte("Katya");
+		listeJoueurs.ajouterJoueurPartie("Katya");
+		assertEquals("[Vincent, Katya]",listeJoueurs.getJoueursConnectes().toString());
+		assertEquals(2,listeJoueurs.nombreJoueursConnectes());
+		assertEquals("[Vincent, Katya]",listeJoueurs.getJoueursPartie().toString());
+		assertEquals(2,listeJoueurs.nombreJoueursPartie());
+		assertEquals("Vincent",listeJoueurs.getCreateurPartie());
 
 	}
 
 	@Test
 	public void ajouterJoueurPartieFail(){
-		ListeJoueurs.ajouterJoueurConnecte("Vincent");
+		listeJoueurs.ajouterJoueurConnecte("Vincent");
 		assertThrows(UnsupportedOperationException.class, () -> {
-			ListeJoueurs.ajouteJoueurPartie("Katya");
+			listeJoueurs.ajouterJoueurPartie("Katya");
         });
-		assertEquals("[]",ListeJoueurs.getJoueursPartie().toString());
-		assertEquals(0,ListeJoueurs.nombreJoueursPartie());
+		assertEquals("[]",listeJoueurs.getJoueursPartie().toString());
+		assertEquals(0,listeJoueurs.nombreJoueursPartie());
 	}
 
 	@Test
 	public void supprimerJoueursPartieTest(){
-		ListeJoueurs.ajouterJoueurConnecte("Vincent");
-		ListeJoueurs.ajouteJoueurPartie("Vincent");
-		ListeJoueurs.supprimerJoueursPartie();
-		assertEquals("[]",ListeJoueurs.getJoueursPartie().toString());
-		assertEquals(0,ListeJoueurs.nombreJoueursPartie());
-		assertEquals("",ListeJoueurs.getCreateurPartie());
+		listeJoueurs.ajouterJoueurConnecte("Vincent");
+		listeJoueurs.ajouterJoueurPartie("Vincent");
+		listeJoueurs.supprimerJoueursPartie();
+		assertEquals("[]",listeJoueurs.getJoueursPartie().toString());
+		assertEquals(0,listeJoueurs.nombreJoueursPartie());
+		assertEquals("",listeJoueurs.getCreateurPartie());
 	}
 
 	@Test
 	public void retirerCreateurPartie(){
-		ListeJoueurs.ajouterJoueurConnecte("Vincent");
-		ListeJoueurs.ajouteJoueurPartie("Vincent");
-		ListeJoueurs.ajouterJoueurConnecte("Katya");
-		ListeJoueurs.ajouteJoueurPartie("Katya");
-		ListeJoueurs.retirerJoueur("Vincent");
-		assertEquals("[Katya]",ListeJoueurs.getJoueursConnectes().toString());
-		assertEquals(1,ListeJoueurs.nombreJoueursConnectes());
-		assertEquals("[]",ListeJoueurs.getJoueursPartie().toString());
-		assertEquals(0,ListeJoueurs.nombreJoueursPartie());
-		assertEquals("",ListeJoueurs.getCreateurPartie());
+		listeJoueurs.ajouterJoueurConnecte("Vincent");
+		listeJoueurs.ajouterJoueurPartie("Vincent");
+		listeJoueurs.ajouterJoueurConnecte("Katya");
+		listeJoueurs.ajouterJoueurPartie("Katya");
+		listeJoueurs.retirerJoueur("Vincent");
+		assertEquals("[Katya]",listeJoueurs.getJoueursConnectes().toString());
+		assertEquals(1,listeJoueurs.nombreJoueursConnectes());
+		assertEquals("[]",listeJoueurs.getJoueursPartie().toString());
+		assertEquals(0,listeJoueurs.nombreJoueursPartie());
+		assertEquals("",listeJoueurs.getCreateurPartie());
 	}
 }

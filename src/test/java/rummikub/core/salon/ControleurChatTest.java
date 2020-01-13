@@ -1,21 +1,48 @@
 package rummikub.salon;
 
-import org.junit.jupiter.api.Disabled;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import static org.mockito.Mockito.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.simp.stomp.StompCommand;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.annotation.support.SimpAnnotationMethodMessageHandler;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.messaging.SubscribableChannel;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ControleurChatTest {
 
-	private ControleurChat controleur;
-	private SimpMessageHeaderAccessor headerMock = mock(SimpMessageHeaderAccessor.class);
+	private HandlerPerso handlerMessages;
+	private CanalMessageTest canalSortie;
+	private CanalMessageTest canalEntree;
+	private ListeJoueurs listeJoueursMock = mock(ListeJoueurs.class);
+	private static final Logger logger = LoggerFactory.getLogger(ControleurChatTest.class);
 
 	@BeforeEach
 	public void initialisation() {
-		controleur = new ControleurChat();
-		ListeJoueurs.retirerTousJoueurs();
+		canalEntree = new CanalMessageTest();
+		canalSortie = new CanalMessageTest();
+		initialisationHandler();
+	}
+
+	private void initialisationHandler() {
+		handlerMessages = new HandlerPerso(
+				canalEntree, canalSortie, new SimpMessagingTemplate(new CanalMessageTest()));
+		handlerMessages.registerHandler(new ControleurChat(listeJoueursMock));
+		handlerMessages.setDestinationPrefixes(Arrays.asList("/salon", "/queue"));
+		handlerMessages.setMessageConverter(new MappingJackson2MessageConverter());
+		handlerMessages.afterPropertiesSet();
 	}
 
 	private MessageChat nouveauMessage(MessageChat.TypeMessage type, String joueur, String texteMessage){
@@ -26,127 +53,160 @@ public class ControleurChatTest {
 		return message;
 	}
 
-	private boolean testContenuMessage(MessageChat message, MessageChat.TypeMessage type, String joueur, String texteMessage){
-		return message.getTypeMessage().equals(type)
-				&& message.getJoueur().equals(joueur)
-				&& message.getMessage().equals(texteMessage);
+	private void testContenuMessage(MessageChat message, MessageChat.TypeMessage type, String joueur, String texteMessage){
+		assertEquals(type, message.getTypeMessage());
+		assertEquals(joueur, message.getJoueur());
+		assertEquals(texteMessage, message.getMessage());
 	}
 
-	@Test
-    public void envoyerMessageTest() {
-		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.MESSAGE_CHAT, "Vincent","");
-		MessageChat messageReponse = controleur.envoyerMessage(messageEnvoye);
-		assertTrue(testContenuMessage(messageReponse,MessageChat.TypeMessage.MESSAGE_CHAT, "Vincent",""));
-    }
+	private MessageChat transfertMessage(MessageChat messageAEnvoyer, String destination, String reception)
+		throws Exception {
+		byte[] payload = new ObjectMapper().writeValueAsBytes(messageAEnvoyer);
+
+		StompHeaderAccessor headers = StompHeaderAccessor.create(StompCommand.SEND);
+		headers.setDestination(destination);
+		headers.setSessionId("0");
+		headers.setSessionAttributes(new HashMap<>());
+		Message<byte[]> message = MessageBuilder.withPayload(payload).setHeaders(headers).build();
+
+		canalSortie.effacerMessages();
+        handlerMessages.handleMessage(message);
+
+		Message<?> reponse = canalSortie.getMessages().get(0);
+
+		StompHeaderAccessor headersReponse = StompHeaderAccessor.wrap(reponse);
+		assertEquals("0", headersReponse.getSessionId());
+		assertEquals(reception, headersReponse.getDestination());
+		return (MessageChat) reponse.getPayload();
+	}
+
 
 	@Test
-    public void ajouterJoueurConnecteTest() {
+    public void ajouterJoueurConnecteTest() throws Exception {
 		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Vincent","");
-		MessageChat messageReponse = controleur.ajouterJoueurConnecte(messageEnvoye,headerMock);
-		assertTrue(testContenuMessage(messageReponse,MessageChat.TypeMessage.CONNEXION, "Vincent",""));
+		String destination = "/salon/ajouterJoueurConnecte";
+		String reception = "/user/0/queue/canalPersonel";
+
+		when(listeJoueursMock.ajouterJoueurConnecte("Vincent")).thenReturn("Vincent");
+		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
+		testContenuMessage(messageRecu,MessageChat.TypeMessage.CONNEXION,"Vincent","");
     }
 
 	@Test
-    public void ajouterJoueurConnecteMemeNomTest() {
+    public void ajouterJoueurConnecteMemeNomTest() throws Exception {
 		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Vincent","");
-		controleur.ajouterJoueurConnecte(messageEnvoye,headerMock);
-		MessageChat messageReponse = controleur.ajouterJoueurConnecte(messageEnvoye,headerMock);
-		assertTrue(testContenuMessage(messageReponse,MessageChat.TypeMessage.CONNEXION, "Vincent-1",""));
+		String destination = "/salon/ajouterJoueurConnecte";
+		String reception = "/user/0/queue/canalPersonel";
+
+		when(listeJoueursMock.ajouterJoueurConnecte("Vincent")).thenReturn("Vincent-1");
+		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
+		testContenuMessage(messageRecu,MessageChat.TypeMessage.CONNEXION, "Vincent-1","");
     }
 
 	@Test
-    public void mettreAJourJoueursConnectesTest() {
-		MessageChat messageEnvoye1 = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Vincent","");
-		MessageChat messageEnvoye2 = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Katya","");
-		controleur.ajouterJoueurConnecte(messageEnvoye1,headerMock);
-		controleur.ajouterJoueurConnecte(messageEnvoye2,headerMock);
-		MessageChat messageReponse = controleur.mettreAJourJoueursConnectes(messageEnvoye2);
-		assertTrue(testContenuMessage(messageReponse,MessageChat.TypeMessage.CONNEXION, "Katya","[Vincent, Katya]"));
+    public void mettreAJourJoueursConnectesTest() throws Exception {
+		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Katya","");
+		String destination = "/salon/mettreAJourJoueursConnectes";
+		String reception = "/topic/joueursConnectes";
+		when(listeJoueursMock.getJoueursConnectes()).thenReturn(new HashSet<String>(Arrays.asList("Vincent", "Katya")));
+
+		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
+		testContenuMessage(messageRecu,MessageChat.TypeMessage.CONNEXION, "Katya","[Vincent, Katya]");
     }
 
 	@Test
-    public void ajouterPremierJoueurPartieTest() {
-		MessageChat messageEnvoye1 = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Vincent","");
-		controleur.ajouterJoueurConnecte(messageEnvoye1,headerMock);
-		MessageChat messageEnvoye2 = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Vincent","");
-		MessageChat messageReponse = controleur.ajouterJoueurPartie(messageEnvoye2);
-		assertTrue(testContenuMessage(messageReponse,MessageChat.TypeMessage.CREER_PARTIE, "Vincent",""));
+    public void ajouterPremierJoueurPartieTest() throws Exception {
+		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Vincent","");
+		String destination = "/salon/joindrePartie";
+		String reception = "/user/0/queue/canalPersonel";
+		when(listeJoueursMock.nombreJoueursPartie()).thenReturn(1L);
+
+		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
+		testContenuMessage(messageRecu,MessageChat.TypeMessage.CREER_PARTIE, "Vincent","");
+    }
+
+
+	@Test
+    public void ajouterDeuxiemeJoueurPartieTest() throws Exception {
+		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Katya","");
+		String destination = "/salon/joindrePartie";
+		String reception = "/user/0/queue/canalPersonel";
+		when(listeJoueursMock.nombreJoueursPartie()).thenReturn(2L);
+
+		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
+		testContenuMessage(messageRecu,MessageChat.TypeMessage.JOINDRE_PARTIE, "Katya","");
     }
 
 	@Test
-    public void ajouterDeuxiemeJoueurPartieTest() {
-		MessageChat messageEnvoye1 = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Vincent","");
-		MessageChat messageEnvoye2 = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Katya","");
-		controleur.ajouterJoueurConnecte(messageEnvoye1,headerMock);
-		controleur.ajouterJoueurConnecte(messageEnvoye2,headerMock);
-		messageEnvoye1 = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Vincent","");
-		controleur.ajouterJoueurPartie(messageEnvoye1);
-		messageEnvoye2 = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Katya","");
-		MessageChat messageReponse = controleur.ajouterJoueurPartie(messageEnvoye2);
-		assertTrue(testContenuMessage(messageReponse,MessageChat.TypeMessage.JOINDRE_PARTIE, "Katya",""));
+    public void ajouterPremierJoueurPartieTestFail() throws Exception {
+		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Tnecniv","");
+		String destination = "/salon/joindrePartie";
+		String reception = "/user/0/queue/canalPersonel";
+		when(listeJoueursMock.nombreJoueursPartie()).thenReturn(1L);
+		doThrow(new UnsupportedOperationException("Le nom n'est pas un joueur connecté"))
+		.when(listeJoueursMock).ajouterJoueurPartie("Tnecniv");
+
+		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
+		testContenuMessage(messageRecu,MessageChat.TypeMessage.ERREUR, "Tnecniv","Le nom n'est pas un joueur connecté");
     }
 
 	@Test
-    public void ajouterPremierJoueurPartieTestFail() {
-		MessageChat messageEnvoye1 = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Vincent","");
-		controleur.ajouterJoueurConnecte(messageEnvoye1,headerMock);
-		MessageChat messageEnvoye2 = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Tnecniv","");
-		MessageChat messageReponse = controleur.ajouterJoueurPartie(messageEnvoye2);
-		assertTrue(testContenuMessage(messageReponse,MessageChat.TypeMessage.ERREUR, "Tnecniv","Le nom n'est pas un joueur connecté"));
+    public void ajouterTropDeJoueursPartieTestFail() throws Exception {
+		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Boris","");
+		String destination = "/salon/joindrePartie";
+		String reception = "/user/0/queue/canalPersonel";
+		when(listeJoueursMock.nombreJoueursPartie()).thenReturn((long)ControleurChat.NOMBRE_MAX_JOUEURS_PARTIE + 1);
+
+		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
+		testContenuMessage(messageRecu,MessageChat.TypeMessage.ERREUR, "Boris","La partie est complète");
     }
 
 	@Test
-    public void ajouterTropDeJoueursPartieTestFail() {
-		for(int i=1; i<=controleur.NOMBRE_MAX_JOUEURS_PARTIE;i++){
-			String nom = "Vincent-" + i;
-			MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.CONNEXION, nom,"");
-			controleur.ajouterJoueurConnecte(messageEnvoye,headerMock);
-			MessageChat messageEnvoye2 = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, nom,"");
-			controleur.ajouterJoueurPartie(messageEnvoye2);
+    public void mettreAJourJoueursPartieTest() throws Exception {
+		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Katya","");
+		String destination = "/salon/mettreAJourJoueursPartie";
+		String reception = "/topic/joueursConnectes";
+		when(listeJoueursMock.getJoueursPartie()).thenReturn(new HashSet<String>(Arrays.asList("Vincent", "Katya")));
+
+		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
+		testContenuMessage(messageRecu,MessageChat.TypeMessage.JOINDRE_PARTIE, "Katya","[Vincent, Katya]");
+    }
+
+	@Test
+    public void mettreAJourJoueursConnectesAvecPartieTest() throws Exception {
+		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Katya","");
+		String destination = "/salon/mettreAJourJoueursConnectes";
+		String reception = "/topic/joueursConnectes";
+		when(listeJoueursMock.getJoueursConnectes()).thenReturn(new HashSet<String>(Arrays.asList("Vincent", "Katya")));
+		when(listeJoueursMock.nombreJoueursPartie()).thenReturn(1L);
+		when(listeJoueursMock.getJoueursPartie()).thenReturn(new HashSet<String>(Arrays.asList("Vincent")));
+
+		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
+		testContenuMessage(messageRecu,MessageChat.TypeMessage.CONNEXION, "Katya","[Vincent, Katya];[Vincent]");
+    }
+
+	@Test
+    public void demarrerPartie() throws Exception {
+		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.DEMARRER_PARTIE, "Vincent","");
+		String destination = "/salon/demarrerPartie";
+		String reception = "/topic/joueursPartie";
+		when(listeJoueursMock.getJoueursPartie()).thenReturn(new HashSet<String>(Arrays.asList("Vincent")));
+
+		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
+		testContenuMessage(messageRecu,MessageChat.TypeMessage.DEMARRER_PARTIE, "Vincent","");
+    }
+
+    private static class HandlerPerso extends SimpAnnotationMethodMessageHandler {
+
+		public HandlerPerso(SubscribableChannel canalEntree, MessageChannel canalSortie,
+				SimpMessageSendingOperations brokerTemplate) {
+
+			super(canalEntree, canalSortie, brokerTemplate);
 		}
-		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Vincent-5","");
-		controleur.ajouterJoueurConnecte(messageEnvoye,headerMock);
-		MessageChat messageEnvoye2 = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Vincent-5","");
-		MessageChat messageReponse = controleur.ajouterJoueurPartie(messageEnvoye2);
-		assertTrue(testContenuMessage(messageReponse,MessageChat.TypeMessage.ERREUR, "Vincent-5","La partie est complète"));
-    }
 
-	@Test
-    public void mettreAJourJoueursPartieTest() {
-		MessageChat messageEnvoye1 = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Vincent","");
-		MessageChat messageEnvoye2 = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Katya","");
-		controleur.ajouterJoueurConnecte(messageEnvoye1,headerMock);
-		controleur.ajouterJoueurConnecte(messageEnvoye2,headerMock);
-		messageEnvoye1 = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Vincent","");
-		messageEnvoye2 = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Katya","");
-		controleur.ajouterJoueurPartie(messageEnvoye1);
-		controleur.ajouterJoueurPartie(messageEnvoye2);
-		MessageChat messageReponse = controleur.mettreAJourJoueursPartie(messageEnvoye2);
-		assertTrue(testContenuMessage(messageReponse,MessageChat.TypeMessage.JOINDRE_PARTIE, "Katya","[Vincent, Katya]"));
-    }
-
-	@Test
-    public void mettreAJourJoueursConnectesAvecPartieTest() {
-		MessageChat messageEnvoye1 = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Vincent","");
-		controleur.ajouterJoueurConnecte(messageEnvoye1,headerMock);
-		messageEnvoye1 = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Vincent","");
-		controleur.ajouterJoueurPartie(messageEnvoye1);
-		MessageChat messageEnvoye2 = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Katya","");
-		controleur.ajouterJoueurConnecte(messageEnvoye2,headerMock);
-		MessageChat messageReponse = controleur.mettreAJourJoueursConnectes(messageEnvoye2);
-		assertTrue(testContenuMessage(messageReponse,MessageChat.TypeMessage.CONNEXION, "Katya","[Vincent, Katya];[Vincent]"));
-    }
-
-	@Test
-    public void demarrerPartie() {
-		MessageChat messageEnvoye1 = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Vincent","");
-		controleur.ajouterJoueurConnecte(messageEnvoye1,headerMock);
-		MessageChat messageEnvoye2 = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Vincent","");
-		controleur.ajouterJoueurPartie(messageEnvoye2);
-		MessageChat messageEnvoye3 = nouveauMessage(MessageChat.TypeMessage.DEMARRER_PARTIE, "Vincent","");
-		MessageChat messageReponse = controleur.demarrerPartie(messageEnvoye3);
-		assertTrue(testContenuMessage(messageReponse,MessageChat.TypeMessage.DEMARRER_PARTIE, "Vincent",""));
-    }
-
+		public void registerHandler(Object handler) {
+			super.detectHandlerMethods(handler);
+		}
+	}
 }
 

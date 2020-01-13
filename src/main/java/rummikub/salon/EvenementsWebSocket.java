@@ -21,6 +21,12 @@ public class EvenementsWebSocket {
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
+    private ListeJoueurs listeJoueurs;
+
+	@Autowired
+	public EvenementsWebSocket(ListeJoueurs listeJoueurs) {
+		this.listeJoueurs = listeJoueurs;
+	}
 
 	/**
 	 * Appelé quand un client est déconnecté.
@@ -38,11 +44,11 @@ public class EvenementsWebSocket {
         if(nomJoueur != null) {
             logger.info("Joueur déconnecté : " + nomJoueur);
 			try{
-				ListeJoueurs.retirerJoueur(nomJoueur);
+				listeJoueurs.retirerJoueur(nomJoueur);
 
-				String listeAEnvoyer = ListeJoueurs.getJoueursConnectes().toString();
-				if(ListeJoueurs.nombreJoueursPartie() > 0){
-					listeAEnvoyer += ";" + ListeJoueurs.getJoueursPartie().toString();
+				String listeAEnvoyer = listeJoueurs.getJoueursConnectes().toString();
+				if(listeJoueurs.nombreJoueursPartie() > 0){
+					listeAEnvoyer += ";" + listeJoueurs.getJoueursPartie().toString();
 				}
 				logger.info("Liste des listes" + listeAEnvoyer);
 				envoiMessage(nomJoueur,listeAEnvoyer);
