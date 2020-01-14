@@ -2,7 +2,7 @@ package rummikub.core.plateau;
 
 import rummikub.core.pieces.Couleur;
 import rummikub.core.pieces.Jeton;
-import rummikub.core.jeu.Pioche;
+import rummikub.core.api.FabriquePartie;
 import rummikub.core.pieces.Joker;
 import java.util.Collections;
 import java.util.List;
@@ -85,19 +85,14 @@ class Suite extends SequenceAbstraite {
         int valeurJoker = -1;
         if (valeurPremierElement(collectionJetons) > 1) {
             valeurJoker = valeurPremierElement(collectionJetons) - 1;
-        } else if (valeurDernierElement(collectionJetons) < Pioche.VALEUR_MAX) {
+        } else if (valeurDernierElement(collectionJetons) < FabriquePartie.VALEUR_MAX) {
             valeurJoker = valeurDernierElement(collectionJetons) + 1;
         }
         return valeurJoker;
     }
 
     private int valeurPremierElement(List<Jeton> collectionJetons) {
-		try {
-			return SequenceAbstraite.premierJetonNonJoker(collectionJetons).getValeur();
-		}
-		catch(NoSuchElementException e) {
-			throw new UnsupportedOperationException("La séquence ne peut contenir que des jokers");
-		}
+		return premierJeton(collectionJetons).getValeur();
     }
 
     private int valeurDernierElement(List<Jeton> collectionJetons) {
@@ -105,8 +100,12 @@ class Suite extends SequenceAbstraite {
     }
 
     private Couleur couleurDeSequence(List<Jeton> collectionJetons) {
+		return premierJeton(collectionJetons).getCouleur();
+    }
+
+    private Jeton premierJeton(List<Jeton> collectionJetons) {
 		try {
-			return SequenceAbstraite.premierJetonNonJoker(collectionJetons).getCouleur();
+			return SequenceAbstraite.premierJetonNonJoker(collectionJetons);
 		}
 		catch(NoSuchElementException e) {
 			throw new UnsupportedOperationException("La séquence ne peut contenir que des jokers");

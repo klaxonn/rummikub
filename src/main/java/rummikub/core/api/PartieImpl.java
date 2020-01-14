@@ -5,9 +5,7 @@ import rummikub.core.jeu.Pioche;
 import rummikub.core.jeu.commands.*;
 import rummikub.core.plateau.Plateau;
 import java.util.List;
-import java.util.Set;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 /**
 * Implémentation d'une partie.
@@ -26,20 +24,13 @@ class PartieImpl implements Partie {
      *
      * @param listeNomsJoueurs la liste des noms des joueurs
      */
-    public PartieImpl(Set<String> listeNomsJoueurs, Pioche pioche, Plateau plateau, Historique historique) {
+    public PartieImpl(List<Joueur> listeJoueurs, Pioche pioche, Plateau plateau, Historique historique) {
         this.pioche = pioche;
         this.plateau = plateau;
         this.historique = historique;
-        creerJoueurs(listeNomsJoueurs);
+		this.listeJoueurs = listeJoueurs;
 		//Pour que le joueur 0  soit le premier à commencer
         numJoueur = -1;
-    }
-
-    private void creerJoueurs(Set<String> listeNomsJoueurs) {
-		listeJoueurs = new ArrayList<>();
-        listeNomsJoueurs.forEach((nomJoueur) -> {
-            listeJoueurs.add(new Joueur(nomJoueur));
-        });
     }
 
     public MessagePartie commencerPartie() {

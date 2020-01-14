@@ -1,6 +1,6 @@
 package rummikub.core.jeu;
 
-import rummikub.core.pieces.*;
+import rummikub.core.pieces.Jeton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,15 +14,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Pioche {
 
     private final List<Jeton> listeJetons;
-    /**
-     * Valeur maximale d'un jeton.
-     */
-    public static final int VALEUR_MAX = 13;
-
-    /**
-     * Nombre de jokers.
-     */
-    public static final int NB_JOKERS = 2;
 
     /**
      * Nombre de jetons par joueur.
@@ -30,40 +21,19 @@ public class Pioche {
     public static final int NB_INITIAL_JETONS = 14;
 
     /**
-     * Nombre d'exemplaires d'un même jeton.
+     * Crée une nouvelle pioche.
+     *
+     * @param listeJetons la liste de tous les jetons de la partie
      */
-    public static final int NB_JEUX_JETONS = 2;
-
-    /**
-     * Crée une nouvelle pioche et l'initialise.
-     */
-    public Pioche() {
-        listeJetons = new ArrayList<>();
-        initialiser();
-    }
-
-    private void initialiser() {
-        for (Couleur couleur : Couleur.values()) {
-            for (int i = 1; i <= VALEUR_MAX; i++) {
-                for (int j = 1; j <= NB_JEUX_JETONS; j++) {
-                    Jeton jeton = new JetonNormal(i, couleur);
-                    listeJetons.add(jeton);
-                }
-            }
-        }
-        for (int i = 1; i <= NB_JOKERS; i++) {
-            Jeton joker = new Joker();
-            listeJetons.add(joker);
-        }
+    public Pioche(List<Jeton> listeJetons) {
+        this.listeJetons = listeJetons;
         Collections.shuffle(listeJetons);
-
-    }
+	}
 
     /**
      * Retire un jeton à la pioche.
      *
      * @return un jeton aléatoire contenu dans la pioche
-     *
      * @throws UnsupportedOperationException si la pioche est vide
      */
     public Jeton piocher1Jeton() {

@@ -1,15 +1,13 @@
 package rummikub.core.api;
 
 import rummikub.core.jeu.Pioche;
+import rummikub.core.jeu.Joueur;
+import rummikub.core.jeu.commands.Historique;
 import rummikub.core.plateau.Plateau;
 import rummikub.core.plateau.PlateauImpl;
-import rummikub.core.jeu.commands.Historique;
 import rummikub.core.pieces.Couleur;
 import rummikub.core.pieces.Jeton;
 import rummikub.core.pieces.JetonNormal;
-
-import java.util.HashSet;
-import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
@@ -33,7 +31,7 @@ public class PartieImplTest {
 
 	@BeforeEach
     private void initialisation() {
-		Set<String> listejoueurs = initialiserJoueurs();
+		List<Joueur> listejoueurs = initialiserJoueurs();
 		jetonsPiochesJoueur1 = initialiserJoueur1();
 		jetonsPiochesJoueur2 = initialiserJoueur2();
 		piocheMock = mock(Pioche.class);
@@ -43,10 +41,10 @@ public class PartieImplTest {
 
     }
 
-	private Set<String> initialiserJoueurs() {
-		Set<String> joueurs = new HashSet<>();
-		joueurs.add("Vincent");
-		joueurs.add("Katya");
+	private List<Joueur> initialiserJoueurs() {
+		List<Joueur> joueurs = new ArrayList<>();
+		joueurs.add(new Joueur("Vincent"));
+		joueurs.add(new Joueur("Katya"));
 		return joueurs;
 	}
 

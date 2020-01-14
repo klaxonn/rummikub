@@ -4,7 +4,7 @@ import rummikub.core.pieces.Couleur;
 import rummikub.core.pieces.Jeton;
 import rummikub.core.pieces.JetonNormal;
 import rummikub.core.pieces.Joker;
-import rummikub.core.jeu.Pioche;
+import rummikub.core.api.FabriquePartie;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
@@ -74,7 +74,7 @@ public class SuiteTest {
 
     @Test
     public void newSuiteAvecJokerBorneSup() {
-        Jeton jeton1 = new JetonNormal(Pioche.VALEUR_MAX, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(FabriquePartie.VALEUR_MAX, Couleur.ROUGE);
         Joker joker = new Joker();
         SequenceAbstraite suite1 = new Suite(Arrays.asList(jeton1, joker), fabrique);
         assertEquals("12rouge* 13rouge", suite1.toString());
@@ -105,7 +105,7 @@ public class SuiteTest {
         Joker joker = new Joker();
         List<Jeton> jetons1 = new ArrayList<>();
         jetons1.add(joker);
-        for (int i = 1; i <= Pioche.VALEUR_MAX; i++) {
+        for (int i = 1; i <= FabriquePartie.VALEUR_MAX; i++) {
             jetons1.add(new JetonNormal(i, Couleur.BLEU));
         }
         assertThrows(UnsupportedOperationException.class, () -> {
