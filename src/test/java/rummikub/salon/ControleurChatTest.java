@@ -42,14 +42,6 @@ public class ControleurChatTest {
 		handlerMessages.afterPropertiesSet();
 	}
 
-	private MessageChat nouveauMessage(MessageChat.TypeMessage type, String joueur, String texteMessage){
-		MessageChat message = new MessageChat();
-		message.setTypeMessage(type);
-		message.setMessage(texteMessage);
-		message.setJoueur(joueur);
-		return message;
-	}
-
 	private void testContenuMessage(MessageChat message, MessageChat.TypeMessage type, String joueur, String texteMessage){
 		assertEquals(type, message.getTypeMessage());
 		assertEquals(joueur, message.getJoueur());
@@ -80,7 +72,7 @@ public class ControleurChatTest {
 
 	@Test
     public void ajouterJoueurConnecteTest() throws Exception {
-		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Vincent","");
+		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.CONNEXION, "Vincent","");
 		String destination = "/salon/ajouterJoueurConnecte";
 		String reception = "/user/0/queue/canalPersonel";
 
@@ -91,7 +83,7 @@ public class ControleurChatTest {
 
 	@Test
     public void ajouterJoueurConnecteMemeNomTest() throws Exception {
-		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Vincent","");
+		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.CONNEXION, "Vincent","");
 		String destination = "/salon/ajouterJoueurConnecte";
 		String reception = "/user/0/queue/canalPersonel";
 
@@ -102,7 +94,7 @@ public class ControleurChatTest {
 
 	@Test
     public void mettreAJourJoueursConnectesTest() throws Exception {
-		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Katya","");
+		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.CONNEXION, "Katya","");
 		String destination = "/salon/mettreAJourJoueursConnectes";
 		String reception = "/topic/joueursConnectes";
 		when(listeJoueursMock.getJoueursConnectes()).thenReturn(new HashSet<String>(Arrays.asList("Vincent", "Katya")));
@@ -113,7 +105,7 @@ public class ControleurChatTest {
 
 	@Test
     public void ajouterPremierJoueurPartieTest() throws Exception {
-		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Vincent","");
+		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.JOINDRE_PARTIE, "Vincent","");
 		String destination = "/salon/joindrePartie";
 		String reception = "/user/0/queue/canalPersonel";
 		when(listeJoueursMock.nombreJoueursPartie()).thenReturn(1L);
@@ -125,7 +117,7 @@ public class ControleurChatTest {
 
 	@Test
     public void ajouterDeuxiemeJoueurPartieTest() throws Exception {
-		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Katya","");
+		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.JOINDRE_PARTIE, "Katya","");
 		String destination = "/salon/joindrePartie";
 		String reception = "/user/0/queue/canalPersonel";
 		when(listeJoueursMock.nombreJoueursPartie()).thenReturn(2L);
@@ -136,7 +128,7 @@ public class ControleurChatTest {
 
 	@Test
     public void ajouterPremierJoueurPartieTestFail() throws Exception {
-		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Tnecniv","");
+		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.JOINDRE_PARTIE, "Tnecniv","");
 		String destination = "/salon/joindrePartie";
 		String reception = "/user/0/queue/canalPersonel";
 		when(listeJoueursMock.nombreJoueursPartie()).thenReturn(1L);
@@ -149,7 +141,7 @@ public class ControleurChatTest {
 
 	@Test
     public void ajouterTropDeJoueursPartieTestFail() throws Exception {
-		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Boris","");
+		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.JOINDRE_PARTIE, "Boris","");
 		String destination = "/salon/joindrePartie";
 		String reception = "/user/0/queue/canalPersonel";
 		when(listeJoueursMock.nombreJoueursPartie()).thenReturn((long)ControleurChat.NOMBRE_MAX_JOUEURS_PARTIE + 1);
@@ -160,7 +152,7 @@ public class ControleurChatTest {
 
 	@Test
     public void mettreAJourJoueursPartieTest() throws Exception {
-		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.JOINDRE_PARTIE, "Katya","");
+		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.JOINDRE_PARTIE, "Katya","");
 		String destination = "/salon/mettreAJourJoueursPartie";
 		String reception = "/topic/joueursConnectes";
 		when(listeJoueursMock.getJoueursPartie()).thenReturn(new HashSet<String>(Arrays.asList("Vincent", "Katya")));
@@ -171,7 +163,7 @@ public class ControleurChatTest {
 
 	@Test
     public void mettreAJourJoueursConnectesAvecPartieTest() throws Exception {
-		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.CONNEXION, "Katya","");
+		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.CONNEXION, "Katya","");
 		String destination = "/salon/mettreAJourJoueursConnectes";
 		String reception = "/topic/joueursConnectes";
 		when(listeJoueursMock.getJoueursConnectes()).thenReturn(new HashSet<String>(Arrays.asList("Vincent", "Katya")));
@@ -184,7 +176,7 @@ public class ControleurChatTest {
 
 	@Test
     public void demarrerPartie() throws Exception {
-		MessageChat messageEnvoye = nouveauMessage(MessageChat.TypeMessage.DEMARRER_PARTIE, "Vincent","");
+		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.DEMARRER_PARTIE, "Vincent","");
 		String destination = "/salon/demarrerPartie";
 		String reception = "/topic/joueursPartie";
 		when(listeJoueursMock.getJoueursPartie()).thenReturn(new HashSet<String>(Arrays.asList("Vincent")));
