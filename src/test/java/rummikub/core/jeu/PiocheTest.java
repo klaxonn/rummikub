@@ -39,7 +39,7 @@ public class PiocheTest {
     @Test
     public void piocher1Jeton() {
         assertEquals(NOMBRE_TOTAL_JETONS, pioche.nombreJetonsRestants());
-        Jeton jeton = pioche.piocher1Jeton();
+        pioche.piocher1Jeton();
         assertFalse(pioche.isVide());
         assertEquals(NOMBRE_TOTAL_JETONS - 1, pioche.nombreJetonsRestants());
     }

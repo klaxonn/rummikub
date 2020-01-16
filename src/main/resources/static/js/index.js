@@ -206,7 +206,6 @@ function demarrerPartie(event) {
 function onMessageRecuDemarrerPartie(payload) {
 	canalSalon.unsubscribe();
 	canalPartie.unsubscribe();
-	clientStomp.disconnect();
 	window.location.href="partie.html";
 }
 

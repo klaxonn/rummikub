@@ -3,13 +3,9 @@ package rummikub.ihm;
 import rummikub.core.api.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.InputMismatchException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implémentation textuelle de l'interface.
@@ -21,7 +17,6 @@ public class InterfaceConsole {
 
     private final Scanner in;
 	private Partie partie;
-	private static final Logger logger = LoggerFactory.getLogger(InterfaceConsole.class);
 	private boolean finTour=false;
 	private boolean finPartie=false;
 	private int indexJoueurCourant = 1;
@@ -56,8 +51,8 @@ public class InterfaceConsole {
 		System.out.println("Félicitation vous avez gagné !");
     }
 
-    private Set<String> obtenirlisteDesJoueurs() {
-		HashSet<String> setJoueurs = new HashSet<>();
+    private List<String> obtenirlisteDesJoueurs() {
+		List<String> setJoueurs = new ArrayList<>();
         System.out.print("Combien de joueurs ? ");
         int nbJoueurs = poserQuestionReponseInt();
 

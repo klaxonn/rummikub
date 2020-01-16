@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -24,7 +23,6 @@ public class PartieImplTest {
     private List<Jeton> jetonsPiochesJoueur2;
 	private Pioche piocheMock;
 	private Plateau plateauMock;
-	private Historique historique;
 	private static final int JOUEUR1 = 1;
 	private static final int JOUEUR2 = 2;
 	private static final int JOUEUR_INCONNU =3;
@@ -36,7 +34,7 @@ public class PartieImplTest {
 		jetonsPiochesJoueur2 = initialiserJoueur2();
 		piocheMock = mock(Pioche.class);
 		plateauMock = mock(PlateauImpl.class);
-		historique = new Historique();
+		Historique historique = new Historique();
 		partie = new PartieImpl(listejoueurs, piocheMock, plateauMock, historique);
 
     }

@@ -7,7 +7,6 @@ import rummikub.core.plateau.PlateauImpl;
 import rummikub.core.plateau.FabriqueSequence;
 import rummikub.core.jeu.commands.Historique;
 import rummikub.core.pieces.*;
-import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +40,7 @@ final public class FabriquePartie {
      * @param listeNomsJoueurs la liste des noms des joueurs
      * @return une nouvelle partie
      */
-    public static Partie creerNouvellePartie(Set<String> listeNomsJoueurs) {
+    public static Partie creerNouvellePartie(List<String> listeNomsJoueurs) {
 		Pioche pioche = new Pioche(creerJetons());
 		FabriqueSequence fabrique = FabriqueSequence.obtenirFabrique();
 		Plateau plateau = new PlateauImpl(fabrique);
@@ -67,7 +66,7 @@ final public class FabriquePartie {
         return listeJetons;
 	}
 
-	private static List<Joueur> creerJoueurs(Set<String> listeNomsJoueurs) {
+	private static List<Joueur> creerJoueurs(List<String> listeNomsJoueurs) {
 		List<Joueur> listeJoueurs = new ArrayList<>();
         listeNomsJoueurs.forEach((nomJoueur) -> {
             listeJoueurs.add(new Joueur(nomJoueur));

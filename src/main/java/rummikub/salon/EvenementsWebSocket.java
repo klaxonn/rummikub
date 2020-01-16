@@ -9,7 +9,8 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
-
+import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
+import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 /**
  * Gestion des événements Web Socket.
@@ -18,6 +19,8 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 public class EvenementsWebSocket {
 
     private static final Logger logger = LoggerFactory.getLogger(EvenementsWebSocket.class);
+    private String idCanalSalon;
+    private String idCanalPartie;
 
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
@@ -58,6 +61,17 @@ public class EvenementsWebSocket {
 				logger.error(e.getMessage());
 			}
         }
+    }
+
+    @EventListener
+    public void deconnexionWebSocket(SessionUnsubscribeEvent evenement) {
+		logger.info("Desabonnement : " + evenement.toString());
+    }
+
+    @EventListener
+    public void deconnexionWebSocket(SessionSubscribeEvent evenement) {
+		//champs destination et id à récupérer
+		logger.info("Abonnement : " + evenement.toString());
     }
 
 	private void envoiMessage(String nomJoueur, String listeJoueurs){

@@ -5,7 +5,6 @@ import rummikub.core.jeu.Pioche;
 import rummikub.core.jeu.commands.*;
 import rummikub.core.plateau.Plateau;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
 * Implémentation d'une partie.

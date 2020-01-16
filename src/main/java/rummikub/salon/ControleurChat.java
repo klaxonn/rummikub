@@ -1,7 +1,6 @@
 package rummikub.salon;
 
-import rummikub.core.api.Partie;
-import rummikub.core.api.FabriquePartie;
+import rummikub.ihm.ControleurWeb;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -26,8 +25,12 @@ public class ControleurChat {
 	private final ListeJoueurs listeJoueurs;
 
 	@Autowired
-	public ControleurChat(ListeJoueurs listeJoueurs) {
+	private ControleurWeb controleurWeb;
+
+	@Autowired
+	public ControleurChat(ListeJoueurs listeJoueurs, ControleurWeb controleurWeb) {
 		this.listeJoueurs = listeJoueurs;
+		this.controleurWeb = controleurWeb;
 	}
 
 	/**
@@ -129,8 +132,7 @@ public class ControleurChat {
     @SendTo("/topic/joueursPartie")
     public MessageChat demarrerPartie(@Payload MessageChat message) {
 		logger.info("Démarrage partie");
-		Partie partie = FabriquePartie.creerNouvellePartie(listeJoueurs.getJoueursPartie());
-        partie.commencerPartie();
+		controleurWeb.creerPartie(listeJoueurs.getJoueursPartie());
         return message;
     }
 

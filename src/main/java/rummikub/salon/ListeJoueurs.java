@@ -2,7 +2,8 @@ package rummikub.salon;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
@@ -41,8 +42,8 @@ public class ListeJoueurs {
 	 *
 	 * @return la liste
 	 */
-	public Set<String> getJoueursConnectes() {
-		return listeJoueurs.keySet();
+	public List<String> getJoueursConnectes() {
+		return new ArrayList<String>(listeJoueurs.keySet());
 	}
 
 	/**
@@ -99,10 +100,10 @@ public class ListeJoueurs {
 	 *
 	 * @return la liste
 	 */
-	public Set<String> getJoueursPartie() {
+	public List<String> getJoueursPartie() {
 		return listeJoueurs.keySet().stream()
 							 .filter(i ->listeJoueurs.get(i).equals(true))
-							 .collect(Collectors.toSet());
+							 .collect(Collectors.toList());
 	}
 
 	/**

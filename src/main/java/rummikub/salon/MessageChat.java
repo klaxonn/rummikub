@@ -10,7 +10,7 @@ public class MessageChat {
 
 
     /**
-	 * Constructeur par défault.
+	 * Constructeur par défaut.
 	 */
     public MessageChat() {
 	}

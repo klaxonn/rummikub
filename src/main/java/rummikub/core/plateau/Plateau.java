@@ -14,7 +14,7 @@ public interface Plateau {
     /**
      * Nombre minimum de jetons pour qu'une séquence soit valide.
      */
-    static final int NOMBRE_JETONS_MINIMUM = 3;
+    int NOMBRE_JETONS_MINIMUM = 3;
 
     /**
      * Crée une nouvelle séquence et l'ajoute au plateau.
