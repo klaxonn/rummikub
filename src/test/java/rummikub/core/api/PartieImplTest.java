@@ -77,6 +77,17 @@ public class PartieImplTest {
     }
 
     @Test
+    public void getNomJoueurTest() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("");
+		partie.commencerPartie();
+		assertEquals(1, partie.getIdJoueur("Vincent"));
+		assertEquals(2, partie.getIdJoueur("Katya"));
+		assertEquals(-1, partie.getIdJoueur("Boris"));
+    }
+
+    @Test
     public void afficherPartieTest() {
 		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
 										 .thenReturn(jetonsPiochesJoueur2);

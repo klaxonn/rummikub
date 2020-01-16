@@ -180,5 +180,13 @@ public interface Partie {
      * @return l'index
      */
     int getIndexJoueurCourant();
+
+    /**
+     * Retourne l'id du joueur.
+     *
+	 * @param le nom du joueur
+     * @return son id si le joueur existe, -1 sinon
+     */
+    int getIdJoueur(String nom);
 }
 

@@ -142,8 +142,16 @@ class PartieImpl implements Partie {
 		}
     }
 
-    public int getIndexJoueurCourant(){
+    public int getIndexJoueurCourant() {
 		return numJoueur + 1;
+	}
+
+	public int getIdJoueur(String nom) {
+		return listeJoueurs.stream()
+							.filter(joueur -> joueur.getNom().equals(nom))
+							.findFirst()
+							.map(joueur -> listeJoueurs.indexOf(joueur) + 1)
+							.orElse(-1);
 	}
 
     public MessagePartie terminerTour(int indexJoueur) {

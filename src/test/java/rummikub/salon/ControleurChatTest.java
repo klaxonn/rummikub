@@ -18,7 +18,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import rummikub.ihm.ControleurWeb;
+import rummikub.ihm.ControleurParties;
 
 @Disabled
 public class ControleurChatTest {
@@ -36,7 +36,7 @@ public class ControleurChatTest {
 	}
 
 	private void initialisationHandler() {
-		ControleurWeb interfaceMock = mock(ControleurWeb.class);
+		ControleurParties interfaceMock = mock(ControleurParties.class);
 		handlerMessages = new HandlerPerso(
 				canalEntree, canalSortie, new SimpMessagingTemplate(new CanalMessageTest()));
 		handlerMessages.registerHandler(new ControleurChat(listeJoueursMock, interfaceMock));
