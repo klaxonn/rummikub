@@ -30,7 +30,6 @@ final public class FabriquePartie {
      */
     public static final int NB_JEUX_JETONS = 2;
 
-
     private FabriquePartie() {
     }
 
@@ -41,11 +40,11 @@ final public class FabriquePartie {
      * @return une nouvelle partie
      */
     public static Partie creerNouvellePartie(List<String> listeNomsJoueurs) {
+		List<Joueur> listeJoueurs = creerJoueurs(listeNomsJoueurs);
 		Pioche pioche = new Pioche(creerJetons());
 		FabriqueSequence fabrique = FabriqueSequence.obtenirFabrique();
 		Plateau plateau = new PlateauImpl(fabrique);
 		Historique historique = new Historique();
-		List<Joueur> listeJoueurs = creerJoueurs(listeNomsJoueurs);
 		return new PartieImpl(listeJoueurs, pioche, plateau, historique);
     }
 
@@ -73,5 +72,4 @@ final public class FabriquePartie {
         });
         return listeJoueurs;
     }
-
 }

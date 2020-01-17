@@ -18,10 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ControleurChat {
 
 	private static final Logger logger = LoggerFactory.getLogger(ControleurChat.class);
-
-	/** Le nombre maximum de joueurs dans une partie */
-	public static final int NOMBRE_MAX_JOUEURS_PARTIE = 4;
-
 	private final ListeJoueurs listeJoueurs;
 	private ControleurParties controleurParties;
 
@@ -34,6 +30,7 @@ public class ControleurChat {
 	/**
 	 * Appelé quand un nouveau client se connecte au salon.
 	 * Le message est transmis au nouveau client pour mettre à jour son nom.
+	 * Si le nom du joueur n'est pas valide, le message sera de type ERREUR
 	 *
 	 * @param message le message reçu du client
 	 * @param headerAccessor informations sur le client
@@ -43,10 +40,15 @@ public class ControleurChat {
     @SendToUser("/queue/canalPersonel")
     public MessageChat ajouterJoueurConnecte(@Payload MessageChat message,
                                SimpMessageHeaderAccessor headerAccessor) {
-		String nomJoueur = listeJoueurs.ajouterJoueurConnecte(message.getJoueur());
-		logger.info("Ajout Joueur");
-        headerAccessor.getSessionAttributes().put("nomJoueur", nomJoueur);
-		message.setJoueur(nomJoueur);
+		try {
+			String nomJoueur = listeJoueurs.ajouterJoueurConnecte(message.getJoueur());
+			logger.info("Ajout Joueur");
+			headerAccessor.getSessionAttributes().put("nomJoueur", nomJoueur);
+			message.setJoueur(nomJoueur);
+		}
+		catch(UnsupportedOperationException e){
+			message = creerMessageErreur(message, e.getMessage());
+		}
         return message;
     }
 
@@ -81,19 +83,14 @@ public class ControleurChat {
     @MessageMapping("/joindrePartie")
     @SendToUser("/queue/canalPersonel")
     public MessageChat ajouterJoueurPartie(@Payload MessageChat message) {
-		if(listeJoueurs.nombreJoueursPartie() < NOMBRE_MAX_JOUEURS_PARTIE) {
-			try{
-				listeJoueurs.ajouterJoueurPartie(message.getJoueur());
-				if(listeJoueurs.nombreJoueursPartie() == 1){
-					message.setTypeMessage(MessageChat.TypeMessage.CREER_PARTIE);
-				}
-			}
-			catch(UnsupportedOperationException e){
-				message = creerMessageErreur(message, e.getMessage());
+		try{
+			listeJoueurs.ajouterJoueurPartie(message.getJoueur());
+			if(listeJoueurs.nombreJoueursPartie() == 1){
+				message.setTypeMessage(MessageChat.TypeMessage.CREER_PARTIE);
 			}
 		}
-		else {
-			message = creerMessageErreur(message, "La partie est complète");
+		catch(UnsupportedOperationException e){
+			message = creerMessageErreur(message, e.getMessage());
 		}
         return message;
     }

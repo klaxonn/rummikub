@@ -1,21 +1,49 @@
 package rummikub.core.api;
 
 import java.util.List;
+import rummikub.core.jeu.Joueur;
 
 /**
 * Représentation d'une partie.
 */
 public interface Partie {
 
+	/** Le nombre maximum de joueurs dans une partie */
+	int NOMBRE_MIN_JOUEURS_PARTIE = 2;
+
+	/** Le nombre maximum de joueurs dans une partie */
+	int NOMBRE_MAX_JOUEURS_PARTIE = 4;
+
+    /**
+     * Ajoute un joueur à la partie non commencée.
+     *
+     * @param joueur le joueur à ajouter
+     * @throws UnsupportedOperationException si la partie est pleine
+     * ou si la partie a déjà commencé
+     */
+    void ajouterJoueur(Joueur joueur);
+
     /**
      * Commence la partie.
+	 * Le message envoyé peut être de deux types :
 	 * Le message envoyé est de type DEBUT_NOUVEAU_TOUR.
 	 * Il contient le nom du premier joueur et son jeu.
 	 * Il contient aussi le plateau.
      *
-     * @return le message contenant les informations
+     * Le message envoyé est de type ERREUR.
+     * Au cas où le nombre de joueurs est incorrect.
+	 * Il contient le message d'erreur
+	 *
+	 * @return le message contenant les informations
      */
     MessagePartie commencerPartie();
+
+     /**
+     * Teste si la partie a commencé.
+     *
+     * @return true si c'est le cas
+     */
+    boolean isPartieCommence();
 
     /**
      * Affiche la partie.
@@ -182,11 +210,11 @@ public interface Partie {
     int getIndexJoueurCourant();
 
     /**
-     * Retourne l'id du joueur.
+     * Retourne les noms des joueurs de la partie
+     * format "joueur1, joueur2"
      *
-	 * @param le nom du joueur
-     * @return son id si le joueur existe, -1 sinon
+     * @return la chaine contenant les noms
      */
-    int getIdJoueur(String nom);
+    String afficherJoueursPartie();
 }
 

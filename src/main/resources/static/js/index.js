@@ -71,6 +71,9 @@ function onMessageRecuPersonnel(payload) {
 		case 'JOINDRE_PARTIE':
 			finalisationJoindrePartie();
 			break;
+		case 'ERREUR':
+			alert(messageServeur.message);
+			break;
 		default:
 			console.log('type message non reconnu');
 	}

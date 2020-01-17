@@ -63,28 +63,88 @@ public class PartieImplTest {
 	}
 
 	@Test
+    public void creerPartieTropdeJoueurs() {
+		when(plateauMock.toString()).thenReturn("");
+		List<Joueur> listejoueurs = new ArrayList<>();
+		for(int i=1; i<= Partie.NOMBRE_MAX_JOUEURS_PARTIE + 1; i++) {
+			listejoueurs.add(new Joueur("Joueur-"+i));
+		}
+		Historique historique = new Historique();
+		assertThrows(IllegalArgumentException.class, () -> {
+			new PartieImpl(listejoueurs, piocheMock, plateauMock, historique);
+        });
+    }
+
+	@Test
+    public void avantCommencerPartieTest() {
+		when(plateauMock.toString()).thenReturn("");
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			"", "", "", "Partie non commencée");
+		MessagePartie message = partie.afficherPartie(JOUEUR1);
+		MessagePartie message2 = partie.remplacerJoker(JOUEUR1, new ArrayList<Integer>());
+		MessagePartie message3 = partie.annulerDerniereAction(JOUEUR1);
+		MessagePartie message4 = partie.terminerTour(JOUEUR1);
+		assertEquals(messageTest, message);
+		assertEquals(messageTest, message2);
+		assertEquals(messageTest, message3);
+		assertEquals(messageTest, message4);
+		assertFalse(partie.isPartieCommence());
+		assertEquals("Vincent, Katya", partie.afficherJoueursPartie());
+    }
+
+    @Test
+    public void ajouterJoueurTest() {
+		Joueur joueur3 = new Joueur("Bob");
+		partie.ajouterJoueur(joueur3);
+		assertEquals("Vincent, Katya, Bob", partie.afficherJoueursPartie());
+	}
+
+    @Test
+    public void ajouterTropJoueurFail() {
+		for(int i=1; i<= Partie.NOMBRE_MAX_JOUEURS_PARTIE - 2; i++) {
+			partie.ajouterJoueur(new Joueur("Joueur-"+i));
+		}
+		assertThrows(UnsupportedOperationException.class, () -> {
+            partie.ajouterJoueur(new Joueur("Joueur"));
+        });
+	}
+
+    @Test
+    public void ajouterJoueurPartieCommenceFail() {
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
+										 .thenReturn(jetonsPiochesJoueur2);
+		when(plateauMock.toString()).thenReturn("");
+		MessagePartie message = partie.commencerPartie();
+		Joueur joueur3 = new Joueur("Bob1");
+		assertThrows(UnsupportedOperationException.class, () -> {
+            partie.ajouterJoueur(joueur3);
+        });
+	}
+
+	@Test
     public void commencerPartieTest() {
 		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
 										 .thenReturn(jetonsPiochesJoueur2);
 		when(plateauMock.toString()).thenReturn("");
 		MessagePartie message = partie.commencerPartie();
-		assertEquals(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,message.getTypeMessage());
-		assertEquals("Vincent",message.getNomJoueur());
-		assertEquals("10bleu 11bleu 12bleu 13bleu",message.getJeuJoueur());
-		assertEquals("",message.getPlateau());
-		assertEquals("",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,
+			"Vincent", "10bleu 11bleu 12bleu 13bleu", "", "");
+		assertEquals(messageTest, message);
 		assertEquals(1,partie.getIndexJoueurCourant());
+		assertTrue(partie.isPartieCommence());
     }
 
-    @Test
-    public void getNomJoueurTest() {
-		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur1)
-										 .thenReturn(jetonsPiochesJoueur2);
+	@Test
+    public void commencerPartiePasAssezJoueur() {
 		when(plateauMock.toString()).thenReturn("");
-		partie.commencerPartie();
-		assertEquals(1, partie.getIdJoueur("Vincent"));
-		assertEquals(2, partie.getIdJoueur("Katya"));
-		assertEquals(-1, partie.getIdJoueur("Boris"));
+		List<Joueur> listejoueurs = new ArrayList<>();
+		listejoueurs.add(new Joueur("Vincent"));
+		Historique historique = new Historique();
+		partie = new PartieImpl(listejoueurs, piocheMock, plateauMock, historique);
+        MessagePartie message = partie.commencerPartie();
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			"", "", "", "Nombre de joueurs incorrect");
+		assertEquals(messageTest, message);
     }
 
     @Test
@@ -95,10 +155,9 @@ public class PartieImplTest {
 		partie.commencerPartie();
 		MessagePartie message = partie.afficherPartie(JOUEUR1);
 		assertEquals(MessagePartie.TypeMessage.AFFICHER_PARTIE,message.getTypeMessage());
-		assertEquals("Vincent",message.getNomJoueur());
-		assertEquals("10bleu 11bleu 12bleu 13bleu",message.getJeuJoueur());
-		assertEquals("",message.getPlateau());
-		assertEquals("",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.AFFICHER_PARTIE,
+			"Vincent", "10bleu 11bleu 12bleu 13bleu", "", "");
+		assertEquals(messageTest, message);
     }
 
     @Test
@@ -108,11 +167,10 @@ public class PartieImplTest {
 		when(plateauMock.toString()).thenReturn("");
 		partie.commencerPartie();
 		MessagePartie message = partie.afficherPartie(JOUEUR_INCONNU);
-		assertEquals(MessagePartie.TypeMessage.ERREUR,message.getTypeMessage());
-		assertEquals("",message.getNomJoueur());
-		assertEquals("",message.getJeuJoueur());
-		assertEquals("",message.getPlateau());
-		assertEquals("Joueur inexistant",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			"", "", "", "Joueur inexistant");
+		assertEquals(messageTest, message);
+
     }
 
 	@Test
@@ -122,11 +180,9 @@ public class PartieImplTest {
 		when(plateauMock.toString()).thenReturn("10bleu 11bleu 12bleu");
 		partie.commencerPartie();
 		MessagePartie message = partie.creerNouvelleSequence(JOUEUR1, Arrays.asList(1,2,3));
-		assertEquals(MessagePartie.TypeMessage.RESULTAT_ACTION,message.getTypeMessage());
-		assertEquals("Vincent",message.getNomJoueur());
-		assertEquals("13bleu",message.getJeuJoueur());
-		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
-		assertEquals("",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+			"Vincent", "13bleu", "10bleu 11bleu 12bleu", "");
+		assertEquals(messageTest, message);
     }
 
     @Test
@@ -136,11 +192,9 @@ public class PartieImplTest {
 		when(plateauMock.toString()).thenReturn("");
 		partie.commencerPartie();
 		MessagePartie message = partie.creerNouvelleSequence(JOUEUR2, Arrays.asList(1,2));
-		assertEquals(MessagePartie.TypeMessage.ERREUR,message.getTypeMessage());
-		assertEquals("Katya",message.getNomJoueur());
-		assertEquals("4jaune 9bleu",message.getJeuJoueur());
-		assertEquals("",message.getPlateau());
-		assertEquals("Ce n'est pas votre tour",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			"Katya", "4jaune 9bleu", "", "Ce n'est pas votre tour");
+		assertEquals(messageTest, message);
     }
 
 	@Test
@@ -152,11 +206,9 @@ public class PartieImplTest {
 		partie.commencerPartie();
 		partie.creerNouvelleSequence(JOUEUR1, Arrays.asList(1,2,3));
 		MessagePartie message = partie.terminerTour(JOUEUR1);
-		assertEquals(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,message.getTypeMessage());
-		assertEquals("Katya",message.getNomJoueur());
-		assertEquals("4jaune 9bleu",message.getJeuJoueur());
-		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
-		assertEquals("",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,
+			"Katya", "4jaune 9bleu", "10bleu 11bleu 12bleu", "");
+		assertEquals(messageTest, message);
     }
 
     @Test
@@ -166,11 +218,9 @@ public class PartieImplTest {
 		when(plateauMock.toString()).thenReturn("");
 		partie.commencerPartie();
 		MessagePartie message = partie.terminerTour(JOUEUR2);
-		assertEquals(MessagePartie.TypeMessage.ERREUR,message.getTypeMessage());
-		assertEquals("Katya",message.getNomJoueur());
-		assertEquals("4jaune 9bleu",message.getJeuJoueur());
-		assertEquals("",message.getPlateau());
-		assertEquals("Ce n'est pas votre tour",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			"Katya", "4jaune 9bleu", "", "Ce n'est pas votre tour");
+		assertEquals(messageTest, message);
     }
 
 	@Test
@@ -183,11 +233,9 @@ public class PartieImplTest {
 		partie.creerNouvelleSequence(JOUEUR1, Arrays.asList(1,2,3));
 		partie.terminerTour(JOUEUR1);
 		MessagePartie message = partie.ajouterJeton(JOUEUR2, Arrays.asList(1,2));
-		assertEquals(MessagePartie.TypeMessage.RESULTAT_ACTION,message.getTypeMessage());
-		assertEquals("Katya",message.getNomJoueur());
-		assertEquals("9bleu",message.getJeuJoueur());
-		assertEquals("10bleu 11bleu 12bleu\n4jaune",message.getPlateau());
-		assertEquals("",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+			"Katya", "9bleu", "10bleu 11bleu 12bleu\n4jaune", "");
+		assertEquals(messageTest, message);
     }
 
 	@Test
@@ -200,11 +248,9 @@ public class PartieImplTest {
 		partie.creerNouvelleSequence(JOUEUR1, Arrays.asList(1,2,3));
 		partie.terminerTour(JOUEUR1);
 		MessagePartie message = partie.couperSequence(JOUEUR2, Arrays.asList(1,2));
-		assertEquals(MessagePartie.TypeMessage.RESULTAT_ACTION,message.getTypeMessage());
-		assertEquals("Katya",message.getNomJoueur());
-		assertEquals("4jaune 9bleu",message.getJeuJoueur());
-		assertEquals("10bleu\n11bleu 12bleu",message.getPlateau());
-		assertEquals("",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+			"Katya", "4jaune 9bleu", "10bleu\n11bleu 12bleu", "");
+		assertEquals(messageTest, message);
     }
 
 	@Test
@@ -217,11 +263,9 @@ public class PartieImplTest {
 		partie.creerNouvelleSequence(JOUEUR1, Arrays.asList(1,2,3));
 		partie.terminerTour(JOUEUR1);
 		MessagePartie message = partie.deplacerJeton(JOUEUR2, Arrays.asList(1,3,2));
-		assertEquals(MessagePartie.TypeMessage.RESULTAT_ACTION,message.getTypeMessage());
-		assertEquals("Katya",message.getNomJoueur());
-		assertEquals("4jaune 9bleu",message.getJeuJoueur());
-		assertEquals("10bleu 11bleu\n12bleu",message.getPlateau());
-		assertEquals("",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+			"Katya", "4jaune 9bleu", "10bleu 11bleu\n12bleu", "");
+		assertEquals(messageTest, message);
     }
 
 	@Test
@@ -235,11 +279,9 @@ public class PartieImplTest {
 		partie.terminerTour(JOUEUR1);
 		partie.deplacerJeton(JOUEUR2, Arrays.asList(1,3,2));
 		MessagePartie message = partie.annulerDerniereAction(JOUEUR2);
-		assertEquals(MessagePartie.TypeMessage.RESULTAT_ACTION,message.getTypeMessage());
-		assertEquals("Katya",message.getNomJoueur());
-		assertEquals("4jaune 9bleu",message.getJeuJoueur());
-		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
-		assertEquals("",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+			"Katya", "4jaune 9bleu", "10bleu 11bleu 12bleu", "");
+		assertEquals(messageTest, message);
     }
 
     @Test
@@ -251,11 +293,9 @@ public class PartieImplTest {
 		partie.commencerPartie();
 		partie.creerNouvelleSequence(JOUEUR1, Arrays.asList(1,2,3));
 		MessagePartie message = partie.annulerDerniereAction(JOUEUR2);
-		assertEquals(MessagePartie.TypeMessage.ERREUR,message.getTypeMessage());
-		assertEquals("Katya",message.getNomJoueur());
-		assertEquals("4jaune 9bleu",message.getJeuJoueur());
-		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
-		assertEquals("Ce n'est pas votre tour",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			"Katya", "4jaune 9bleu", "10bleu 11bleu 12bleu", "Ce n'est pas votre tour");
+		assertEquals(messageTest, message);
     }
 
 	@Test
@@ -269,11 +309,9 @@ public class PartieImplTest {
 		partie.terminerTour(JOUEUR1);
 		partie.deplacerJeton(JOUEUR2, Arrays.asList(1,3,2));
 		MessagePartie message = partie.fusionnerSequence(JOUEUR2, Arrays.asList(1,4));
-		assertEquals(MessagePartie.TypeMessage.RESULTAT_ACTION,message.getTypeMessage());
-		assertEquals("Katya",message.getNomJoueur());
-		assertEquals("4jaune 9bleu",message.getJeuJoueur());
-		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
-		assertEquals("",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+			"Katya", "4jaune 9bleu", "10bleu 11bleu 12bleu", "");
+		assertEquals(messageTest, message);
     }
 
 	@Test
@@ -286,11 +324,9 @@ public class PartieImplTest {
 		partie.creerNouvelleSequence(JOUEUR1, Arrays.asList(1,2,3));
 		partie.terminerTour(JOUEUR1);
 		MessagePartie message = partie.remplacerJoker(JOUEUR2, Arrays.asList(3,1));
-		assertEquals(MessagePartie.TypeMessage.ERREUR,message.getTypeMessage());
-		assertEquals("Katya",message.getNomJoueur());
-		assertEquals("4jaune 9bleu",message.getJeuJoueur());
-		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
-		assertEquals("Index jeton hors limite",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			"Katya", "4jaune 9bleu", "10bleu 11bleu 12bleu", "Index jeton hors limite");
+		assertEquals(messageTest, message);
     }
 
 	@Test
@@ -304,11 +340,9 @@ public class PartieImplTest {
 		partie.terminerTour(JOUEUR1);
 		partie.ajouterJeton(JOUEUR2, Arrays.asList(1,2));
 		MessagePartie message = partie.terminerTour(JOUEUR2);
-		assertEquals(MessagePartie.TypeMessage.ERREUR,message.getTypeMessage());
-		assertEquals("Katya",message.getNomJoueur());
-		assertEquals("9bleu",message.getJeuJoueur());
-		assertEquals("10bleu 11bleu 12bleu\n4jaune",message.getPlateau());
-		assertEquals("plateau non valide",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			"Katya", "9bleu", "10bleu 11bleu 12bleu\n4jaune", "plateau non valide");
+		assertEquals(messageTest, message);
     }
 
 	@Test
@@ -322,11 +356,9 @@ public class PartieImplTest {
 		partie.terminerTour(JOUEUR1);
 		partie.ajouterJeton(JOUEUR2, Arrays.asList(2,1));
 		MessagePartie message = partie.terminerTour(JOUEUR2);
-		assertEquals(MessagePartie.TypeMessage.ERREUR,message.getTypeMessage());
-		assertEquals("Katya",message.getNomJoueur());
-		assertEquals("4jaune",message.getJeuJoueur());
-		assertEquals("9bleu 10bleu 11bleu 12bleu",message.getPlateau());
-		assertEquals("21 points restants nécessaires",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			"Katya", "4jaune", "9bleu 10bleu 11bleu 12bleu", "21 points restants nécessaires");
+		assertEquals(messageTest, message);
     }
 
 	@Test
@@ -340,11 +372,9 @@ public class PartieImplTest {
 		partie.creerNouvelleSequence(JOUEUR1, Arrays.asList(1,2,3));
 		partie.terminerTour(JOUEUR1);
 		MessagePartie message = partie.terminerTour(JOUEUR2);
-		assertEquals(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,message.getTypeMessage());
-		assertEquals("Vincent",message.getNomJoueur());
-		assertEquals("13bleu",message.getJeuJoueur());
-		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
-		assertEquals("",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,
+			"Vincent", "13bleu", "10bleu 11bleu 12bleu", "");
+		assertEquals(messageTest, message);
     }
 
 	@Test
@@ -358,11 +388,9 @@ public class PartieImplTest {
 		partie.creerNouvelleSequence(JOUEUR1, Arrays.asList(1,2,3));
 		partie.terminerTour(JOUEUR1);
 		MessagePartie message = partie.terminerTour(JOUEUR2);
-		assertEquals(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,message.getTypeMessage());
-		assertEquals("Vincent",message.getNomJoueur());
-		assertEquals("13bleu",message.getJeuJoueur());
-		assertEquals("10bleu 11bleu 12bleu",message.getPlateau());
-		assertEquals("",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,
+			"Vincent", "13bleu", "10bleu 11bleu 12bleu", "");
+		assertEquals(messageTest, message);
     }
 
 	@Test
@@ -374,10 +402,7 @@ public class PartieImplTest {
 		partie.commencerPartie();
 		partie.creerNouvelleSequence(JOUEUR1, Arrays.asList(1,2,3,4));
 		MessagePartie message = partie.terminerTour(JOUEUR1);
-		assertEquals(MessagePartie.TypeMessage.FIN_DE_PARTIE,message.getTypeMessage());
-		assertEquals("Vincent",message.getNomJoueur());
-		assertEquals("",message.getJeuJoueur());
-		assertEquals("10bleu 11bleu 12bleu 13bleu",message.getPlateau());
-		assertEquals("",message.getMessageErreur());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.FIN_DE_PARTIE,
+			"Vincent", "", "10bleu 11bleu 12bleu 13bleu", "");
     }
 }

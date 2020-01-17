@@ -3,6 +3,7 @@ package rummikub.ihm;
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
 import java.util.List;
+import java.lang.reflect.Method;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,59 +28,64 @@ public class ControleurPartie {
 
     @GetMapping("{idPartie}/{idJoueur}/afficherPartie")
     public ResponseEntity<MessagePartie> afficherPartie(@PathVariable int idPartie, @PathVariable int idJoueur){
-		Partie partie = listeParties.getPartie(idPartie);
-		MessagePartie message = partie.afficherPartie(idJoueur);
-		return traitementActions(message);
+		return executerAction("afficherPartie", idPartie, idJoueur, null);
 	}
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/creerSequence")
 	public ResponseEntity<MessagePartie> creerSequence(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
-		Partie partie = listeParties.getPartie(idPartie);
-		MessagePartie message = partie.creerNouvelleSequence(idJoueur, indexes);
-		return traitementActions(message);
+		return executerAction("creerSequence", idPartie, idJoueur, indexes);
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/fusionnerSequence")
 	public ResponseEntity<MessagePartie> fusionnerSequence(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
-		Partie partie = listeParties.getPartie(idPartie);
-		MessagePartie message = partie.fusionnerSequence(idJoueur, indexes);
-		return traitementActions(message);
+		return executerAction("fusionnerSequence", idPartie, idJoueur, indexes);
     }
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/couperSequence")
 	public ResponseEntity<MessagePartie> couperSequence(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
-		Partie partie = listeParties.getPartie(idPartie);
-		MessagePartie message = partie.couperSequence(idJoueur, indexes);
-		return traitementActions(message);
+		return executerAction("couperSequence", idPartie, idJoueur, indexes);
     }
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/deplacerJeton")
 	public ResponseEntity<MessagePartie> deplacerJeton(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
-		Partie partie = listeParties.getPartie(idPartie);
-		MessagePartie message = partie.deplacerJeton(idJoueur, indexes);
-		return traitementActions(message);
+		return executerAction("deplacerJeton", idPartie, idJoueur, indexes);
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/remplacerJoker")
 	public ResponseEntity<MessagePartie> remplacerJoker(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
-		Partie partie = listeParties.getPartie(idPartie);
-		MessagePartie message = partie.remplacerJoker(idJoueur, indexes);
-		return traitementActions(message);
+		return executerAction("remplacerJoker", idPartie, idJoueur, indexes);
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/annulerDerniereAction")
 	public ResponseEntity<MessagePartie> annulerDerniereAction(@PathVariable int idPartie, @PathVariable int idJoueur) {
-		Partie partie = listeParties.getPartie(idPartie);
-		MessagePartie message = partie.annulerDerniereAction(idJoueur);
-		return traitementActions(message);
+		return executerAction("annulerDerniereAction", idPartie, idJoueur, null);
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/terminerTour")
 	public ResponseEntity<MessagePartie> terminerTour(@PathVariable int idPartie, @PathVariable int idJoueur) {
-		Partie partie = listeParties.getPartie(idPartie);
-		MessagePartie message = partie.terminerTour(idJoueur);
-		return traitementActions(message);
+		return executerAction("terminerTour", idPartie, idJoueur, null);
     }
+
+	private ResponseEntity<MessagePartie> executerAction(String action, int idPartie, int idJoueur, List<Integer> arg) {
+		//test partie existe
+		Partie partie = listeParties.getPartie(idPartie);
+		MessagePartie message = null;
+		try{
+			Class<?> classePartie = Class.forName("Partie");
+			if(arg == null) {
+				Method methode = classePartie.getMethod(action, Integer.class);
+				message = (MessagePartie) methode.invoke(partie, idJoueur);
+			}
+			else {
+				Method methode = classePartie.getMethod(action, Integer.class, List.class);
+				message = (MessagePartie) methode.invoke(partie, idJoueur, arg);
+			}
+		}
+		catch(Exception e) {
+		}
+		return traitementActions(message);
+	}
+
 
     private ResponseEntity<MessagePartie> traitementActions(MessagePartie message) {
 		switch(message.getTypeMessage()) {

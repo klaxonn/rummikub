@@ -17,10 +17,14 @@ public class ListeParties {
 	}
 
 	public Partie creerPartie(List<String> listeNomsJoueurs) {
-		int indexNouvellePartie = listeParties.size() + 1;
 		Partie partie = FabriquePartie.creerNouvellePartie(listeNomsJoueurs);
+		int indexNouvellePartie = listeParties.size() + 1;
 		listeParties.put(indexNouvellePartie, partie);
 		return partie;
+	}
+
+	public String listerPartiesDispos() {
+		return "";
 	}
 
 	public Partie getPartie(int id) {

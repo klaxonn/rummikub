@@ -29,6 +29,6 @@ test {
     useJUnitPlatform()
 }
 
-bootRun {
-    standardInput = System.in
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ['-Xlint:unchecked']
 }

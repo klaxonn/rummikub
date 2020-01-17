@@ -3,6 +3,7 @@ package rummikub.salon;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
+import rummikub.core.api.Partie;
 
 public class ListeJoueursTest {
 
@@ -26,6 +27,14 @@ public class ListeJoueursTest {
 		listeJoueurs.ajouterJoueurConnecte("Vincent");
 		assertEquals("[Vincent, Vincent-1]",listeJoueurs.getJoueursConnectes().toString());
 		assertEquals(2,listeJoueurs.nombreJoueursConnectes());
+	}
+
+	@Test
+	public void ajouterJoueurNomNonValideTest(){
+		assertThrows(UnsupportedOperationException.class, () -> {
+			listeJoueurs.ajouterJoueurConnecte("*::*");
+        });
+        assertEquals(0,listeJoueurs.nombreJoueursConnectes());
 	}
 
 	@Test
@@ -59,6 +68,18 @@ public class ListeJoueursTest {
 		assertEquals("Vincent",listeJoueurs.getCreateurPartie());
 
 	}
+
+	@Test
+    public void ajouterTropDeJoueursPartieTestFail() throws Exception {
+		for (int i=1; i < Partie.NOMBRE_MAX_JOUEURS_PARTIE; i++) {
+			listeJoueurs.ajouterJoueurConnecte("joueur-"+i);
+			listeJoueurs.ajouterJoueurPartie("joueur-"+i);
+		}
+		listeJoueurs.ajouterJoueurConnecte("Katya");
+		assertThrows(UnsupportedOperationException.class, () -> {
+			listeJoueurs.ajouterJoueurPartie("Katya");
+        });
+    }
 
 	@Test
 	public void ajouterJoueurPartieFail(){

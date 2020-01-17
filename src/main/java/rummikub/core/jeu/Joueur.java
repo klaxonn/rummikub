@@ -27,11 +27,17 @@ public class Joueur {
      * Crée un nouveau joueur.
      *
      * @param nom nom du joueur
+     * @throws IllegalArgumentException si le nom n'est pas valide
      */
     public Joueur(String nom) {
-        nomJoueur = nom;
-        peutJouer = false;
-        totalPointsJoues = 0;
+		if(isNomValide(nom)) {
+			nomJoueur = nom;
+			peutJouer = false;
+			totalPointsJoues = 0;
+		}
+		else {
+			throw new IllegalArgumentException("Nom non valide");
+		}
     }
 
     /**
@@ -220,4 +226,16 @@ public class Joueur {
     public int nombreJetonsRestants() {
         return listeJetons.size();
     }
+
+    /**
+	 * Détermine si le nom du joueur est valide.
+	 * Il doit utiliser uniquement des caractères alphanumériques et -.
+	 * La taille est comprise entre 1 et 15.
+	 *
+	 * @param nomJoueur le nom du joueur à tester
+	 * @return true si le nom est valide
+	 */
+	public static boolean isNomValide(String nom){
+		return nom.matches("[\\w\\-]{1,15}+");
+	}
 }

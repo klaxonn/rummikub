@@ -5,36 +5,67 @@ import rummikub.core.jeu.Pioche;
 import rummikub.core.jeu.commands.*;
 import rummikub.core.plateau.Plateau;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 /**
 * Implémentation d'une partie.
 */
 class PartieImpl implements Partie {
 
+	private static final int INDEX_JOUEUR_ERREUR = -1;
     private final Pioche pioche;
     private final Plateau plateau;
     private List<Joueur> listeJoueurs;
     private Joueur joueurEnCours;
     private int numJoueur;
     private final Historique historique;
+    private boolean partieCommence;
 
     /**
      * Crée une nouvelle partie.
      *
      * @param listeNomsJoueurs la liste des noms des joueurs
+     * @throws UnsupportedOperationException si la liste contient trop de joueurs
      */
     public PartieImpl(List<Joueur> listeJoueurs, Pioche pioche, Plateau plateau, Historique historique) {
-        this.pioche = pioche;
-        this.plateau = plateau;
-        this.historique = historique;
-		this.listeJoueurs = listeJoueurs;
-		//Pour que le joueur 0  soit le premier à commencer
-        numJoueur = -1;
+		if(listeJoueurs.size() <= NOMBRE_MAX_JOUEURS_PARTIE) {
+			this.pioche = pioche;
+			this.plateau = plateau;
+			this.historique = historique;
+			this.listeJoueurs = listeJoueurs;
+			partieCommence = false;
+			//Pour que le joueur 0  soit le premier à commencer
+			numJoueur = -1;
+		}
+		else {
+			throw new IllegalArgumentException ("Trop de joueurs");
+		}
     }
 
+	public void ajouterJoueur(Joueur joueur) {
+		if(!partieCommence && listeJoueurs.size() < NOMBRE_MAX_JOUEURS_PARTIE) {
+			listeJoueurs.add(joueur);
+		}
+		else {
+			throw new UnsupportedOperationException ("Impossible d'ajouter le joueur");
+		}
+	}
+
+	public String afficherJoueursPartie(){
+		return listeJoueurs.stream().map((joueur) -> joueur.getNom())
+							   .collect(Collectors.joining(", "));
+	}
+
     public MessagePartie commencerPartie() {
-        initialiserJoueurs();
-		return debutDuTour();
+		if(!partieCommence && listeJoueurs.size() >= NOMBRE_MIN_JOUEURS_PARTIE) {
+			initialiserJoueurs();
+			partieCommence = true;
+			return debutDuTour();
+		}
+		else {
+			return nouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, "Nombre de joueurs incorrect");
+		}
     }
 
     private void initialiserJoueurs() {
@@ -42,6 +73,10 @@ class PartieImpl implements Partie {
             joueur.setPiocheInitiale(pioche.piocheInitiale());
         });
     }
+
+    public boolean isPartieCommence() {
+		return partieCommence;
+	}
 
     private MessagePartie debutDuTour() {
 		numJoueur = (numJoueur + 1) % listeJoueurs.size();
@@ -73,13 +108,20 @@ class PartieImpl implements Partie {
 	}
 
 	public MessagePartie afficherPartie(int indexJoueur){
-		int indexReelJoueur = indexJoueur - 1;
-		if(correctIndex(indexReelJoueur)){
-			return nouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.AFFICHER_PARTIE, "");
+		String messageErreur = "";
+		if(partieCommence) {
+			int indexReelJoueur = indexJoueur - 1;
+			if(correctIndex(indexReelJoueur)){
+				return nouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.AFFICHER_PARTIE, "");
+			}
+			else {
+				messageErreur = "Joueur inexistant";
+			}
 		}
 		else {
-			return nouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.ERREUR, "Joueur inexistant");
+			messageErreur = "Partie non commencée";
 		}
+		return nouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, messageErreur);
 	}
 
 	public MessagePartie creerNouvelleSequence(int indexJoueur, List<Integer> indexes) {
@@ -107,19 +149,24 @@ class PartieImpl implements Partie {
     }
 
     private MessagePartie executerAction(int indexJoueur, Command action) {
-		int indexReelJoueur = indexJoueur - 1;
-		if(isJoueurCourant(indexReelJoueur)){
-			try{
-				action.doCommand();
-				historique.ajouterCommande(action);
-				return nouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.RESULTAT_ACTION, "");
+		if(partieCommence) {
+			int indexReelJoueur = indexJoueur - 1;
+			if(isJoueurCourant(indexReelJoueur)){
+				try{
+					action.doCommand();
+					historique.ajouterCommande(action);
+					return nouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.RESULTAT_ACTION, "");
+				}
+				catch(Exception e){
+					return nouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.ERREUR, e.getMessage());
+				}
 			}
-			catch(Exception e){
-				return nouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.ERREUR, e.getMessage());
+			else {
+				return joueurIncorrect(indexReelJoueur);
 			}
 		}
 		else {
-			return joueurIncorrect(indexReelJoueur);
+			return nouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, "Partie non commencée");
 		}
     }
 
@@ -132,13 +179,18 @@ class PartieImpl implements Partie {
     }
 
     public MessagePartie annulerDerniereAction(int indexJoueur) {
-		int indexReelJoueur = indexJoueur - 1;
-		if(isJoueurCourant(indexReelJoueur)){
-			historique.annulerDerniereCommande();
-			return nouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.RESULTAT_ACTION, "");
+		if(partieCommence) {
+			int indexReelJoueur = indexJoueur - 1;
+			if(isJoueurCourant(indexReelJoueur)){
+				historique.annulerDerniereCommande();
+				return nouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.RESULTAT_ACTION, "");
+			}
+			else {
+				return joueurIncorrect(indexReelJoueur);
+			}
 		}
 		else {
-			return joueurIncorrect(indexReelJoueur);
+			return nouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, "Partie non commencée");
 		}
     }
 
@@ -146,31 +198,32 @@ class PartieImpl implements Partie {
 		return numJoueur + 1;
 	}
 
-	public int getIdJoueur(String nom) {
-		return listeJoueurs.stream()
-							.filter(joueur -> joueur.getNom().equals(nom))
-							.findFirst()
-							.map(joueur -> listeJoueurs.indexOf(joueur) + 1)
-							.orElse(-1);
-	}
-
     public MessagePartie terminerTour(int indexJoueur) {
-		int indexReelJoueur = indexJoueur - 1;
-		if(isJoueurCourant(indexReelJoueur)){
-			if (plateau.isValide()) {
-				if (joueurEnCours.aJoueAuMoins1Jeton()) {
-					return joueurAJoue(indexReelJoueur);
-				} else {
-					return piocher();
-				}
-			} else {
-				return nouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.ERREUR, "plateau non valide");
+		if(partieCommence) {
+			int indexReelJoueur = indexJoueur - 1;
+			if(isJoueurCourant(indexReelJoueur)){
+				return traitementFinDeTour(indexReelJoueur);
+			}
+			else {
+				return joueurIncorrect(indexReelJoueur);
 			}
 		}
 		else {
-			return joueurIncorrect(indexReelJoueur);
+			return nouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, "Partie non commencée");
 		}
     }
+
+    private MessagePartie traitementFinDeTour(int indexReelJoueur) {
+		if (plateau.isValide()) {
+			if (joueurEnCours.aJoueAuMoins1Jeton()) {
+				return joueurAJoue(indexReelJoueur);
+			} else {
+				return piocher();
+			}
+		} else {
+			return nouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.ERREUR, "plateau non valide");
+		}
+	}
 
     private MessagePartie joueurAJoue(int indexReelJoueur) {
         if (joueurEnCours.isAutoriseAterminerLeTour()) {

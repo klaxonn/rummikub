@@ -10,6 +10,29 @@ public class MessagePartie {
     private String plateau;
 	private String messageErreur;
 
+	/**
+	 * Constructeur par défaut.
+	 */
+    public MessagePartie() {
+	}
+
+    /**
+	 * Construit un message.
+	 *
+	 * @param typeMessage le type de message
+	 * @param nomJoueur le nom du joueur
+	 * @param jeuJoueur la représentation textuelle du jeu du joueur
+	 * @param plateau la représentation textuelle du plateau
+	 * @param messageErreur le message d'erreur
+	 */
+	public MessagePartie(MessagePartie.TypeMessage typeMessage, String nomJoueur, String jeuJoueur,
+						String plateau, String messageErreur){
+        this.typeMessage = typeMessage;
+		this.nomJoueur = nomJoueur;
+		this.jeuJoueur = jeuJoueur;
+        this.plateau = plateau;
+        this.messageErreur = messageErreur;
+	}
 
 	/**
 	 * Types de messages possibles.
@@ -111,6 +134,22 @@ public class MessagePartie {
 	 */
     public void setPlateau(String plateau) {
         this.plateau = plateau;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof MessagePartie)) {
+            return false;
+        }
+        final MessagePartie other = (MessagePartie) obj;
+        return this.typeMessage == other.typeMessage
+                && this.nomJoueur.equals(other.nomJoueur)
+                && this.jeuJoueur.equals(other.jeuJoueur)
+                && this.plateau.equals(other.plateau)
+                && this.messageErreur.equals(other.messageErreur);
     }
 }
 

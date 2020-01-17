@@ -38,6 +38,13 @@ public class JoueurTest {
     }
 
     @Test
+    public void nouveauJoueurFail() {
+		assertThrows(IllegalArgumentException.class, () -> {
+            new Joueur("*:*");
+        });
+    }
+
+    @Test
     public void utiliseJeton() {
         Jeton jeton = joueur.utiliseJeton(5);
         assertEquals("1rouge 10bleu 11jaune * 1rouge", joueur.afficheJetonsJoueur());

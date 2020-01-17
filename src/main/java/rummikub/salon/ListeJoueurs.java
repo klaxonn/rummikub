@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
+import rummikub.core.api.Partie;
+import rummikub.core.jeu.Joueur;
+
 
 /**
  * Gestion de la liste des clients du salon.
@@ -27,14 +30,20 @@ public class ListeJoueurs {
 	 *
 	 * @param nomJoueur le nom du joueur
 	 * @return le nom du joueur éventuellement modifié
+	 * @throws UnsupportedOperationException si le nom n'est pas valide.
 	 */
 	public String ajouterJoueurConnecte(String nomJoueur) {
-		String nom = nomJoueur;
-		if(listeJoueurs.containsKey(nomJoueur)){
-			 nom = nomJoueur + "-1";
+		if(Joueur.isNomValide(nomJoueur)) {
+			String nom = nomJoueur;
+			if(listeJoueurs.containsKey(nomJoueur)){
+				 nom = nomJoueur + "-1";
+			}
+			listeJoueurs.put(nom,false);
+			return nom;
 		}
-		listeJoueurs.put(nom,false);
-		return nom;
+		else {
+			throw new UnsupportedOperationException("Le nom n'est pas valide");
+		}
 	}
 
 	/**
@@ -81,17 +90,22 @@ public class ListeJoueurs {
 	 *
 	 * @param nomJoueur le nom du joueur
      * @throws UnsupportedOperationException si le nom
-	 * n'est pas un client reconnu.
+	 * n'est pas un client reconnu, ou si la partie est pleine.
 	 */
 	public void ajouterJoueurPartie(String nomJoueur) {
-		if(listeJoueurs.containsKey(nomJoueur)){
-			listeJoueurs.replace(nomJoueur,true);
-			if(nombreJoueursPartie() == 1){
-				createurPartie = nomJoueur;
+		if(listeJoueurs.size() < Partie.NOMBRE_MAX_JOUEURS_PARTIE) {
+			if(listeJoueurs.containsKey(nomJoueur)){
+				listeJoueurs.replace(nomJoueur,true);
+				if(nombreJoueursPartie() == 1){
+					createurPartie = nomJoueur;
+				}
+			}
+			else {
+				throw new UnsupportedOperationException("Le nom n'est pas un joueur connecté");
 			}
 		}
 		else {
-            throw new UnsupportedOperationException("Le nom n'est pas un joueur connecté");
+			throw new UnsupportedOperationException("La partie est complète");
 		}
 	}
 

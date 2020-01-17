@@ -95,6 +95,18 @@ public class ControleurChatTest {
 		testContenuMessage(messageRecu,MessageChat.TypeMessage.CONNEXION, "Vincent-1","");
     }
 
+    @Test
+    public void ajouterJoueurConnecteNomInvalide() throws Exception {
+		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.CONNEXION, "*?*","");
+		String destination = "/salon/ajouterJoueurConnecte";
+		String reception = "/user/0/queue/canalPersonel";
+
+		doThrow(new UnsupportedOperationException("Le nom n'est pas valide"))
+		.when(listeJoueursMock).ajouterJoueurConnecte("*?*");
+		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
+		testContenuMessage(messageRecu,MessageChat.TypeMessage.ERREUR, "*?*","Le nom n'est pas valide");
+    }
+
 	@Test
     public void mettreAJourJoueursConnectesTest() throws Exception {
 		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.CONNEXION, "Katya","");
@@ -140,17 +152,6 @@ public class ControleurChatTest {
 
 		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
 		testContenuMessage(messageRecu,MessageChat.TypeMessage.ERREUR, "Tnecniv","Le nom n'est pas un joueur connecté");
-    }
-
-	@Test
-    public void ajouterTropDeJoueursPartieTestFail() throws Exception {
-		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.JOINDRE_PARTIE, "Boris","");
-		String destination = "/salon/joindrePartie";
-		String reception = "/user/0/queue/canalPersonel";
-		when(listeJoueursMock.nombreJoueursPartie()).thenReturn((long)ControleurChat.NOMBRE_MAX_JOUEURS_PARTIE + 1);
-
-		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
-		testContenuMessage(messageRecu,MessageChat.TypeMessage.ERREUR, "Boris","La partie est complète");
     }
 
 	@Test
