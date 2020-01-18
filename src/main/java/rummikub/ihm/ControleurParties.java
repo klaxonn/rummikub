@@ -33,11 +33,13 @@ public class ControleurParties {
 	 */
 	@PostMapping(value = "/creerPartie")
 	public ResponseEntity<MessagePartie> creerPartie(@RequestBody List<String> listeNomsJoueurs) {
-		try {
-			Partie partie = listeParties.creerPartie(listeNomsJoueurs);
-			return new ResponseEntity<MessagePartie>(HttpStatus.OK);
+		MessagePartie messageReponse = new MessagePartie();
+		int idPartie = listeParties.creerPartie(listeNomsJoueurs);
+		if(idPartie > 0) {
+			messageReponse.setIdPartie(idPartie);
+			return new ResponseEntity<MessagePartie>(messageReponse, HttpStatus.OK);
 		}
-		catch(IllegalArgumentException e) {
+		else {
 			return new ResponseEntity<MessagePartie>(HttpStatus.FORBIDDEN);
 		}
     }
@@ -51,20 +53,28 @@ public class ControleurParties {
     @PostMapping(value = "{idPartie}/ajouterJoueur")
 	public ResponseEntity<MessagePartie> ajouterJoueur(@PathVariable int idPartie, @RequestBody String nomJoueur) {
 		Partie partie = listeParties.getPartie(idPartie);
+		MessagePartie messageReponse = new MessagePartie();
+		messageReponse.setIdPartie(idPartie);
 		try {
 			Joueur joueur = new Joueur(nomJoueur);
-			partie.ajouterJoueur(joueur);
+			messageReponse = partie.ajouterJoueur(joueur);
+			if(messageReponse.getTypeMessage().equals(MessagePartie.TypeMessage.AJOUTER_JOUEUR)) {
+				messageReponse.setIdPartie(idPartie);
+				return new ResponseEntity<MessagePartie>(messageReponse,HttpStatus.OK);
+			}
 		}
-		catch(Exception e) {
-			return new ResponseEntity<MessagePartie>(HttpStatus.FORBIDDEN);
+		catch(IllegalArgumentException e) {
+			messageReponse.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
+			messageReponse.setMessageErreur(e.getMessage());
 		}
-        return new ResponseEntity<MessagePartie>(HttpStatus.OK);
+		return new ResponseEntity<MessagePartie>(messageReponse, HttpStatus.FORBIDDEN);
     }
 
     @PostMapping(value = "{idPartie}/demarrerPartie")
 	public ResponseEntity<MessagePartie> demarrerPartie(@PathVariable int idPartie) {
 		Partie partie = listeParties.getPartie(idPartie);
 		MessagePartie message = partie.commencerPartie();
+		message.setIdPartie(idPartie);
 		if(message.getTypeMessage().equals(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR)) {
 			return new ResponseEntity<MessagePartie>(message, HttpStatus.OK);
 		}

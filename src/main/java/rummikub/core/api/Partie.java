@@ -15,13 +15,18 @@ public interface Partie {
 	int NOMBRE_MAX_JOUEURS_PARTIE = 4;
 
     /**
-     * Ajoute un joueur à la partie non commencée.
+     * Ajoute un joueur.
+	 * Le message envoyé peut être de deux types :
+	 * Le message envoyé est de type AJOUTER_JOUEUR.
+	 * Il contient le nom du premier joueur et son id.
      *
-     * @param joueur le joueur à ajouter
-     * @throws UnsupportedOperationException si la partie est pleine
-     * ou si la partie a déjà commencé
-     */
-    void ajouterJoueur(Joueur joueur);
+     * Le message envoyé est de type ERREUR.
+     * Au cas où le nombre de joueurs est incorrect.
+	 * Il contient le message d'erreur
+	 *
+	 * @return le message contenant les informations
+	 */
+    MessagePartie ajouterJoueur(Joueur joueur);
 
     /**
      * Commence la partie.

@@ -5,7 +5,9 @@ package rummikub.core.api;
 */
 public class MessagePartie {
     private TypeMessage typeMessage;
-    private String nomJoueur;
+    private int idPartie;
+    private int idJoueur;
+	private String nomJoueur;
 	private String jeuJoueur;
     private String plateau;
 	private String messageErreur;
@@ -14,6 +16,12 @@ public class MessagePartie {
 	 * Constructeur par défaut.
 	 */
     public MessagePartie() {
+		this.nomJoueur = "";
+		this.jeuJoueur = "";
+        this.plateau = "";
+        this.messageErreur = "";
+        this.idJoueur = 0;
+        this.idPartie = 0;
 	}
 
     /**
@@ -25,19 +33,22 @@ public class MessagePartie {
 	 * @param plateau la représentation textuelle du plateau
 	 * @param messageErreur le message d'erreur
 	 */
-	public MessagePartie(MessagePartie.TypeMessage typeMessage, String nomJoueur, String jeuJoueur,
+	public MessagePartie(MessagePartie.TypeMessage typeMessage, int idPartie, int idJoueur, String nomJoueur, String jeuJoueur,
 						String plateau, String messageErreur){
         this.typeMessage = typeMessage;
 		this.nomJoueur = nomJoueur;
 		this.jeuJoueur = jeuJoueur;
         this.plateau = plateau;
         this.messageErreur = messageErreur;
+        this.idJoueur = idJoueur;
+        this.idPartie = idPartie;
 	}
 
 	/**
 	 * Types de messages possibles.
 	 */
     public enum TypeMessage {
+		AJOUTER_JOUEUR,
 		AFFICHER_PARTIE,
         RESULTAT_ACTION,
         DEBUT_NOUVEAU_TOUR,
@@ -80,6 +91,42 @@ public class MessagePartie {
 	 */
     public void setMessageErreur(String messageErreur) {
         this.messageErreur = messageErreur;
+    }
+
+    /**
+	 * Obtenir l'id de la partie.
+	 *
+	 * @return l'id
+	 */
+    public int getIdPartie() {
+        return idPartie;
+    }
+
+	/**
+	 * Définir l'id de la partie.
+	 *
+	 * @param nomJoueur le nom
+	 */
+    public void setIdPartie(int idPartie) {
+        this.idPartie = idPartie;
+    }
+
+    /**
+	 * Obtenir l'id du joueur.
+	 *
+	 * @return l'id
+	 */
+    public int getIdJoueur() {
+        return idJoueur;
+    }
+
+	/**
+	 * Définir l'id du joueur.
+	 *
+	 * @param nomJoueur le nom
+	 */
+    public void setIdJoueur(int idJoueur) {
+        this.idJoueur = idJoueur;
     }
 
 	/**
@@ -146,6 +193,8 @@ public class MessagePartie {
         }
         final MessagePartie other = (MessagePartie) obj;
         return this.typeMessage == other.typeMessage
+				&& this.idJoueur == other.idJoueur
+				&& this.idPartie == other.idPartie
                 && this.nomJoueur.equals(other.nomJoueur)
                 && this.jeuJoueur.equals(other.jeuJoueur)
                 && this.plateau.equals(other.plateau)

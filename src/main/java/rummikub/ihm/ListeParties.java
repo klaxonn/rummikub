@@ -27,13 +27,18 @@ public class ListeParties {
 	 * Crée une partie.
 	 *
 	 * @param listeNomsJoueurs la liste des noms des joueurs
-	 * @return la partie
+	 * @return l'id de partie ou -1 en cas d'échec
 	 */
-	public Partie creerPartie(List<String> listeNomsJoueurs) {
-		Partie partie = FabriquePartie.creerNouvellePartie(listeNomsJoueurs);
-		int indexNouvellePartie = listeParties.size() + 1;
-		listeParties.put(indexNouvellePartie, partie);
-		return partie;
+	public int creerPartie(List<String> listeNomsJoueurs) {
+		try{
+			Partie partie = FabriquePartie.creerNouvellePartie(listeNomsJoueurs);
+			int indexNouvellePartie = listeParties.size() + 1;
+			listeParties.put(indexNouvellePartie, partie);
+			return indexNouvellePartie;
+		}
+		catch(IndexOutOfBoundsException e) {
+			return -1;
+		}
 	}
 
 	/**

@@ -9,20 +9,29 @@ import rummikub.core.api.Partie;
 public class ListePartiesTest {
 
 	private ListeParties listeParties;
-	Partie partie1;
-	Partie partie2;
+	int idPartie1;
+	int idPartie2;
 
 	@BeforeEach
 	public void initialisation() {
 		listeParties = new ListeParties();
-		partie1 = listeParties.creerPartie(Arrays.asList("Vincent", "Kate"));
-		partie2 = listeParties.creerPartie(Arrays.asList("Benoit", "Emie"));
+		idPartie1 = listeParties.creerPartie(Arrays.asList("Vincent", "Kate"));
+		idPartie2 = listeParties.creerPartie(Arrays.asList("Benoit", "Emie"));
+	}
+
+	@Test
+	public void creationPartieFail(){
+		assertEquals(idPartie1, 1);
+		assertEquals(idPartie2, 2);
+		assertThrows(IllegalArgumentException.class, () -> {
+			listeParties.creerPartie(Arrays.asList("A", "B", "C", "D", "E"));
+		});
 	}
 
     @Test
 	public void getIdTest(){
-		assertEquals(partie1, listeParties.getPartie(1));
-		assertEquals(partie2, listeParties.getPartie(2));
+		assertEquals(idPartie1, 1);
+		assertEquals(idPartie2, 2);
 		assertEquals(null, listeParties.getPartie(3));
 	}
 
@@ -30,7 +39,7 @@ public class ListePartiesTest {
 	public void listerPartiesDisposTest(){
 		assertEquals("idPartie: 1 joueurs: [\"Vincent\", \"Kate\"]\n"
 		+"idPartie: 2 joueurs: [\"Benoit\", \"Emie\"]", listeParties.listerPartiesDispos());
-		partie1.commencerPartie();
+		listeParties.getPartie(idPartie1).commencerPartie();
 		assertEquals("idPartie: 2 joueurs: [\"Benoit\", \"Emie\"]", listeParties.listerPartiesDispos());
 	}
 }

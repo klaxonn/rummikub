@@ -80,12 +80,13 @@ public class ControleurPartie {
 					Method methode = classePartie.getMethod(action, Integer.class, List.class);
 					message = (MessagePartie) methode.invoke(partie, idJoueur, arg);
 				}
+				message.setIdPartie(idPartie);
 			}
 			catch(Exception e) {
 			}
 		}
 		else {
-			message = new MessagePartie(MessagePartie.TypeMessage.ERREUR, "", "", "", "La partie n'existe pas");
+			message = new MessagePartie(MessagePartie.TypeMessage.ERREUR, 0, 0, "", "", "", "La partie n'existe pas");
 		}
 		return traitementActions(message);
 	}

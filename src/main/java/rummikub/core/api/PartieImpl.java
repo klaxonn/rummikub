@@ -43,14 +43,21 @@ class PartieImpl implements Partie {
 		}
     }
 
-	public void ajouterJoueur(Joueur joueur) {
+	public MessagePartie ajouterJoueur(Joueur joueur) {
+		MessagePartie message = new MessagePartie();
 		if(!partieCommence && listeJoueurs.size() < NOMBRE_MAX_JOUEURS_PARTIE) {
 			listeJoueurs.add(joueur);
+			message.setTypeMessage(MessagePartie.TypeMessage.AJOUTER_JOUEUR);
+			message.setIdJoueur(listeJoueurs.indexOf(joueur) + 1);
+			message.setNomJoueur(joueur.getNom());
+
 		}
 		else {
+			message.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
 			String messageErreur = isPartieCommence() ? "Partie déjà commencée" : "Partie Pleine";
-			throw new UnsupportedOperationException (messageErreur);
+			message.setMessageErreur(messageErreur);
 		}
+		return message;
 	}
 
 	public String afficherJoueursPartie(){
@@ -94,16 +101,19 @@ class PartieImpl implements Partie {
 	private MessagePartie nouveauMessage(int indexJoueur, MessagePartie.TypeMessage type, String messageErreur){
 		MessagePartie message = new MessagePartie();
 		message.setTypeMessage(type);
+		message.setIdPartie(0);
 		message.setPlateau(plateau.toString());
 		message.setMessageErreur(messageErreur);
 		if(correctIndex(indexJoueur)){
 			Joueur joueur = listeJoueurs.get(indexJoueur);
 			message.setNomJoueur(joueur.getNom());
+			message.setIdJoueur(indexJoueur + 1);
 			message.setJeuJoueur(joueur.afficheJetonsJoueur());
 		}
 		else{
 			message.setNomJoueur("");
 			message.setJeuJoueur("");
+			message.setIdJoueur(0);
 		}
 		return message;
 	}
