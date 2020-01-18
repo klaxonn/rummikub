@@ -48,13 +48,17 @@ class PartieImpl implements Partie {
 			listeJoueurs.add(joueur);
 		}
 		else {
-			throw new UnsupportedOperationException ("Impossible d'ajouter le joueur");
+			String messageErreur = isPartieCommence() ? "Partie déjà commencée" : "Partie Pleine";
+			throw new UnsupportedOperationException (messageErreur);
 		}
 	}
 
 	public String afficherJoueursPartie(){
-		return listeJoueurs.stream().map((joueur) -> joueur.getNom())
-							   .collect(Collectors.joining(", "));
+		String resultat = "";
+		for (Joueur joueur : listeJoueurs) {
+			resultat += "\"" + joueur.getNom() + "\", ";
+		}
+		return resultat.length() == 0 ? resultat : resultat.substring(0,resultat.length() -2);
 	}
 
     public MessagePartie commencerPartie() {
@@ -64,7 +68,8 @@ class PartieImpl implements Partie {
 			return debutDuTour();
 		}
 		else {
-			return nouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, "Nombre de joueurs incorrect");
+			String messageErreur = isPartieCommence() ? "Partie déjà commencée" : "Nombre de joueurs insuffisant";
+			return nouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, messageErreur);
 		}
     }
 

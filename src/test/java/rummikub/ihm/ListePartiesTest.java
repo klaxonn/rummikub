@@ -28,9 +28,9 @@ public class ListePartiesTest {
 
     @Test
 	public void listerPartiesDisposTest(){
-		assertEquals("idPartie: 1 joueurs: [Vincent, Kate]\n"
-		+"idPartie: 2 joueurs: [Benoit, Emie]", listeParties.listerPartiesDispos());
+		assertEquals("idPartie: 1 joueurs: [\"Vincent\", \"Kate\"]\n"
+		+"idPartie: 2 joueurs: [\"Benoit\", \"Emie\"]", listeParties.listerPartiesDispos());
 		partie1.commencerPartie();
-		assertEquals("idPartie: 2 joueurs: [Benoit, Emie]", listeParties.listerPartiesDispos());
+		assertEquals("idPartie: 2 joueurs: [\"Benoit\", \"Emie\"]", listeParties.listerPartiesDispos());
 	}
 }

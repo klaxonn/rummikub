@@ -63,6 +63,14 @@ public class PartieImplTest {
 	}
 
 	@Test
+    public void creerPartieVide() {
+		when(plateauMock.toString()).thenReturn("");
+		Historique historique = new Historique();
+		Partie partie = new PartieImpl(new ArrayList<>(), piocheMock, plateauMock, historique);
+		assertEquals("", partie.afficherJoueursPartie());
+    }
+
+	@Test
     public void creerPartieTropdeJoueurs() {
 		when(plateauMock.toString()).thenReturn("");
 		List<Joueur> listejoueurs = new ArrayList<>();
@@ -89,14 +97,14 @@ public class PartieImplTest {
 		assertEquals(messageTest, message3);
 		assertEquals(messageTest, message4);
 		assertFalse(partie.isPartieCommence());
-		assertEquals("Vincent, Katya", partie.afficherJoueursPartie());
+		assertEquals("\"Vincent\", \"Katya\"", partie.afficherJoueursPartie());
     }
 
     @Test
     public void ajouterJoueurTest() {
 		Joueur joueur3 = new Joueur("Bob");
 		partie.ajouterJoueur(joueur3);
-		assertEquals("Vincent, Katya, Bob", partie.afficherJoueursPartie());
+		assertEquals("\"Vincent\", \"Katya\", \"Bob\"", partie.afficherJoueursPartie());
 	}
 
     @Test
@@ -132,7 +140,11 @@ public class PartieImplTest {
 		assertEquals(messageTest, message);
 		assertEquals(1,partie.getIndexJoueurCourant());
 		assertTrue(partie.isPartieCommence());
-    }
+        message = partie.commencerPartie();
+		messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			"", "", "", "Partie déjà commencée");
+		assertEquals(messageTest, message);
+	}
 
 	@Test
     public void commencerPartiePasAssezJoueur() {
@@ -143,7 +155,7 @@ public class PartieImplTest {
 		partie = new PartieImpl(listejoueurs, piocheMock, plateauMock, historique);
         MessagePartie message = partie.commencerPartie();
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
-			"", "", "", "Nombre de joueurs incorrect");
+			"", "", "", "Nombre de joueurs insuffisant");
 		assertEquals(messageTest, message);
     }
 
