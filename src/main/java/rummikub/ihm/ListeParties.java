@@ -24,7 +24,15 @@ public class ListeParties {
 	}
 
 	public String listerPartiesDispos() {
-		return "";
+		int id = 1;
+		String resultat = "";
+		for(Partie partie : listeParties.values()) {
+			if(!partie.isPartieCommence()) {
+				resultat += "idPartie: " + id + " joueurs: [" + partie.afficherJoueursPartie() + "]\n";
+			}
+			id++;
+		}
+		return resultat.trim();
 	}
 
 	public Partie getPartie(int id) {

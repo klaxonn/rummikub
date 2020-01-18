@@ -67,21 +67,25 @@ public class ControleurPartie {
     }
 
 	private ResponseEntity<MessagePartie> executerAction(String action, int idPartie, int idJoueur, List<Integer> arg) {
-		//test partie existe
-		Partie partie = listeParties.getPartie(idPartie);
 		MessagePartie message = null;
-		try{
-			Class<?> classePartie = Class.forName("Partie");
-			if(arg == null) {
-				Method methode = classePartie.getMethod(action, Integer.class);
-				message = (MessagePartie) methode.invoke(partie, idJoueur);
+		Partie partie = listeParties.getPartie(idPartie);
+		if(partie != null){
+			try{
+				Class<?> classePartie = Class.forName("Partie");
+				if(arg == null) {
+					Method methode = classePartie.getMethod(action, Integer.class);
+					message = (MessagePartie) methode.invoke(partie, idJoueur);
+				}
+				else {
+					Method methode = classePartie.getMethod(action, Integer.class, List.class);
+					message = (MessagePartie) methode.invoke(partie, idJoueur, arg);
+				}
 			}
-			else {
-				Method methode = classePartie.getMethod(action, Integer.class, List.class);
-				message = (MessagePartie) methode.invoke(partie, idJoueur, arg);
+			catch(Exception e) {
 			}
 		}
-		catch(Exception e) {
+		else {
+			message = new MessagePartie(MessagePartie.TypeMessage.ERREUR, "", "", "", "La partie n'existe pas");
 		}
 		return traitementActions(message);
 	}
