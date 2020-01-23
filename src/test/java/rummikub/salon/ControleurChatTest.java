@@ -1,6 +1,7 @@
 package rummikub.salon;
 
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +19,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.messaging.SubscribableChannel;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import rummikub.ihm.ControleurParties;
+import rummikub.ihm.ListeParties;
 
 @Disabled
 public class ControleurChatTest {
@@ -27,6 +28,7 @@ public class ControleurChatTest {
 	private CanalMessageTest canalSortie;
 	private CanalMessageTest canalEntree;
 	private ListeJoueurs listeJoueursMock = mock(ListeJoueurs.class);
+	private ListeParties listePartiesMock = mock(ListeParties.class);
 
 	@BeforeEach
 	public void initialisation() {
@@ -36,10 +38,9 @@ public class ControleurChatTest {
 	}
 
 	private void initialisationHandler() {
-		ControleurParties interfaceMock = mock(ControleurParties.class);
 		handlerMessages = new HandlerPerso(
 				canalEntree, canalSortie, new SimpMessagingTemplate(new CanalMessageTest()));
-		handlerMessages.registerHandler(new ControleurChat(listeJoueursMock, interfaceMock));
+		handlerMessages.registerHandler(new ControleurChat(listeJoueursMock, listePartiesMock));
 		handlerMessages.setDestinationPrefixes(Arrays.asList("/salon", "/queue"));
 		handlerMessages.setMessageConverter(new MappingJackson2MessageConverter());
 		handlerMessages.afterPropertiesSet();
@@ -183,7 +184,7 @@ public class ControleurChatTest {
 		MessageChat messageEnvoye = new MessageChat(MessageChat.TypeMessage.DEMARRER_PARTIE, "Vincent","");
 		String destination = "/salon/demarrerPartie";
 		String reception = "/topic/joueursPartie";
-		when(listeJoueursMock.getJoueursPartie()).thenReturn(Arrays.asList("Vincent"));
+		when(listeJoueursMock.getJoueursPartie()).thenReturn(new ArrayList<String>());
 
 		MessageChat messageRecu = transfertMessage(messageEnvoye,destination,reception);
 		testContenuMessage(messageRecu,MessageChat.TypeMessage.DEMARRER_PARTIE, "Vincent","");

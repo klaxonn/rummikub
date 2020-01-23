@@ -1,5 +1,6 @@
 package rummikub.ihm;
 
+import rummikub.core.jeu.Joueur;
 import rummikub.core.api.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,8 @@ public class InterfaceConsole {
      */
 	public void demarrerPartie() {
 		afficherIntroduction();
-		partie = FabriquePartie.creerNouvellePartie(obtenirlisteDesJoueurs());
+		partie = FabriquePartie.creerNouvellePartie();
+		ajouterJoueurs();
 		traitementMessages(partie.commencerPartie());
 		do {
 			finTour=false;
@@ -51,17 +53,16 @@ public class InterfaceConsole {
 		System.out.println("Félicitation vous avez gagné !");
     }
 
-    private List<String> obtenirlisteDesJoueurs() {
-		List<String> setJoueurs = new ArrayList<>();
+    private void ajouterJoueurs() {
         System.out.print("Combien de joueurs ? ");
         int nbJoueurs = poserQuestionReponseInt();
 
         for (int i = 1; i <= nbJoueurs; i++) {
             System.out.print("Nom du joueur " + i + ": ");
             String nomJoueur = in.next();
-            setJoueurs.add(nomJoueur);
+            Joueur joueur = new Joueur(nomJoueur);
+            partie.ajouterJoueur(joueur);
         }
-		return setJoueurs;
     }
 
     private void traitementMessages(MessagePartie message) {

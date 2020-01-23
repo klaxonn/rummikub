@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -32,26 +31,20 @@ public class ControleurParties {
 	 * @param listeNomsJoueurs la liste des noms des joueurs
 	 */
 	@PostMapping(value = "/creerPartie")
-	public ResponseEntity<MessagePartie> creerPartie(@RequestBody List<String> listeNomsJoueurs) {
+	public MessagePartie creerPartie() {
 		MessagePartie messageReponse = new MessagePartie();
-		int idPartie = listeParties.creerPartie(listeNomsJoueurs);
-		if(idPartie > 0) {
-			messageReponse.setIdPartie(idPartie);
-			return new ResponseEntity<MessagePartie>(messageReponse, HttpStatus.OK);
-		}
-		else {
-			return new ResponseEntity<MessagePartie>(HttpStatus.FORBIDDEN);
-		}
+		int idPartie = listeParties.creerPartie();
+		messageReponse.setIdPartie(idPartie);
+		return messageReponse;
     }
 
     @GetMapping(value = "/listerPartiesDispos")
-	public ResponseEntity<String> listerPartiesDispos() {
-		String resultat = listeParties.listerPartiesDispos();
-		return new ResponseEntity<String>(resultat, HttpStatus.OK);
+	public String listerPartiesDispos() {
+		return listeParties.listerPartiesDispos();
     }
 
     @PostMapping(value = "{idPartie}/ajouterJoueur")
-	public ResponseEntity<MessagePartie> ajouterJoueur(@PathVariable int idPartie, @RequestBody String nomJoueur) {
+	public MessagePartie ajouterJoueur(@PathVariable int idPartie, @RequestBody String nomJoueur) {
 		Partie partie = listeParties.getPartie(idPartie);
 		MessagePartie messageReponse = new MessagePartie();
 		messageReponse.setIdPartie(idPartie);
@@ -60,26 +53,21 @@ public class ControleurParties {
 			messageReponse = partie.ajouterJoueur(joueur);
 			if(messageReponse.getTypeMessage().equals(MessagePartie.TypeMessage.AJOUTER_JOUEUR)) {
 				messageReponse.setIdPartie(idPartie);
-				return new ResponseEntity<MessagePartie>(messageReponse,HttpStatus.OK);
+				return messageReponse;
 			}
 		}
 		catch(IllegalArgumentException e) {
 			messageReponse.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
 			messageReponse.setMessageErreur(e.getMessage());
 		}
-		return new ResponseEntity<MessagePartie>(messageReponse, HttpStatus.FORBIDDEN);
+		return messageReponse;
     }
 
     @PostMapping(value = "{idPartie}/demarrerPartie")
-	public ResponseEntity<MessagePartie> demarrerPartie(@PathVariable int idPartie) {
+	public MessagePartie demarrerPartie(@PathVariable int idPartie) {
 		Partie partie = listeParties.getPartie(idPartie);
 		MessagePartie message = partie.commencerPartie();
 		message.setIdPartie(idPartie);
-		if(message.getTypeMessage().equals(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR)) {
-			return new ResponseEntity<MessagePartie>(message, HttpStatus.OK);
-		}
-		else {
-			return new ResponseEntity<MessagePartie>(message, HttpStatus.FORBIDDEN);
-		}
-    }
+		return message;
+	}
 }

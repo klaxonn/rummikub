@@ -36,16 +36,14 @@ final public class FabriquePartie {
     /**
      * Créé une nouvelle partie
      *
-     * @param listeNomsJoueurs la liste des noms des joueurs
      * @return une nouvelle partie
      */
-    public static Partie creerNouvellePartie(List<String> listeNomsJoueurs) {
-		List<Joueur> listeJoueurs = creerJoueurs(listeNomsJoueurs);
+    public static Partie creerNouvellePartie() {
 		Pioche pioche = new Pioche(creerJetons());
 		FabriqueSequence fabrique = FabriqueSequence.obtenirFabrique();
 		Plateau plateau = new PlateauImpl(fabrique);
 		Historique historique = new Historique();
-		return new PartieImpl(listeJoueurs, pioche, plateau, historique);
+		return new PartieImpl(pioche, plateau, historique);
     }
 
     private static List<Jeton> creerJetons() {
@@ -64,12 +62,4 @@ final public class FabriquePartie {
         }
         return listeJetons;
 	}
-
-	private static List<Joueur> creerJoueurs(List<String> listeNomsJoueurs) {
-		List<Joueur> listeJoueurs = new ArrayList<>();
-        listeNomsJoueurs.forEach((nomJoueur) -> {
-            listeJoueurs.add(new Joueur(nomJoueur));
-        });
-        return listeJoueurs;
-    }
 }

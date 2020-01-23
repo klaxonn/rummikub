@@ -29,21 +29,18 @@ public class PartieImplTest {
 
 	@BeforeEach
     private void initialisation() {
-		List<Joueur> listejoueurs = initialiserJoueurs();
 		jetonsPiochesJoueur1 = initialiserJoueur1();
 		jetonsPiochesJoueur2 = initialiserJoueur2();
 		piocheMock = mock(Pioche.class);
 		plateauMock = mock(PlateauImpl.class);
 		Historique historique = new Historique();
-		partie = new PartieImpl(listejoueurs, piocheMock, plateauMock, historique);
-
+		partie = new PartieImpl(piocheMock, plateauMock, historique);
+		ajouterJoueurs();
     }
 
-	private List<Joueur> initialiserJoueurs() {
-		List<Joueur> joueurs = new ArrayList<>();
-		joueurs.add(new Joueur("Vincent"));
-		joueurs.add(new Joueur("Katya"));
-		return joueurs;
+	private void ajouterJoueurs() {
+		partie.ajouterJoueur(new Joueur("Vincent"));
+		partie.ajouterJoueur(new Joueur("Katya"));
 	}
 
 	private List<Jeton> initialiserJoueur1() {
@@ -63,24 +60,11 @@ public class PartieImplTest {
 	}
 
 	@Test
-    public void creerPartieVide() {
+    public void creerPartie() {
 		when(plateauMock.toString()).thenReturn("");
 		Historique historique = new Historique();
-		Partie partie = new PartieImpl(new ArrayList<>(), piocheMock, plateauMock, historique);
+		Partie partie = new PartieImpl(piocheMock, plateauMock, historique);
 		assertEquals("", partie.afficherJoueursPartie());
-    }
-
-	@Test
-    public void creerPartieTropdeJoueurs() {
-		when(plateauMock.toString()).thenReturn("");
-		List<Joueur> listejoueurs = new ArrayList<>();
-		for(int i=1; i<= Partie.NOMBRE_MAX_JOUEURS_PARTIE + 1; i++) {
-			listejoueurs.add(new Joueur("Joueur-"+i));
-		}
-		Historique historique = new Historique();
-		assertThrows(IllegalArgumentException.class, () -> {
-			new PartieImpl(listejoueurs, piocheMock, plateauMock, historique);
-        });
     }
 
 	@Test
@@ -153,10 +137,9 @@ public class PartieImplTest {
 	@Test
     public void commencerPartiePasAssezJoueur() {
 		when(plateauMock.toString()).thenReturn("");
-		List<Joueur> listejoueurs = new ArrayList<>();
-		listejoueurs.add(new Joueur("Vincent"));
 		Historique historique = new Historique();
-		partie = new PartieImpl(listejoueurs, piocheMock, plateauMock, historique);
+		partie = new PartieImpl(piocheMock, plateauMock, historique);
+		partie.ajouterJoueur(new Joueur("Vincent"));
         MessagePartie message = partie.commencerPartie();
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
 			0, 0, "", "", "", "Nombre de joueurs insuffisant");

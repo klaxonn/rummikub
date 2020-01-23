@@ -3,40 +3,46 @@ package rummikub.ihm;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.Arrays;
 import rummikub.core.api.Partie;
+import rummikub.core.jeu.Joueur;
 
 public class ListePartiesTest {
 
 	private ListeParties listeParties;
-	int idPartie1;
-	int idPartie2;
 
 	@BeforeEach
 	public void initialisation() {
 		listeParties = new ListeParties();
-		idPartie1 = listeParties.creerPartie(Arrays.asList("Vincent", "Kate"));
-		idPartie2 = listeParties.creerPartie(Arrays.asList("Benoit", "Emie"));
-	}
-
-	@Test
-	public void creationPartieFail(){
-		assertEquals(idPartie1, 1);
-		assertEquals(idPartie2, 2);
-		assertThrows(IllegalArgumentException.class, () -> {
-			listeParties.creerPartie(Arrays.asList("A", "B", "C", "D", "E"));
-		});
 	}
 
     @Test
-	public void getIdTest(){
-		assertEquals(idPartie1, 1);
-		assertEquals(idPartie2, 2);
+	public void creerPartieTest(){
+		int idPartie1 = listeParties.creerPartie();
+		assertEquals(1, idPartie1);
+		int idPartie2 = listeParties.creerPartie();
+		assertEquals(2, idPartie2);
+	}
+
+    @Test
+	public void getPartieTest(){
+		int idPartie1 = listeParties.creerPartie();
+		int idPartie2 = listeParties.creerPartie();
+		Partie partie1 = listeParties.getPartie(idPartie1);
+		Partie partie2 = listeParties.getPartie(idPartie2);
+		assertNotSame(partie1, partie2);
+		assertNotEquals(null, partie1);
+		assertNotEquals(null, partie1);
 		assertEquals(null, listeParties.getPartie(3));
 	}
 
     @Test
 	public void listerPartiesDisposTest(){
+		int idPartie1 = listeParties.creerPartie();
+		int idPartie2 = listeParties.creerPartie();
+		listeParties.getPartie(idPartie1).ajouterJoueur(new Joueur("Vincent"));
+		listeParties.getPartie(idPartie1).ajouterJoueur(new Joueur("Kate"));
+		listeParties.getPartie(idPartie2).ajouterJoueur(new Joueur("Benoit"));
+		listeParties.getPartie(idPartie2).ajouterJoueur(new Joueur("Emie"));
 		assertEquals("idPartie: 1 joueurs: [\"Vincent\", \"Kate\"]\n"
 		+"idPartie: 2 joueurs: [\"Benoit\", \"Emie\"]", listeParties.listerPartiesDispos());
 		listeParties.getPartie(idPartie1).commencerPartie();

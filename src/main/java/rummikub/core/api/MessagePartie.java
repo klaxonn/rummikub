@@ -1,8 +1,11 @@
 package rummikub.core.api;
 
+import lombok.Data;
+
 /**
 * Représentation d'un message envoyé par Partie.
 */
+@Data
 public class MessagePartie {
     private TypeMessage typeMessage;
     private int idPartie;
@@ -11,6 +14,18 @@ public class MessagePartie {
 	private String jeuJoueur;
     private String plateau;
 	private String messageErreur;
+
+	/**
+	 * Types de messages possibles.
+	 */
+    public enum TypeMessage {
+		AJOUTER_JOUEUR,
+		AFFICHER_PARTIE,
+        RESULTAT_ACTION,
+        DEBUT_NOUVEAU_TOUR,
+		FIN_DE_PARTIE,
+		ERREUR
+    }
 
 	/**
 	 * Constructeur par défaut.
@@ -43,162 +58,5 @@ public class MessagePartie {
         this.idJoueur = idJoueur;
         this.idPartie = idPartie;
 	}
-
-	/**
-	 * Types de messages possibles.
-	 */
-    public enum TypeMessage {
-		AJOUTER_JOUEUR,
-		AFFICHER_PARTIE,
-        RESULTAT_ACTION,
-        DEBUT_NOUVEAU_TOUR,
-		FIN_DE_PARTIE,
-		ERREUR
-    }
-
-	/**
-	 * Obtenir le type du message.
-	 *
-	 * @return le type du message
-	 */
-    public TypeMessage getTypeMessage() {
-        return typeMessage;
-    }
-
-	/**
-	 * Définir le type du message.
-	 *
-	 * @param typeMessage le type de message
-	 */
-    public void setTypeMessage(TypeMessage typeMessage) {
-        this.typeMessage = typeMessage;
-    }
-
-	/**
-	 * Obtenir le message d'erreur.
-	 * Chaine vide s'il n'y a pas d'erreur.
-	 *
-	 * @return le message
-	 */
-    public String getMessageErreur() {
-        return messageErreur;
-    }
-
-	/**
-	 * Définir le message d'erreur.
-	 *
-	 * @param messageErreur le message
-	 */
-    public void setMessageErreur(String messageErreur) {
-        this.messageErreur = messageErreur;
-    }
-
-    /**
-	 * Obtenir l'id de la partie.
-	 *
-	 * @return l'id
-	 */
-    public int getIdPartie() {
-        return idPartie;
-    }
-
-	/**
-	 * Définir l'id de la partie.
-	 *
-	 * @param nomJoueur le nom
-	 */
-    public void setIdPartie(int idPartie) {
-        this.idPartie = idPartie;
-    }
-
-    /**
-	 * Obtenir l'id du joueur.
-	 *
-	 * @return l'id
-	 */
-    public int getIdJoueur() {
-        return idJoueur;
-    }
-
-	/**
-	 * Définir l'id du joueur.
-	 *
-	 * @param nomJoueur le nom
-	 */
-    public void setIdJoueur(int idJoueur) {
-        this.idJoueur = idJoueur;
-    }
-
-	/**
-	 * Obtenir le nom du joueur.
-	 *
-	 * @return le nom
-	 */
-    public String getNomJoueur() {
-        return nomJoueur;
-    }
-
-	/**
-	 * Définir le nom du joueur.
-	 *
-	 * @param nomJoueur le nom
-	 */
-    public void setNomJoueur(String nomJoueur) {
-        this.nomJoueur = nomJoueur;
-    }
-
-	/**
-	 * Obtenir la représentation textuelle des jetons du joueur.
-	 *
-	 * @return le jeu
-	 */
-    public String getJeuJoueur() {
-        return jeuJoueur;
-    }
-
-	/**
-	 * Définir le jeu (ensemble des jetons) du joueur.
-	 *
-	 * @param jeuJoueur le jeu
-	 */
-    public void setJeuJoueur(String jeuJoueur) {
-        this.jeuJoueur = jeuJoueur;
-    }
-
-	/**
-	 * Obtenir la représentation textuelle du plateau.
-	 *
-	 * @return le plateau
-	 */
-    public String getPlateau() {
-        return plateau;
-    }
-
-	/**
-	 * Définir le plateau.
-	 *
-	 * @param plateau le plateau
-	 */
-    public void setPlateau(String plateau) {
-        this.plateau = plateau;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof MessagePartie)) {
-            return false;
-        }
-        final MessagePartie other = (MessagePartie) obj;
-        return this.typeMessage == other.typeMessage
-				&& this.idJoueur == other.idJoueur
-				&& this.idPartie == other.idPartie
-                && this.nomJoueur.equals(other.nomJoueur)
-                && this.jeuJoueur.equals(other.jeuJoueur)
-                && this.plateau.equals(other.plateau)
-                && this.messageErreur.equals(other.messageErreur);
-    }
 }
 

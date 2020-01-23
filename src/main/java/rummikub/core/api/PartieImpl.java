@@ -5,6 +5,7 @@ import rummikub.core.jeu.Pioche;
 import rummikub.core.jeu.commands.*;
 import rummikub.core.plateau.Plateau;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 
@@ -24,23 +25,15 @@ class PartieImpl implements Partie {
 
     /**
      * Crée une nouvelle partie.
-     *
-     * @param listeNomsJoueurs la liste des noms des joueurs
-     * @throws UnsupportedOperationException si la liste contient trop de joueurs
      */
-    public PartieImpl(List<Joueur> listeJoueurs, Pioche pioche, Plateau plateau, Historique historique) {
-		if(listeJoueurs.size() <= NOMBRE_MAX_JOUEURS_PARTIE) {
-			this.pioche = pioche;
-			this.plateau = plateau;
-			this.historique = historique;
-			this.listeJoueurs = listeJoueurs;
-			partieCommence = false;
-			//Pour que le joueur 0  soit le premier à commencer
-			numJoueur = -1;
-		}
-		else {
-			throw new IllegalArgumentException ("Trop de joueurs");
-		}
+    public PartieImpl(Pioche pioche, Plateau plateau, Historique historique) {
+		this.pioche = pioche;
+		this.plateau = plateau;
+		this.historique = historique;
+		listeJoueurs = new ArrayList<>();
+		partieCommence = false;
+		//Pour que le joueur 0  soit le premier à commencer
+		numJoueur = -1;
     }
 
 	public MessagePartie ajouterJoueur(Joueur joueur) {
