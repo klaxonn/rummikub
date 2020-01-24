@@ -74,11 +74,13 @@ class PartieImpl implements Partie {
     }
 
     private MessagePartie debutDuTour() {
+		MessagePartie message = creerNouveauMessage(numJoueur, MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR, "");
 		numJoueur = (numJoueur + 1) % listeJoueurs.size();
+		message.setIdJoueurCourant(numJoueur + 1);
 		joueurEnCours = listeJoueurs.get(numJoueur);
 		joueurEnCours.initialiserNouveauTour();
         historique.reinitialiserHistorique();
-		return creerNouveauMessage(numJoueur, MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR, "");
+		return message;
 	}
 
 	private MessagePartie creerNouveauMessage(int indexJoueur, MessagePartie.TypeMessage type, String messageErreur){

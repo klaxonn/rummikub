@@ -70,7 +70,7 @@ public class InterfaceConsole {
 			case DEBUT_NOUVEAU_TOUR:
 				finTour = true;
 				indexJoueurCourant = message.getIdJoueurCourant();
-				afficherPartie(message);
+				afficherPartie();
 				break;
 			case FIN_DE_PARTIE:
 				finTour = true;
@@ -78,10 +78,10 @@ public class InterfaceConsole {
 				break;
 			case ERREUR:
 				System.out.println(message.getMessageErreur());
-				afficherPartie(message);
+				afficherPartie();
 				break;
 			case RESULTAT_ACTION:
-				afficherPartie(message);
+				afficherPartie();
 				break;
 			default:
 				System.out.println("message non reconnu");
@@ -89,7 +89,8 @@ public class InterfaceConsole {
 		}
     }
 
-	private void afficherPartie(MessagePartie message){
+	private void afficherPartie(){
+		MessagePartie message = partie.afficherPartie(indexJoueurCourant);
 		String plateau = message.getPlateau();
 		if (plateau.isEmpty()) {
             System.out.println("\nPlateau vide\n");

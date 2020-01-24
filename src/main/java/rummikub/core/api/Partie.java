@@ -32,8 +32,7 @@ public interface Partie {
      * Commence la partie.
 	 * Le message envoyé peut être de deux types :
 	 * Le message envoyé est de type DEBUT_NOUVEAU_TOUR.
-	 * Il contient le nom du premier joueur et son jeu.
-	 * Il contient aussi le plateau.
+	 * Il contient l'id du premier joueur.
      *
      * Le message envoyé est de type ERREUR.
      * Au cas où le nombre de joueurs est incorrect.
@@ -183,7 +182,7 @@ public interface Partie {
      * Termine un tour.
 	 * Le message envoyé peut être de trois types :
 	 * Le message envoyé est de type DEBUT_NOUVEAU_TOUR.
-	 * Il contient le nom du joueur qui suit et son jeu.
+	 * Il contient l'id du joueur qui suit.
 	 * Il contient aussi le plateau.
 	 *
 	 * Le message envoyé est de type ERREUR.
