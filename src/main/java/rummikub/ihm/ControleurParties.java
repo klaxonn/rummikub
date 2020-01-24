@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 
 /**
  * Controleur de la partie.
@@ -19,23 +20,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ControleurParties {
 
 	private ListeParties listeParties;
+	private ModeleControleurParties modeleControleur;
+
 
 	@Autowired
-	public ControleurParties(ListeParties listeParties){
+	public ControleurParties(ListeParties listeParties, ModeleControleurParties modeleControleur){
 		this.listeParties = listeParties;
+		this.modeleControleur = modeleControleur;
 	}
 
-	/**
-	 * Crée une partie.
-	 *
-	 * @param listeNomsJoueurs la liste des noms des joueurs
-	 */
 	@PostMapping(value = "/creerPartie")
-	public MessagePartie creerPartie() {
-		MessagePartie messageReponse = new MessagePartie();
+	public EntityModel<MessagePartie> creerPartie(@RequestBody String nomJoueur) {
 		int idPartie = listeParties.creerPartie();
-		messageReponse.setIdPartie(idPartie);
-		return messageReponse;
+		return ajouterJoueur(idPartie, nomJoueur);
     }
 
     @GetMapping(value = "/listerPartiesDispos")
@@ -44,30 +41,34 @@ public class ControleurParties {
     }
 
     @PostMapping(value = "{idPartie}/ajouterJoueur")
-	public MessagePartie ajouterJoueur(@PathVariable int idPartie, @RequestBody String nomJoueur) {
+	public EntityModel<MessagePartie> ajouterJoueur(@PathVariable int idPartie, @RequestBody String nomJoueur) {
 		Partie partie = listeParties.getPartie(idPartie);
-		MessagePartie messageReponse = new MessagePartie();
-		messageReponse.setIdPartie(idPartie);
-		try {
+		if(partie != null) {
 			Joueur joueur = new Joueur(nomJoueur);
-			messageReponse = partie.ajouterJoueur(joueur);
-			if(messageReponse.getTypeMessage().equals(MessagePartie.TypeMessage.AJOUTER_JOUEUR)) {
-				messageReponse.setIdPartie(idPartie);
-				return messageReponse;
+			MessagePartie message = partie.ajouterJoueur(joueur);
+			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.AJOUTER_JOUEUR)) {
+				message.setIdPartie(idPartie);
+				return modeleControleur.toModel(message);
+			}
+			else {
+				throw new UnsupportedOperationException(message.getMessageErreur());
 			}
 		}
-		catch(IllegalArgumentException e) {
-			messageReponse.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
-			messageReponse.setMessageErreur(e.getMessage());
+		else {
+			throw new IllegalArgumentException("La partie n'existe pas");
 		}
-		return messageReponse;
     }
 
     @PostMapping(value = "{idPartie}/demarrerPartie")
-	public MessagePartie demarrerPartie(@PathVariable int idPartie) {
+	public EntityModel<MessagePartie> demarrerPartie(@PathVariable int idPartie) {
 		Partie partie = listeParties.getPartie(idPartie);
-		MessagePartie message = partie.commencerPartie();
-		message.setIdPartie(idPartie);
-		return message;
+		if(partie != null) {
+			MessagePartie message = partie.commencerPartie();
+			message.setIdPartie(idPartie);
+			return modeleControleur.toModel(message);
+		}
+		else {
+			throw new IllegalArgumentException("La partie n'existe pas");
+		}
 	}
 }

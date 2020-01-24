@@ -45,8 +45,9 @@ public class ListeParties {
 		int id = 1;
 		String resultat = "";
 		for(Partie partie : listeParties.values()) {
-			if(!partie.isPartieCommence()) {
-				resultat += "idPartie: " + id + " joueurs: [" + partie.afficherJoueursPartie() + "]\n";
+			String joueurs = partie.listeJoueursPrets();
+			if(!joueurs.isEmpty()) {
+				resultat += "idPartie: " + id + " joueurs: [" + joueurs + "]\n";
 			}
 			id++;
 		}

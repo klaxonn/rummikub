@@ -12,6 +12,7 @@ public class MessagePartie {
     private int idJoueur;
 	private String nomJoueur;
 	private String jeuJoueur;
+    private int idJoueurCourant;
     private String plateau;
 	private String messageErreur;
 
@@ -31,12 +32,13 @@ public class MessagePartie {
 	 * Constructeur par défaut.
 	 */
     public MessagePartie() {
+        this.idPartie = 0;
+        this.idJoueur = 0;
 		this.nomJoueur = "";
 		this.jeuJoueur = "";
+		this.idJoueurCourant = 0;
         this.plateau = "";
         this.messageErreur = "";
-        this.idJoueur = 0;
-        this.idPartie = 0;
 	}
 
     /**
@@ -49,10 +51,11 @@ public class MessagePartie {
 	 * @param messageErreur le message d'erreur
 	 */
 	public MessagePartie(MessagePartie.TypeMessage typeMessage, int idPartie, int idJoueur, String nomJoueur, String jeuJoueur,
-						String plateau, String messageErreur){
+						int idJoueurCourant, String plateau, String messageErreur){
         this.typeMessage = typeMessage;
 		this.nomJoueur = nomJoueur;
 		this.jeuJoueur = jeuJoueur;
+		this.idJoueurCourant = idJoueurCourant;
         this.plateau = plateau;
         this.messageErreur = messageErreur;
         this.idJoueur = idJoueur;

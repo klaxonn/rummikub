@@ -43,13 +43,6 @@ public interface Partie {
      */
     MessagePartie commencerPartie();
 
-     /**
-     * Teste si la partie a commencé.
-     *
-     * @return true si c'est le cas
-     */
-    boolean isPartieCommence();
-
     /**
      * Affiche la partie.
 	 * Le message envoyé est de type AFFICHER_PARTIE.
@@ -208,18 +201,11 @@ public interface Partie {
     MessagePartie terminerTour(int indexJoueur);
 
     /**
-     * Retourne l'index du joueur courant.
-	 *
-     * @return l'index
-     */
-    int getIndexJoueurCourant();
-
-    /**
-     * Retourne les noms des joueurs de la partie
+     * Retourne les noms des joueurs de la partie avant qu'elle ne démarre
      * format "joueur1, joueur2"
      *
      * @return la chaine contenant les noms
      */
-    String afficherJoueursPartie();
+    String listeJoueursPrets();
 }
 

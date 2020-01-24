@@ -69,6 +69,7 @@ public class InterfaceConsole {
 		switch(message.getTypeMessage()){
 			case DEBUT_NOUVEAU_TOUR:
 				finTour = true;
+				indexJoueurCourant = message.getIdJoueurCourant();
 				afficherPartie(message);
 				break;
 			case FIN_DE_PARTIE:
@@ -147,7 +148,6 @@ public class InterfaceConsole {
 				break;
 			case 8:
 				traitementMessages(partie.terminerTour(indexJoueurCourant));
-				indexJoueurCourant = partie.getIndexJoueurCourant();
 				break;
 			case 9:
 				System.exit(0);

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 
 /**
  * Controleur de la partie.
@@ -19,53 +20,55 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ControleurPartie {
 
 	private ListeParties listeParties;
+	private ModeleControleurPartie modeleControleur;
 
 	@Autowired
-	public ControleurPartie(ListeParties listeParties){
+	public ControleurPartie(ListeParties listeParties, ModeleControleurPartie modeleControleur){
 		this.listeParties = listeParties;
+		this.modeleControleur = modeleControleur;
 	}
 
     @GetMapping("{idPartie}/{idJoueur}/afficherPartie")
-    public MessagePartie afficherPartie(@PathVariable int idPartie, @PathVariable int idJoueur){
+    public EntityModel<MessagePartie> afficherPartie(@PathVariable int idPartie, @PathVariable int idJoueur){
 		return executerAction("afficherPartie", idPartie, idJoueur, null);
 	}
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/creerSequence")
-	public MessagePartie creerSequence(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
+	public EntityModel<MessagePartie> creerSequence(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
 		return executerAction("creerSequence", idPartie, idJoueur, indexes);
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/fusionnerSequence")
-	public MessagePartie fusionnerSequence(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
+	public EntityModel<MessagePartie> fusionnerSequence(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
 		return executerAction("fusionnerSequence", idPartie, idJoueur, indexes);
     }
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/couperSequence")
-	public MessagePartie couperSequence(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
+	public EntityModel<MessagePartie> couperSequence(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
 		return executerAction("couperSequence", idPartie, idJoueur, indexes);
     }
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/deplacerJeton")
-	public MessagePartie deplacerJeton(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
+	public EntityModel<MessagePartie> deplacerJeton(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
 		return executerAction("deplacerJeton", idPartie, idJoueur, indexes);
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/remplacerJoker")
-	public MessagePartie remplacerJoker(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
+	public EntityModel<MessagePartie> remplacerJoker(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
 		return executerAction("remplacerJoker", idPartie, idJoueur, indexes);
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/annulerDerniereAction")
-	public MessagePartie annulerDerniereAction(@PathVariable int idPartie, @PathVariable int idJoueur) {
+	public EntityModel<MessagePartie> annulerDerniereAction(@PathVariable int idPartie, @PathVariable int idJoueur) {
 		return executerAction("annulerDerniereAction", idPartie, idJoueur, null);
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/terminerTour")
-	public MessagePartie terminerTour(@PathVariable int idPartie, @PathVariable int idJoueur) {
+	public EntityModel<MessagePartie> terminerTour(@PathVariable int idPartie, @PathVariable int idJoueur) {
 		return executerAction("terminerTour", idPartie, idJoueur, null);
     }
 
-	private MessagePartie executerAction(String action, int idPartie, int idJoueur, List<Integer> arg) {
+	private EntityModel<MessagePartie> executerAction(String action, int idPartie, int idJoueur, List<Integer> arg) {
 		Partie partie = listeParties.getPartie(idPartie);
 		if(partie != null){
 			try{
@@ -80,10 +83,10 @@ public class ControleurPartie {
 					message = (MessagePartie) methode.invoke(partie, idJoueur, arg);
 				}
 				message.setIdPartie(idPartie);
-				return message;
+				return modeleControleur.toModel(message);
 			}
 			catch(Exception e) {
-				throw new  NullPointerException("Argument manquant");
+				throw new IllegalArgumentException("Argument manquant");
 			}
 		}
 		else {
