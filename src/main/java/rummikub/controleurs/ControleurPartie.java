@@ -1,4 +1,4 @@
-package rummikub.ihm;
+package rummikub.controleurs;
 
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 
@@ -72,14 +71,14 @@ public class ControleurPartie {
 		Partie partie = listeParties.getPartie(idPartie);
 		if(partie != null){
 			try{
-				Class<?> classePartie = Class.forName("Partie");
+				Class<?> classePartie = Class.forName("rummikub.core.api.Partie");
 				MessagePartie message = null;
 				if(arg == null) {
-					Method methode = classePartie.getMethod(action, Integer.class);
+					Method methode = classePartie.getMethod(action, int.class);
 					message = (MessagePartie) methode.invoke(partie, idJoueur);
 				}
 				else {
-					Method methode = classePartie.getMethod(action, Integer.class, List.class);
+					Method methode = classePartie.getMethod(action, int.class, List.class);
 					message = (MessagePartie) methode.invoke(partie, idJoueur, arg);
 				}
 				message.setIdPartie(idPartie);

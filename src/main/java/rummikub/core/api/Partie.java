@@ -200,11 +200,10 @@ public interface Partie {
     MessagePartie terminerTour(int indexJoueur);
 
     /**
-     * Retourne les noms des joueurs de la partie avant qu'elle ne démarre
-     * format "joueur1, joueur2"
+     * Retourne la liste des joueurs de la partie avant qu'elle ne démarre
      *
-     * @return la chaine contenant les noms
+     * @return la liste
      */
-    String listeJoueursPrets();
+    List<String> listeJoueursPrets();
 }
 

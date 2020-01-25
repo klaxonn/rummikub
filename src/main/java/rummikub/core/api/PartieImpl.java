@@ -52,14 +52,12 @@ class PartieImpl implements Partie {
 		}
 	}
 
-	public String listeJoueursPrets(){
-		String resultat = "";
+	public List<String> listeJoueursPrets(){
 		if(!partieCommence) {
-			for (Joueur joueur : listeJoueurs) {
-				resultat += "\"" + joueur.getNom() + "\", ";
-			}
+			return listeJoueurs.stream().map((joueur) -> joueur.getNom())
+										.collect(Collectors.toList());
 		}
-		return resultat.length() == 0 ? resultat : resultat.substring(0,resultat.length() -2);
+		return new ArrayList<>();
 	}
 
     public MessagePartie commencerPartie() {

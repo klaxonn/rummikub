@@ -1,4 +1,4 @@
-package rummikub.ihm;
+package rummikub.controleurs;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,9 +43,9 @@ public class ListePartiesTest {
 		listeParties.getPartie(idPartie1).ajouterJoueur(new Joueur("Kate"));
 		listeParties.getPartie(idPartie2).ajouterJoueur(new Joueur("Benoit"));
 		listeParties.getPartie(idPartie2).ajouterJoueur(new Joueur("Emie"));
-		assertEquals("idPartie: 1 joueurs: [\"Vincent\", \"Kate\"]\n"
-		+"idPartie: 2 joueurs: [\"Benoit\", \"Emie\"]", listeParties.listerPartiesDispos());
+		assertEquals("[{idPartie=1, joueurs=[Vincent, Kate]}, {idPartie=2, joueurs=[Benoit, Emie]}]",
+			listeParties.listerPartiesDispos().toString());
 		listeParties.getPartie(idPartie1).commencerPartie();
-		assertEquals("idPartie: 2 joueurs: [\"Benoit\", \"Emie\"]", listeParties.listerPartiesDispos());
+		assertEquals("[{idPartie=2, joueurs=[Benoit, Emie]}]", listeParties.listerPartiesDispos().toString());
 	}
 }

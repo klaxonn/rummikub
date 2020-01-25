@@ -1,4 +1,4 @@
-package rummikub.ihm;
+package rummikub.controleurs;
 
 import rummikub.core.jeu.Joueur;
 import rummikub.core.api.*;

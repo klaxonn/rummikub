@@ -1,17 +1,18 @@
-package rummikub.ihm;
+package rummikub.controleurs;
 
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
 import rummikub.core.jeu.Joueur;
 import java.util.List;
+import java.util.Map;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.CollectionModel;
 
 /**
  * Controleur de la partie.
@@ -20,13 +21,17 @@ import org.springframework.hateoas.EntityModel;
 public class ControleurParties {
 
 	private ListeParties listeParties;
-	private ModeleControleurParties modeleControleur;
-
+	private ModeleControleurParties modeleControleurParties;
+	private ModeleControleurPartie modeleControleurPartie;
+	private ModeleAfficherParties modeleAfficherParties;
 
 	@Autowired
-	public ControleurParties(ListeParties listeParties, ModeleControleurParties modeleControleur){
+	public ControleurParties(ListeParties listeParties, ModeleControleurParties modeleControleurParties,
+	  ModeleControleurPartie modeleControleurPartie, ModeleAfficherParties modeleAfficherParties){
 		this.listeParties = listeParties;
-		this.modeleControleur = modeleControleur;
+		this.modeleControleurParties = modeleControleurParties;
+		this.modeleControleurPartie = modeleControleurPartie;
+		this.modeleAfficherParties = modeleAfficherParties;
 	}
 
 	@PostMapping(value = "/creerPartie")
@@ -36,8 +41,9 @@ public class ControleurParties {
     }
 
     @GetMapping(value = "/listerPartiesDispos")
-	public String listerPartiesDispos() {
-		return listeParties.listerPartiesDispos();
+	public CollectionModel<EntityModel<Map>> listerPartiesDispos() {
+		List<Map> message = listeParties.listerPartiesDispos();
+		return modeleAfficherParties.toCollectionModel(message);
     }
 
     @PostMapping(value = "{idPartie}/ajouterJoueur")
@@ -48,7 +54,7 @@ public class ControleurParties {
 			MessagePartie message = partie.ajouterJoueur(joueur);
 			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.AJOUTER_JOUEUR)) {
 				message.setIdPartie(idPartie);
-				return modeleControleur.toModel(message);
+				return modeleControleurParties.toModel(message);
 			}
 			else {
 				throw new UnsupportedOperationException(message.getMessageErreur());
@@ -65,7 +71,7 @@ public class ControleurParties {
 		if(partie != null) {
 			MessagePartie message = partie.commencerPartie();
 			message.setIdPartie(idPartie);
-			return modeleControleur.toModel(message);
+			return modeleControleurPartie.toModel(message);
 		}
 		else {
 			throw new IllegalArgumentException("La partie n'existe pas");

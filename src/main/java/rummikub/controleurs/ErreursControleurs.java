@@ -1,4 +1,4 @@
-package rummikub.ihm;
+package rummikub.controleurs;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,6 +13,6 @@ class ErreursControleurs{
   @ExceptionHandler(IllegalArgumentException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   String partieInconnue(IllegalArgumentException ex) {
-    return ex.getMessage();
+    return ex.getMessage() +"\n";
   }
 }

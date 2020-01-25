@@ -66,7 +66,7 @@ public class PartieImplTest {
 		when(plateauMock.toString()).thenReturn("");
 		Historique historique = new Historique();
 		Partie partie = new PartieImpl(piocheMock, plateauMock, historique);
-		assertEquals("", partie.listeJoueursPrets());
+		assertEquals("[]", partie.listeJoueursPrets().toString());
     }
 
 	@Test
@@ -82,7 +82,7 @@ public class PartieImplTest {
 		assertEquals(messageTest, message2);
 		assertEquals(messageTest, message3);
 		assertEquals(messageTest, message4);
-		assertEquals("\"Vincent\", \"Katya\"", partie.listeJoueursPrets());
+		assertEquals("[Vincent, Katya]", partie.listeJoueursPrets().toString());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class PartieImplTest {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.AJOUTER_JOUEUR,
 			0, 3, "Bob", "4jaune 9bleu", 0, "", "");
 		assertEquals(messageTest, message);
-		assertEquals("\"Vincent\", \"Katya\", \"Bob\"", partie.listeJoueursPrets());
+		assertEquals("[Vincent, Katya, Bob]", partie.listeJoueursPrets().toString());
 	}
 
     @Test
@@ -130,7 +130,7 @@ public class PartieImplTest {
 		messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
 			0, 0, "", "", JOUEUR1, "", "Partie déjà commencée");
 		assertEquals(messageTest, message);
-		assertEquals("", partie.listeJoueursPrets());
+		assertEquals("[]", partie.listeJoueursPrets().toString());
 
 	}
 

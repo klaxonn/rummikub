@@ -1,4 +1,4 @@
-package rummikub.ihm;
+package rummikub.controleurs;
 
 import rummikub.core.api.MessagePartie;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -20,4 +20,5 @@ class ModeleControleurParties implements RepresentationModelAssembler<MessagePar
       linkTo(methodOn(ControleurParties.class).demarrerPartie(idPartie)).withRel("demarrerPartie"));
   }
 }
+
 

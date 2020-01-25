@@ -1,10 +1,11 @@
-package rummikub.ihm;
+package rummikub.controleurs;
 
 import rummikub.core.api.Partie;
 import rummikub.core.api.FabriquePartie;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import org.springframework.stereotype.Component;
 
 /**
@@ -41,17 +42,20 @@ public class ListeParties {
 	 *
 	 * @return le texte.
 	 */
-	public String listerPartiesDispos() {
+	public List<Map> listerPartiesDispos() {
 		int id = 1;
-		String resultat = "";
+		List<Map> resultat = new ArrayList<>();
 		for(Partie partie : listeParties.values()) {
-			String joueurs = partie.listeJoueursPrets();
+			List joueurs = partie.listeJoueursPrets();
 			if(!joueurs.isEmpty()) {
-				resultat += "idPartie: " + id + " joueurs: [" + joueurs + "]\n";
+				Map<String,String> partieDispo = new HashMap<>();
+				partieDispo.put("idPartie", "" + id);
+				partieDispo.put("joueurs", joueurs.toString());
+				resultat.add(partieDispo);
 			}
 			id++;
 		}
-		return resultat.trim();
+		return resultat;
 	}
 
 	/**
