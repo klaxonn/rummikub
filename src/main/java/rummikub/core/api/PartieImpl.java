@@ -237,4 +237,3 @@ class PartieImpl implements Partie {
 		}
     }
 }
-

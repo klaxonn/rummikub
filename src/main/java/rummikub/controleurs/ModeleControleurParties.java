@@ -20,5 +20,3 @@ class ModeleControleurParties implements RepresentationModelAssembler<MessagePar
       linkTo(methodOn(ControleurParties.class).demarrerPartie(idPartie)).withRel("demarrerPartie"));
   }
 }
-
-

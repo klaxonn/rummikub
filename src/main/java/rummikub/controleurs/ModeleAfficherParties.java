@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Component
 class ModeleAfficherParties implements RepresentationModelAssembler<Map, EntityModel<Map>> {
@@ -31,8 +29,5 @@ class ModeleAfficherParties implements RepresentationModelAssembler<Map, EntityM
 		collection.add(linkTo(methodOn(ControleurParties.class).creerPartie(null)).withRel("creerPartie"),
 						linkTo(methodOn(ControleurParties.class).listerPartiesDispos()).withRel("listerPartiesDispos"));
 		return collection;
-
   }
 }
-
-

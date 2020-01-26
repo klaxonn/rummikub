@@ -11,8 +11,22 @@ class ErreursControleurs{
 
   @ResponseBody
   @ExceptionHandler(IllegalArgumentException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  String partieInconnue(IllegalArgumentException ex) {
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  String argumentIllegal(IllegalArgumentException ex) {
+    return ex.getMessage() +"\n";
+  }
+
+  @ResponseBody
+  @ExceptionHandler(IndexOutOfBoundsException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND )
+  String argumentIllegal(IndexOutOfBoundsException ex) {
+    return ex.getMessage() +"\n";
+  }
+
+  @ResponseBody
+  @ExceptionHandler(UnsupportedOperationException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  String echecOperation(UnsupportedOperationException ex) {
     return ex.getMessage() +"\n";
   }
 }

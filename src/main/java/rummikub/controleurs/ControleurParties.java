@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 /**
  * Controleur de la partie.
@@ -35,7 +37,7 @@ public class ControleurParties {
 	}
 
 	@PostMapping(value = "/creerPartie")
-	public EntityModel<MessagePartie> creerPartie(@RequestBody String nomJoueur) {
+	public ResponseEntity<EntityModel> creerPartie(@RequestBody String nomJoueur) {
 		int idPartie = listeParties.creerPartie();
 		return ajouterJoueur(idPartie, nomJoueur);
     }
@@ -47,21 +49,22 @@ public class ControleurParties {
     }
 
     @PostMapping(value = "{idPartie}/ajouterJoueur")
-	public EntityModel<MessagePartie> ajouterJoueur(@PathVariable int idPartie, @RequestBody String nomJoueur) {
+	public ResponseEntity<EntityModel> ajouterJoueur(@PathVariable int idPartie, @RequestBody String nomJoueur) {
 		Partie partie = listeParties.getPartie(idPartie);
 		if(partie != null) {
 			Joueur joueur = new Joueur(nomJoueur);
 			MessagePartie message = partie.ajouterJoueur(joueur);
 			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.AJOUTER_JOUEUR)) {
 				message.setIdPartie(idPartie);
-				return modeleControleurParties.toModel(message);
+				EntityModel<MessagePartie> reponseAjout = modeleControleurParties.toModel(message);
+				return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.CREATED);
 			}
 			else {
 				throw new UnsupportedOperationException(message.getMessageErreur());
 			}
 		}
 		else {
-			throw new IllegalArgumentException("La partie n'existe pas");
+			throw new IndexOutOfBoundsException("La partie n'existe pas");
 		}
     }
 
@@ -70,11 +73,14 @@ public class ControleurParties {
 		Partie partie = listeParties.getPartie(idPartie);
 		if(partie != null) {
 			MessagePartie message = partie.commencerPartie();
+			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.ERREUR)) {
+				throw new UnsupportedOperationException(message.getMessageErreur());
+			}
 			message.setIdPartie(idPartie);
 			return modeleControleurPartie.toModel(message);
 		}
 		else {
-			throw new IllegalArgumentException("La partie n'existe pas");
+			throw new IndexOutOfBoundsException("La partie n'existe pas");
 		}
 	}
 }

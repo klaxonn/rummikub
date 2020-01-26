@@ -81,6 +81,9 @@ public class ControleurPartie {
 					Method methode = classePartie.getMethod(action, int.class, List.class);
 					message = (MessagePartie) methode.invoke(partie, idJoueur, arg);
 				}
+				if(message.getTypeMessage().equals(MessagePartie.TypeMessage.ERREUR)) {
+					throw new UnsupportedOperationException(message.getMessageErreur());
+				}
 				message.setIdPartie(idPartie);
 				return modeleControleur.toModel(message);
 			}
@@ -89,7 +92,7 @@ public class ControleurPartie {
 			}
 		}
 		else {
-			throw new IllegalArgumentException("La partie n'existe pas");
+			throw new IndexOutOfBoundsException("La partie n'existe pas");
 		}
 	}
 }
