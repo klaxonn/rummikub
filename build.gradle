@@ -16,6 +16,8 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+    compile 'org.springdoc:springdoc-openapi-core:1.1.44'
+    compile 'org.springdoc:springdoc-openapi-ui:1.1.44'
  	testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 

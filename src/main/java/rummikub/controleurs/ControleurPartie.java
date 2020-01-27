@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 /**
  * Controleur de la partie.
  */
+@Validated
 @RestController
 public class ControleurPartie {
 
@@ -33,27 +37,50 @@ public class ControleurPartie {
 	}
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/creerSequence")
-	public EntityModel<MessagePartie> creerSequence(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
-		return executerAction("creerSequence", idPartie, idJoueur, indexes);
+	public EntityModel<MessagePartie> creerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
+	  @RequestBody
+	  @NotEmpty(message = "Au moins 1 jeton nécessaire")
+	  List<Integer> indexes) {
+		return executerAction("creerNouvelleSequence", idPartie, idJoueur, indexes);
+    }
+
+	@PostMapping(value = "{idPartie}/{idJoueur}/ajouterJeton")
+	public EntityModel<MessagePartie> ajouterJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
+	  @RequestBody
+	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
+	  List<Integer> indexes) {
+		return executerAction("ajouterJeton", idPartie, idJoueur, indexes);
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/fusionnerSequence")
-	public EntityModel<MessagePartie> fusionnerSequence(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
+	public EntityModel<MessagePartie> fusionnerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
+	  @RequestBody
+	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
+	  List<Integer> indexes) {
 		return executerAction("fusionnerSequence", idPartie, idJoueur, indexes);
     }
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/couperSequence")
-	public EntityModel<MessagePartie> couperSequence(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
+	public EntityModel<MessagePartie> couperSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
+	  @RequestBody
+	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
+	  List<Integer> indexes) {
 		return executerAction("couperSequence", idPartie, idJoueur, indexes);
     }
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/deplacerJeton")
-	public EntityModel<MessagePartie> deplacerJeton(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
+	public EntityModel<MessagePartie> deplacerJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
+	  @RequestBody
+	  @Size(min = 3, max = 3, message = "3 valeurs attendues")
+	  List<Integer> indexes) {
 		return executerAction("deplacerJeton", idPartie, idJoueur, indexes);
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/remplacerJoker")
-	public EntityModel<MessagePartie> remplacerJoker(@PathVariable int idPartie, @PathVariable int idJoueur, @RequestBody List<Integer> indexes) {
+	public EntityModel<MessagePartie> remplacerJoker(@PathVariable int idPartie, @PathVariable int idJoueur,
+	  @RequestBody
+	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
+	  List<Integer> indexes) {
 		return executerAction("remplacerJoker", idPartie, idJoueur, indexes);
     }
 
@@ -70,9 +97,9 @@ public class ControleurPartie {
 	private EntityModel<MessagePartie> executerAction(String action, int idPartie, int idJoueur, List<Integer> arg) {
 		Partie partie = listeParties.getPartie(idPartie);
 		if(partie != null){
+			MessagePartie message = null;
 			try{
 				Class<?> classePartie = Class.forName("rummikub.core.api.Partie");
-				MessagePartie message = null;
 				if(arg == null) {
 					Method methode = classePartie.getMethod(action, int.class);
 					message = (MessagePartie) methode.invoke(partie, idJoueur);
@@ -81,15 +108,15 @@ public class ControleurPartie {
 					Method methode = classePartie.getMethod(action, int.class, List.class);
 					message = (MessagePartie) methode.invoke(partie, idJoueur, arg);
 				}
-				if(message.getTypeMessage().equals(MessagePartie.TypeMessage.ERREUR)) {
-					throw new UnsupportedOperationException(message.getMessageErreur());
-				}
-				message.setIdPartie(idPartie);
-				return modeleControleur.toModel(message);
 			}
 			catch(Exception e) {
-				throw new IllegalArgumentException("Argument manquant");
 			}
+
+			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.ERREUR)) {
+				throw new UnsupportedOperationException(message.getMessageErreur());
+			}
+			message.setIdPartie(idPartie);
+			return modeleControleur.toModel(message);
 		}
 		else {
 			throw new IndexOutOfBoundsException("La partie n'existe pas");
