@@ -5,6 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 import rummikub.core.api.Partie;
 import rummikub.core.jeu.Joueur;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ListePartiesTest {
 
@@ -43,9 +46,14 @@ public class ListePartiesTest {
 		listeParties.getPartie(idPartie1).ajouterJoueur(new Joueur("Kate"));
 		listeParties.getPartie(idPartie2).ajouterJoueur(new Joueur("Benoit"));
 		listeParties.getPartie(idPartie2).ajouterJoueur(new Joueur("Emie"));
-		assertEquals("[{idPartie=1, joueurs=[Vincent, Kate]}, {idPartie=2, joueurs=[Benoit, Emie]}]",
-			listeParties.listerPartiesDispos().toString());
+
+		PartieDispo partie1 = new PartieDispo(1, Arrays.asList("Vincent", "Kate"));
+		PartieDispo partie2 = new PartieDispo(2, Arrays.asList("Benoit", "Emie"));
+		List<PartieDispo> listePartiesDispos = new ArrayList<>(Arrays.asList(partie1, partie2));
+
+		assertEquals(listePartiesDispos, listeParties.listerPartiesDispos());
 		listeParties.getPartie(idPartie1).commencerPartie();
-		assertEquals("[{idPartie=2, joueurs=[Benoit, Emie]}]", listeParties.listerPartiesDispos().toString());
+		listePartiesDispos.remove(0);
+		assertEquals(listePartiesDispos, listeParties.listerPartiesDispos());
 	}
 }

@@ -37,7 +37,7 @@ public class ControleurPartieTest {
 	@Test
 	public void afficherPartieTest() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.AFFICHER_PARTIE,
-			0, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", 1, "", "");
+			1, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", 1, "", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.afficherPartie(1)).thenReturn(messageTest);
 
@@ -65,7 +65,7 @@ public class ControleurPartieTest {
 	@Test
 	public void creerNouvelleSequenceTest() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
-			0, 1, "Vincent", "13bleu", 1, "10bleu 11bleu 12bleu", "");
+			1, 1, "Vincent", "13bleu", 1, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.creerNouvelleSequence(1, Arrays.asList(1,2,3))).thenReturn(messageTest);
 
@@ -84,7 +84,7 @@ public class ControleurPartieTest {
 	@Test
 	public void ajouterJetonTest() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
-			0, 2, "Katya", "9bleu", 2, "10bleu 11bleu 12bleu\n4jaune", "");
+			1, 2, "Katya", "9bleu", 2, "10bleu 11bleu 12bleu\n4jaune", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.ajouterJeton(2, Arrays.asList(1,2))).thenReturn(messageTest);
 
@@ -102,7 +102,7 @@ public class ControleurPartieTest {
 	@Test
 	public void fusionnerSequenceTest() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
-			0, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu 12bleu", "");
+			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.fusionnerSequence(2, Arrays.asList(1,4))).thenReturn(messageTest);
 
@@ -121,7 +121,7 @@ public class ControleurPartieTest {
 	@Test
 	public void couperSequenceTest() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
-			0, 2, "Katya", "4jaune 9bleu", 2, "10bleu\n11bleu 12bleu", "");
+			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu\n11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.couperSequence(2, Arrays.asList(1,2))).thenReturn(messageTest);
 
@@ -140,7 +140,7 @@ public class ControleurPartieTest {
 	@Test
 	public void deplacerJetonTest() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
-			0, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu\n12bleu", "");
+			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu\n12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.deplacerJeton(2, Arrays.asList(1,3,2))).thenReturn(messageTest);
 
@@ -159,7 +159,7 @@ public class ControleurPartieTest {
 	@Test
 	public void remplacerJokerTest() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
-			0, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu 12bleu", "");
+			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.remplacerJoker(2, Arrays.asList(2,1))).thenReturn(messageTest);
 
@@ -178,7 +178,7 @@ public class ControleurPartieTest {
 	@Test
 	public void annulerActionTest() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
-			0, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu 12bleu", "");
+			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.annulerDerniereAction(2)).thenReturn(messageTest);
 
@@ -194,7 +194,7 @@ public class ControleurPartieTest {
 	@Test
 	public void finDeTourTest() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,
-			0, 2, "Katya", "4jaune 9bleu 10bleu", 1, "10bleu 11bleu 12bleu", "");
+			1, 2, "Katya", "4jaune 9bleu 10bleu", 1, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.terminerTour(2)).thenReturn(messageTest);
 
@@ -211,7 +211,7 @@ public class ControleurPartieTest {
 	@Test
 	public void creerSequenceSansArgument() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
-			0, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", 1, "", "");
+			1, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", 1, "", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/creerSequence")
@@ -253,7 +253,7 @@ public class ControleurPartieTest {
 	@Test
 	public void creerSequenceFail() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
-			0, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", 1, "", "Aucune séquence possible");
+			1, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", 1, "", "Aucune séquence possible");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.creerNouvelleSequence(1, Arrays.asList(1,3))).thenReturn(messageTest);
 

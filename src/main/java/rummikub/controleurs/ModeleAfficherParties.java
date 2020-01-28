@@ -6,26 +6,27 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
-import java.util.Map;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-class ModeleAfficherParties implements RepresentationModelAssembler<Map, EntityModel<Map>> {
+class ModeleAfficherParties implements RepresentationModelAssembler<PartieDispo, EntityModel<PartieDispo>> {
 
 	@Override
-	public EntityModel<Map> toModel(Map infoPartie) {
-		int idPartie = Integer.parseInt((String)infoPartie.get("idPartie"));
+	public EntityModel<PartieDispo> toModel(PartieDispo partie) {
+		int idPartie = partie.getId();
 
-		EntityModel<Map> resultat = new EntityModel<>(infoPartie,
+		EntityModel<PartieDispo> resultat = new EntityModel<>(partie,
 		  linkTo(methodOn(ControleurParties.class).ajouterJoueur(idPartie, null)).withRel("ajouterJoueur"),
 		  linkTo(methodOn(ControleurParties.class).demarrerPartie(idPartie)).withRel("demarrerPartie"));
 
 		return resultat;
 	}
 
-	public CollectionModel<EntityModel<Map>> toCollectionModel(List<Map> liste) {
-		CollectionModel<EntityModel<Map>> collection = CollectionModel.wrap(liste);
+	public CollectionModel<EntityModel<PartieDispo>> toCollectionModel(List<PartieDispo> liste) {
+		List<EntityModel<PartieDispo>> ListeEntity = liste.stream().map(element -> toModel(element))
+															.collect(Collectors.toList());
+		CollectionModel<EntityModel<PartieDispo>> collection = new CollectionModel<>(ListeEntity);
 		collection.add(linkTo(methodOn(ControleurParties.class).creerPartie(null)).withRel("creerPartie"),
 						linkTo(methodOn(ControleurParties.class).listerPartiesDispos()).withRel("listerPartiesDispos"));
 		return collection;

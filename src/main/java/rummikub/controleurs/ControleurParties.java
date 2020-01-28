@@ -4,7 +4,6 @@ import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
 import rummikub.core.jeu.Joueur;
 import java.util.List;
-import java.util.Map;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,8 +42,8 @@ public class ControleurParties {
     }
 
     @GetMapping(value = "/listerPartiesDispos")
-	public CollectionModel<EntityModel<Map>> listerPartiesDispos() {
-		List<Map> message = listeParties.listerPartiesDispos();
+	public CollectionModel<EntityModel<PartieDispo>> listerPartiesDispos() {
+		List<PartieDispo> message = listeParties.listerPartiesDispos();
 		return modeleAfficherParties.toCollectionModel(message);
     }
 
@@ -52,8 +51,7 @@ public class ControleurParties {
 	public ResponseEntity<EntityModel> ajouterJoueur(@PathVariable int idPartie, @RequestBody String nomJoueur) {
 		Partie partie = listeParties.getPartie(idPartie);
 		if(partie != null) {
-			Joueur joueur = new Joueur(nomJoueur);
-			MessagePartie message = partie.ajouterJoueur(joueur);
+			MessagePartie message = partie.ajouterJoueur(new Joueur(nomJoueur));
 			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.AJOUTER_JOUEUR)) {
 				message.setIdPartie(idPartie);
 				EntityModel<MessagePartie> reponseAjout = modeleControleurParties.toModel(message);

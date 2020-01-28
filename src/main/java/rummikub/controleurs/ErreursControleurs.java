@@ -27,7 +27,7 @@ class ErreursControleurs{
 
   @ResponseBody
   @ExceptionHandler(IndexOutOfBoundsException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND )
+  @ResponseStatus(HttpStatus.NOT_FOUND)
   String mauvaisIndex(IndexOutOfBoundsException ex) {
     return ex.getMessage() +"\n";
   }

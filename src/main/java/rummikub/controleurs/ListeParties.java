@@ -38,19 +38,16 @@ public class ListeParties {
 
 	/**
 	 * Retourne la liste des parties non commencées.
-	 * Format : "idPartie: id joueurs: ["joueur1", "joueur2",...]"
 	 *
-	 * @return le texte.
+	 * @return la liste.
 	 */
-	public List<Map> listerPartiesDispos() {
+	public List<PartieDispo> listerPartiesDispos() {
 		int id = 1;
-		List<Map> resultat = new ArrayList<>();
+		List<PartieDispo> resultat = new ArrayList<>();
 		for(Partie partie : listeParties.values()) {
-			List joueurs = partie.listeJoueursPrets();
+			List<String> joueurs = partie.listeJoueursPrets();
 			if(!joueurs.isEmpty()) {
-				Map<String,String> partieDispo = new HashMap<>();
-				partieDispo.put("idPartie", "" + id);
-				partieDispo.put("joueurs", joueurs.toString());
+				PartieDispo partieDispo = new PartieDispo(id, joueurs);
 				resultat.add(partieDispo);
 			}
 			id++;
