@@ -21,6 +21,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.hateoas.MediaTypes;
 import org.skyscreamer.jsonassert.JSONAssert;
+import java.nio.charset.Charset;
 
 @Import({ ModeleControleurPartie.class })
 @WebMvcTest(ControleurPartie.class)
@@ -212,8 +213,8 @@ public class ControleurPartieTest {
 
 	@Test
 	public void creerSequenceSansArgument() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
-			1, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", 1, "", "");
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "Argument manquant ou de mauvais type");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/creerSequence")
@@ -221,11 +222,14 @@ public class ControleurPartieTest {
 			.andExpect(status().isBadRequest())
 			.andReturn();
 
-		assertEquals("Argument manquant ou de mauvais type\n", resultat.getResponse().getContentAsString());
+        String resultatTest = asJsonString(messageTest);
+        JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 	}
 
 	@Test
 	public void creerSequenceMauvaisTypeArgument() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "Argument manquant ou de mauvais type");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 
 		String argument = asJsonString("blabla");
@@ -235,11 +239,14 @@ public class ControleurPartieTest {
 			.andExpect(status().isBadRequest())
 			.andReturn();
 
-		assertEquals("Argument manquant ou de mauvais type\n", resultat.getResponse().getContentAsString());
+        String resultatTest = asJsonString(messageTest);
+        JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 	}
 
 	@Test
 	public void ajouterJetonTableauIncorrectTest() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "ajouterJeton.indexes: 2 valeurs attendues");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 
 		String argument = asJsonString(Arrays.asList(1));
@@ -249,7 +256,8 @@ public class ControleurPartieTest {
 			.andExpect(status().isBadRequest())
 			.andReturn();
 
-		assertEquals("ajouterJeton.indexes: 2 valeurs attendues\n", resultat.getResponse().getContentAsString());
+        String resultatTest = asJsonString(messageTest);
+        JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 	}
 
 	@Test
@@ -267,7 +275,7 @@ public class ControleurPartieTest {
 			.andReturn();
 
         String resultatTest = asJsonString(messageTest);
-        JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
+        JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
 	}
 
 

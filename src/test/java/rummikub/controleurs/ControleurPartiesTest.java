@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.skyscreamer.jsonassert.JSONAssert;
+import java.nio.charset.Charset;
 
 @Import({ 	ModeleControleurParties.class,
 			ModeleAfficherParties.class,
@@ -74,7 +75,7 @@ public class ControleurPartiesTest {
 	@Test
 	public void ajouterPartieJoueurInvalideFail() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
-			1, 0, "", "", 0, "", "Nom non valide");
+			0, 0, "", "", 0, "", "Nom non valide");
 		when(listePartiesMock.creerPartie()).thenReturn(1);
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 
@@ -151,7 +152,7 @@ public class ControleurPartiesTest {
 										.andReturn();
 
 		String resultatTest = asJsonString(messageTest);
-		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
 	}
 
 	@Test

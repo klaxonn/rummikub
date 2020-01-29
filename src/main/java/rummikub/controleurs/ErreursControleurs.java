@@ -16,16 +16,22 @@ class ErreursControleurs{
 
 	@ResponseBody
 	@ExceptionHandler(HttpMessageNotReadableException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	String argumentManquant(HttpMessageNotReadableException ex) {
-		return "Argument manquant ou de mauvais type\n";
+	ResponseEntity<EntityModel> argumentManquant(HttpMessageNotReadableException ex) {
+		MessagePartie message = new MessagePartie();
+		message.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
+		message.setMessageErreur("Argument manquant ou de mauvais type");
+		EntityModel<MessagePartie> reponseAjout = new EntityModel<>(message);
+		return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.BAD_REQUEST);
 	}
 
 	@ResponseBody
 	@ExceptionHandler(ConstraintViolationException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	String mauvaiseTailleTableau(ConstraintViolationException ex) {
-		return ex.getMessage() +"\n";
+	ResponseEntity<EntityModel> mauvaiseTailleTableau(ConstraintViolationException ex) {
+		MessagePartie message = new MessagePartie();
+		message.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
+		message.setMessageErreur(ex.getMessage());
+		EntityModel<MessagePartie> reponseAjout = new EntityModel<>(message);
+		return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.BAD_REQUEST);
 	}
 
 	@ResponseBody

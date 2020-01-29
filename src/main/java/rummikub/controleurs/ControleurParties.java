@@ -53,10 +53,10 @@ public class ControleurParties {
 		Partie partie = listeParties.getPartie(idPartie);
 		MessagePartie message = new MessagePartie();
 		if(partie != null) {
-			message.setIdPartie(idPartie);
 			Joueur joueur = creerJoueur(nomJoueur, message);
 			message = partie.ajouterJoueur(joueur);
 			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.AJOUTER_JOUEUR)) {
+				message.setIdPartie(idPartie);
 				EntityModel<MessagePartie> reponseAjout = modeleControleurParties.toModel(message);
 				return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.CREATED);
 			}

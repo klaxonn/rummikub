@@ -92,7 +92,7 @@ class PartieImpl implements Partie {
 			message.setIdJoueur(indexJoueur + 1);
 			message.setJeuJoueur(joueur.afficheJetonsJoueur());
 		}
-		if(partieCommence) {
+		if(partieCommence && correctIndex(indexJoueur)) {
 			message.setIdJoueurCourant(numJoueur + 1);
 		}
 		return message;

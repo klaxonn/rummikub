@@ -115,7 +115,7 @@ public class PartieImplTest {
 		partie.commencerPartie();
         MessagePartie message = partie.ajouterJoueur(new Joueur("Bob1"));
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
-			0, 0, "", "", 1, "", "Partie déjà commencée");
+			0, 0, "", "", 0, "", "Partie déjà commencée");
 		assertEquals(messageTest, message);
 	}
 
@@ -128,7 +128,7 @@ public class PartieImplTest {
 		assertEquals(messageTest, message);
         message = partie.commencerPartie();
 		messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
-			0, 0, "", "", JOUEUR1, "", "Partie déjà commencée");
+			0, 0, "", "", 0, "", "Partie déjà commencée");
 		assertEquals(messageTest, message);
 		assertEquals("[]", partie.listeJoueursPrets().toString());
 
@@ -162,7 +162,7 @@ public class PartieImplTest {
 		partie.commencerPartie();
 		MessagePartie message = partie.afficherPartie(JOUEUR_INCONNU);
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
-			0, 0, "", "", JOUEUR1, "", "Joueur inexistant");
+			0, 0, "", "", 0, "", "Joueur inexistant");
 		assertEquals(messageTest, message);
 
     }
