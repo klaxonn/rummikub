@@ -42,43 +42,60 @@ public class ControleurParties {
     }
 
     @GetMapping(value = "/listerPartiesDispos")
-	public CollectionModel<EntityModel<PartieDispo>> listerPartiesDispos() {
+	public ResponseEntity<CollectionModel> listerPartiesDispos() {
 		List<PartieDispo> message = listeParties.listerPartiesDispos();
-		return modeleAfficherParties.toCollectionModel(message);
+		CollectionModel<EntityModel<PartieDispo>> body = modeleAfficherParties.toCollectionModel(message);
+		return new ResponseEntity<CollectionModel>(body, HttpStatus.OK);
     }
 
     @PostMapping(value = "{idPartie}/ajouterJoueur")
 	public ResponseEntity<EntityModel> ajouterJoueur(@PathVariable int idPartie, @RequestBody String nomJoueur) {
 		Partie partie = listeParties.getPartie(idPartie);
+		MessagePartie message = new MessagePartie();
 		if(partie != null) {
-			MessagePartie message = partie.ajouterJoueur(new Joueur(nomJoueur));
+			message.setIdPartie(idPartie);
+			Joueur joueur = creerJoueur(nomJoueur, message);
+			message = partie.ajouterJoueur(joueur);
 			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.AJOUTER_JOUEUR)) {
-				message.setIdPartie(idPartie);
 				EntityModel<MessagePartie> reponseAjout = modeleControleurParties.toModel(message);
 				return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.CREATED);
 			}
 			else {
-				throw new UnsupportedOperationException(message.getMessageErreur());
+				throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.FORBIDDEN);
 			}
 		}
 		else {
-			throw new IndexOutOfBoundsException("La partie n'existe pas");
+			message.setMessageErreur("La partie n'existe pas");
+			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.NOT_FOUND);
 		}
     }
 
+    private Joueur creerJoueur(String nomJoueur, MessagePartie message) {
+		try {
+			return new Joueur(nomJoueur);
+		}
+		catch(IllegalArgumentException ex) {
+			message.setMessageErreur(ex.getMessage());
+			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.FORBIDDEN);
+		}
+	}
+
     @PostMapping(value = "{idPartie}/demarrerPartie")
-	public EntityModel<MessagePartie> demarrerPartie(@PathVariable int idPartie) {
+	public ResponseEntity<EntityModel> demarrerPartie(@PathVariable int idPartie) {
 		Partie partie = listeParties.getPartie(idPartie);
+		MessagePartie message = new MessagePartie();
 		if(partie != null) {
-			MessagePartie message = partie.commencerPartie();
+			message = partie.commencerPartie();
 			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.ERREUR)) {
-				throw new UnsupportedOperationException(message.getMessageErreur());
+				throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.FORBIDDEN);
 			}
 			message.setIdPartie(idPartie);
-			return modeleControleurPartie.toModel(message);
+			EntityModel<MessagePartie> body = modeleControleurPartie.toModel(message);
+			return new ResponseEntity<EntityModel>(body, HttpStatus.OK);
 		}
 		else {
-			throw new IndexOutOfBoundsException("La partie n'existe pas");
+			message.setMessageErreur("La partie n'existe pas");
+			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.NOT_FOUND);
 		}
 	}
 }

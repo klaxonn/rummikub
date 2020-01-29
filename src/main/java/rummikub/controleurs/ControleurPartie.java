@@ -4,6 +4,8 @@ import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
 import java.util.List;
 import java.lang.reflect.Method;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,12 +34,12 @@ public class ControleurPartie {
 	}
 
     @GetMapping("{idPartie}/{idJoueur}/afficherPartie")
-    public EntityModel<MessagePartie> afficherPartie(@PathVariable int idPartie, @PathVariable int idJoueur){
+    public ResponseEntity<EntityModel> afficherPartie(@PathVariable int idPartie, @PathVariable int idJoueur){
 		return executerAction("afficherPartie", idPartie, idJoueur, null);
 	}
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/creerSequence")
-	public EntityModel<MessagePartie> creerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
+	public ResponseEntity<EntityModel> creerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @NotEmpty(message = "Au moins 1 jeton nécessaire")
 	  List<Integer> indexes) {
@@ -45,7 +47,7 @@ public class ControleurPartie {
     }
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/ajouterJeton")
-	public EntityModel<MessagePartie> ajouterJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
+	public ResponseEntity<EntityModel> ajouterJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
 	  List<Integer> indexes) {
@@ -53,7 +55,7 @@ public class ControleurPartie {
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/fusionnerSequence")
-	public EntityModel<MessagePartie> fusionnerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
+	public ResponseEntity<EntityModel> fusionnerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
 	  List<Integer> indexes) {
@@ -61,7 +63,7 @@ public class ControleurPartie {
     }
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/couperSequence")
-	public EntityModel<MessagePartie> couperSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
+	public ResponseEntity<EntityModel> couperSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
 	  List<Integer> indexes) {
@@ -69,7 +71,7 @@ public class ControleurPartie {
     }
 
 	@PostMapping(value = "{idPartie}/{idJoueur}/deplacerJeton")
-	public EntityModel<MessagePartie> deplacerJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
+	public ResponseEntity<EntityModel> deplacerJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @Size(min = 3, max = 3, message = "3 valeurs attendues")
 	  List<Integer> indexes) {
@@ -77,7 +79,7 @@ public class ControleurPartie {
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/remplacerJoker")
-	public EntityModel<MessagePartie> remplacerJoker(@PathVariable int idPartie, @PathVariable int idJoueur,
+	public ResponseEntity<EntityModel> remplacerJoker(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
 	  List<Integer> indexes) {
@@ -85,19 +87,19 @@ public class ControleurPartie {
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/annulerDerniereAction")
-	public EntityModel<MessagePartie> annulerDerniereAction(@PathVariable int idPartie, @PathVariable int idJoueur) {
+	public ResponseEntity<EntityModel> annulerDerniereAction(@PathVariable int idPartie, @PathVariable int idJoueur) {
 		return executerAction("annulerDerniereAction", idPartie, idJoueur, null);
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/terminerTour")
-	public EntityModel<MessagePartie> terminerTour(@PathVariable int idPartie, @PathVariable int idJoueur) {
+	public ResponseEntity<EntityModel> terminerTour(@PathVariable int idPartie, @PathVariable int idJoueur) {
 		return executerAction("terminerTour", idPartie, idJoueur, null);
     }
 
-	private EntityModel<MessagePartie> executerAction(String action, int idPartie, int idJoueur, List<Integer> arg) {
+	private ResponseEntity<EntityModel> executerAction(String action, int idPartie, int idJoueur, List<Integer> arg) {
 		Partie partie = listeParties.getPartie(idPartie);
+		MessagePartie message = new MessagePartie();
 		if(partie != null){
-			MessagePartie message = null;
 			try{
 				Class<?> classePartie = Class.forName("rummikub.core.api.Partie");
 				if(arg == null) {
@@ -113,13 +115,15 @@ public class ControleurPartie {
 			}
 
 			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.ERREUR)) {
-				throw new UnsupportedOperationException(message.getMessageErreur());
+				throw new ControleurErreurException(message, modeleControleur, HttpStatus.FORBIDDEN);
 			}
 			message.setIdPartie(idPartie);
-			return modeleControleur.toModel(message);
+			EntityModel<MessagePartie> body = modeleControleur.toModel(message);
+			return new ResponseEntity<EntityModel>(body, HttpStatus.OK);
 		}
 		else {
-			throw new IndexOutOfBoundsException("La partie n'existe pas");
+			message.setMessageErreur("La partie n'existe pas");
+			throw new ControleurErreurException(message, modeleControleur, HttpStatus.NOT_FOUND);
 		}
 	}
 }

@@ -8,55 +8,101 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.hateoas.EntityModel;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import static org.junit.jupiter.api.Assertions.*;
 import org.skyscreamer.jsonassert.JSONAssert;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
+import java.util.Arrays;
 
+@Disabled
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ControleursTestIntegration {
-	
+
 	@LocalServerPort
     private int port;
-    
+
     private static final String ADRESSE = "http://localhost:";
     private TestRestTemplate template = new TestRestTemplate();
-    
+
     @Test
 	public void creerPartieTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.AJOUTER_JOUEUR,
-			1, 1, "Vincent", "", 0, "", "");
-
 		ResponseEntity<EntityModel> reponse = template.postForEntity(
 		creerUrl("/creerPartie"), "Vincent", EntityModel.class);
-       
+
 		assertEquals(HttpStatus.CREATED, reponse.getStatusCode());
 
 		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
+		int idPartie = messageReponse.getIdPartie();
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.AJOUTER_JOUEUR,
+			idPartie, 1, "Vincent", "", 0, "", "");
+
 		messageTest.setJeuJoueur(messageReponse.getJeuJoueur());
 		assertEquals(messageTest, messageReponse);
 	}
-	
+
 	@Test
-	public void demarrerPartieTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,
-			1, 0, "", "",  1, "", "");
-
-		template.postForEntity(creerUrl("/creerPartie"), "Vincent", EntityModel.class);
-		template.postForEntity(creerUrl("/1/ajouterJoueur"), "Katya", EntityModel.class);
+	public void ajouterJoueurTest() throws Exception {
 		ResponseEntity<EntityModel> reponse = template.postForEntity(
-		  creerUrl("/1/demarrerPartie"), null, EntityModel.class);
-       
-		assertEquals(HttpStatus.OK, reponse.getStatusCode());
-
+		  creerUrl("/creerPartie"), "Vincent", EntityModel.class);
 		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
+		int idPartie = messageReponse.getIdPartie();
+
+		reponse = template.postForEntity(
+		  creerUrl("/"+idPartie+"/ajouterJoueur"), "Katya", EntityModel.class);
+
+		assertEquals(HttpStatus.CREATED, reponse.getStatusCode());
+
+		messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.AJOUTER_JOUEUR,
+			idPartie, 2, "Katya", "", 0, "", "");
+		messageTest.setJeuJoueur(messageReponse.getJeuJoueur());
 		assertEquals(messageTest, messageReponse);
 	}
-	
+
+	@Test
+	public void demarrerPartieTest() throws Exception {
+		ResponseEntity<EntityModel> reponse = template.postForEntity(
+		  creerUrl("/creerPartie"), "Vincent", EntityModel.class);
+		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
+		int idPartie = messageReponse.getIdPartie();
+
+		template.postForEntity(creerUrl("/"+idPartie+"/ajouterJoueur"), "Katya", EntityModel.class);
+		reponse = template.postForEntity(creerUrl("/"+idPartie+"/demarrerPartie"), null, EntityModel.class);
+
+		assertEquals(HttpStatus.OK, reponse.getStatusCode());
+
+		messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,
+			idPartie, 0, "", "",  1, "", "");
+		assertEquals(messageTest, messageReponse);
+	}
+
+	@Test
+	public void creerSequenceTest() throws Exception {
+		ResponseEntity<EntityModel> reponse = template.postForEntity(
+		  creerUrl("/creerPartie"), "Vincent", EntityModel.class);
+		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
+		int idPartie = messageReponse.getIdPartie();
+		template.postForEntity(creerUrl("/"+idPartie+"/ajouterJoueur"), "Katya", EntityModel.class);
+		reponse = template.postForEntity(creerUrl("/"+idPartie+"/demarrerPartie"), null, EntityModel.class);
+
+		reponse = template.postForEntity(creerUrl("/"+idPartie+"/1/creerSequence"), Arrays.asList(1), EntityModel.class);
+		assertEquals(HttpStatus.OK, reponse.getStatusCode());
+
+		messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+			idPartie, 1, "Vincent", "", 1, "", "");
+		messageTest.setJeuJoueur(messageReponse.getJeuJoueur());
+		messageTest.setPlateau(messageReponse.getPlateau());
+		assertEquals(messageTest, messageReponse);
+	}
+
 	private String creerUrl(String uri) {
         return ADRESSE + port + uri;
     }
-    
+
     private MessagePartie creerMessageReponse(Map valeurs) {
 		MessagePartie message = new MessagePartie();
 		message.setTypeMessage(Enum.valueOf(MessagePartie.TypeMessage.class,(String) valeurs.get("typeMessage")));

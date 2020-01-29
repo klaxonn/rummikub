@@ -53,13 +53,15 @@ public class ControleurPartieTest {
 
 	@Test
 	public void afficherPartieFail() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "La partie n'existe pas");
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
 
 		MvcResult resultat = mockMvc.perform(get("/1/1/afficherPartie").contentType(MediaTypes.HAL_JSON_VALUE))
 									.andExpect(status().isNotFound())
 									.andReturn();
-
-		assertEquals("La partie n'existe pas\n", resultat.getResponse().getContentAsString());
+		String resultatTest = asJsonString(messageTest);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 	}
 
 	@Test
@@ -264,7 +266,8 @@ public class ControleurPartieTest {
 			.andExpect(status().isForbidden())
 			.andReturn();
 
-		assertEquals("Aucune séquence possible\n", resultat.getResponse().getContentAsString());
+        String resultatTest = asJsonString(messageTest);
+        JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 	}
 
 

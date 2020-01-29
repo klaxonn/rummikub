@@ -58,6 +58,8 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void ajouterPartieMauvaisePartieFail() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "La partie n'existe pas");
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
 
 		MvcResult resultat = mockMvc.perform(post("/1/ajouterJoueur")
@@ -65,22 +67,24 @@ public class ControleurPartiesTest {
 										.andExpect(status().isNotFound())
 										.andReturn();
 
-		assertEquals("La partie n'existe pas\n", resultat.getResponse().getContentAsString());
+		String resultatTest = asJsonString(messageTest);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 	}
 
 	@Test
 	public void ajouterPartieJoueurInvalideFail() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			1, 0, "", "", 0, "", "Nom non valide");
 		when(listePartiesMock.creerPartie()).thenReturn(1);
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
-		when(partieMock.ajouterJoueur(any(Joueur.class)))
-			.thenThrow(new UnsupportedOperationException("Nom non valide"));
 
 		MvcResult resultat = mockMvc.perform(post("/1/ajouterJoueur")
-										.content("aa").contentType(MediaTypes.HAL_JSON_VALUE))
+										.content("&é_ç").contentType(MediaTypes.HAL_JSON_VALUE))
 										.andExpect(status().isForbidden())
 										.andReturn();
 
-		assertEquals("Nom non valide\n", resultat.getResponse().getContentAsString());
+		String resultatTest = asJsonString(messageTest);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 	}
 
 	@Test
@@ -96,7 +100,8 @@ public class ControleurPartiesTest {
 										.andExpect(status().isForbidden())
 										.andReturn();
 
-		assertEquals("Partie Pleine\n", resultat.getResponse().getContentAsString());
+		String resultatTest = asJsonString(messageTest);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 	}
 
 	@Test
@@ -118,6 +123,8 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void demarrerPartieMauvaisePartieFail() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "La partie n'existe pas");
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
 
 		MvcResult resultat = mockMvc.perform(post("/1/demarrerPartie")
@@ -126,7 +133,8 @@ public class ControleurPartiesTest {
 										.andExpect(status().isNotFound())
 										.andReturn();
 
-		assertEquals("La partie n'existe pas\n", resultat.getResponse().getContentAsString());
+		String resultatTest = asJsonString(messageTest);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 
 	}
 
@@ -142,7 +150,8 @@ public class ControleurPartiesTest {
 										.andExpect(status().isForbidden())
 										.andReturn();
 
-		assertEquals("Partie déjà commencée\n", resultat.getResponse().getContentAsString());
+		String resultatTest = asJsonString(messageTest);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 	}
 
 	@Test
