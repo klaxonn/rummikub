@@ -16,6 +16,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import org.springframework.http.MediaType;
 
 /**
  * Controleur de la partie.
@@ -38,7 +39,7 @@ public class ControleurPartie {
 		return executerAction("afficherPartie", idPartie, idJoueur, null);
 	}
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/creerSequence")
+	@PostMapping(value = "{idPartie}/{idJoueur}/creerSequence", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EntityModel> creerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @NotEmpty(message = "Au moins 1 jeton nécessaire")
@@ -46,7 +47,7 @@ public class ControleurPartie {
 		return executerAction("creerNouvelleSequence", idPartie, idJoueur, indexes);
     }
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/ajouterJeton")
+	@PostMapping(value = "{idPartie}/{idJoueur}/ajouterJeton", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EntityModel> ajouterJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
@@ -54,7 +55,7 @@ public class ControleurPartie {
 		return executerAction("ajouterJeton", idPartie, idJoueur, indexes);
     }
 
-    @PostMapping(value = "{idPartie}/{idJoueur}/fusionnerSequence")
+    @PostMapping(value = "{idPartie}/{idJoueur}/fusionnerSequence", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EntityModel> fusionnerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
@@ -62,7 +63,7 @@ public class ControleurPartie {
 		return executerAction("fusionnerSequence", idPartie, idJoueur, indexes);
     }
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/couperSequence")
+	@PostMapping(value = "{idPartie}/{idJoueur}/couperSequence", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EntityModel> couperSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
@@ -70,7 +71,7 @@ public class ControleurPartie {
 		return executerAction("couperSequence", idPartie, idJoueur, indexes);
     }
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/deplacerJeton")
+	@PostMapping(value = "{idPartie}/{idJoueur}/deplacerJeton", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EntityModel> deplacerJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @Size(min = 3, max = 3, message = "3 valeurs attendues")
@@ -78,7 +79,7 @@ public class ControleurPartie {
 		return executerAction("deplacerJeton", idPartie, idJoueur, indexes);
     }
 
-    @PostMapping(value = "{idPartie}/{idJoueur}/remplacerJoker")
+    @PostMapping(value = "{idPartie}/{idJoueur}/remplacerJoker", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EntityModel> remplacerJoker(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @Size(min = 2, max = 2, message = "2 valeurs attendues")

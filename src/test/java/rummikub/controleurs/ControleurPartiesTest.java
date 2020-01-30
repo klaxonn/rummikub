@@ -48,7 +48,7 @@ public class ControleurPartiesTest {
 		when(partieMock.ajouterJoueur(any(Joueur.class))).thenReturn(messageTest);
 
 		MvcResult resultat = mockMvc.perform(post("/creerPartie")
-										.content("Vincent").contentType(MediaTypes.HAL_JSON_VALUE))
+										.content("Vincent").contentType("application/json"))
 										.andDo(print())
 										.andExpect(status().isCreated())
 										.andReturn();
@@ -64,12 +64,27 @@ public class ControleurPartiesTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
 
 		MvcResult resultat = mockMvc.perform(post("/1/ajouterJoueur")
-										.content("Vincent").contentType(MediaTypes.HAL_JSON_VALUE))
+										.content("Vincent").contentType("application/json"))
 										.andExpect(status().isNotFound())
 										.andReturn();
 
 		String resultatTest = asJsonString(messageTest);
 		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
+	}
+
+	@Test
+	public void ajouterPartieMauvaiseMethode() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "Méthode GET non autorisée");
+		when(listePartiesMock.getPartie(1)).thenReturn(null);
+
+		MvcResult resultat = mockMvc.perform(get("/1/ajouterJoueur")
+										.content("Vincent").contentType("application/json"))
+										.andExpect(status().isMethodNotAllowed())
+										.andReturn();
+
+		String resultatTest = asJsonString(messageTest);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
 	}
 
 	@Test
@@ -80,7 +95,7 @@ public class ControleurPartiesTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 
 		MvcResult resultat = mockMvc.perform(post("/1/ajouterJoueur")
-										.content("&é_ç").contentType(MediaTypes.HAL_JSON_VALUE))
+										.content("&é_ç").contentType("application/json"))
 										.andExpect(status().isForbidden())
 										.andReturn();
 
@@ -97,7 +112,7 @@ public class ControleurPartiesTest {
 		when(partieMock.ajouterJoueur(any(Joueur.class))).thenReturn(messageTest);
 
 		MvcResult resultat = mockMvc.perform(post("/1/ajouterJoueur")
-										.content("Vincent").contentType(MediaTypes.HAL_JSON_VALUE))
+										.content("Vincent").contentType("application/json"))
 										.andExpect(status().isForbidden())
 										.andReturn();
 
@@ -113,7 +128,7 @@ public class ControleurPartiesTest {
 		when(partieMock.commencerPartie()).thenReturn(messageTest);
 
 		MvcResult resultat = mockMvc.perform(post("/1/demarrerPartie")
-										.contentType(MediaTypes.HAL_JSON_VALUE))
+										.contentType("application/json"))
 										.andDo(print())
 										.andExpect(status().isOk())
 										.andReturn();
@@ -129,7 +144,7 @@ public class ControleurPartiesTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
 
 		MvcResult resultat = mockMvc.perform(post("/1/demarrerPartie")
-										.contentType(MediaTypes.HAL_JSON_VALUE))
+										.contentType("application/json"))
 										.andDo(print())
 										.andExpect(status().isNotFound())
 										.andReturn();
@@ -147,7 +162,7 @@ public class ControleurPartiesTest {
 		when(partieMock.commencerPartie()).thenReturn(messageTest);
 
 		MvcResult resultat = mockMvc.perform(post("/1/demarrerPartie")
-										.contentType(MediaTypes.HAL_JSON_VALUE))
+										.contentType("application/json"))
 										.andExpect(status().isForbidden())
 										.andReturn();
 
@@ -165,8 +180,7 @@ public class ControleurPartiesTest {
 
 		when(listePartiesMock.listerPartiesDispos()).thenReturn(resultatList);
 
-		MvcResult resultat = mockMvc.perform(get("/listerPartiesDispos")
-										.contentType(MediaTypes.HAL_JSON_VALUE))
+		MvcResult resultat = mockMvc.perform(get("/listerPartiesDispos"))
 										.andDo(print())
 										.andExpect(status().isOk())
 										.andReturn();

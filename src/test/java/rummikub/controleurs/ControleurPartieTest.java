@@ -42,7 +42,7 @@ public class ControleurPartieTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.afficherPartie(1)).thenReturn(messageTest);
 
-		MvcResult resultat = mockMvc.perform(get("/1/1/afficherPartie").contentType(MediaTypes.HAL_JSON_VALUE))
+		MvcResult resultat = mockMvc.perform(get("/1/1/afficherPartie"))
 										.andDo(print())
 										.andExpect(status().isOk())
 										.andReturn();
@@ -58,7 +58,7 @@ public class ControleurPartieTest {
 			0, 0, "", "", 0, "", "La partie n'existe pas");
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
 
-		MvcResult resultat = mockMvc.perform(get("/1/1/afficherPartie").contentType(MediaTypes.HAL_JSON_VALUE))
+		MvcResult resultat = mockMvc.perform(get("/1/1/afficherPartie"))
 									.andExpect(status().isNotFound())
 									.andReturn();
 		String resultatTest = asJsonString(messageTest);
@@ -75,7 +75,7 @@ public class ControleurPartieTest {
 		String argument = asJsonString(Arrays.asList(1,2,3));
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/creerSequence")
-									.content(argument).contentType(MediaTypes.HAL_JSON_VALUE))
+									.content(argument).contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -94,7 +94,7 @@ public class ControleurPartieTest {
 		String argument = asJsonString(Arrays.asList(1,2));
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/ajouterJeton")
-									.content(argument).contentType(MediaTypes.HAL_JSON_VALUE))
+									.content(argument).contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -112,7 +112,7 @@ public class ControleurPartieTest {
 		String argument = asJsonString(Arrays.asList(1,4));
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/fusionnerSequence")
-									.content(argument).contentType(MediaTypes.HAL_JSON_VALUE))
+									.content(argument).contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -131,7 +131,7 @@ public class ControleurPartieTest {
 		String argument = asJsonString(Arrays.asList(1,2));
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/couperSequence")
-									.content(argument).contentType(MediaTypes.HAL_JSON_VALUE))
+									.content(argument).contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -150,7 +150,7 @@ public class ControleurPartieTest {
 		String argument = asJsonString(Arrays.asList(1,3,2));
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/deplacerJeton")
-									.content(argument).contentType(MediaTypes.HAL_JSON_VALUE))
+									.content(argument).contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -169,7 +169,7 @@ public class ControleurPartieTest {
 		String argument = asJsonString(Arrays.asList(2,1));
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/remplacerJoker")
-									.content(argument).contentType(MediaTypes.HAL_JSON_VALUE))
+									.content(argument).contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -186,7 +186,7 @@ public class ControleurPartieTest {
 		when(partieMock.annulerDerniereAction(2)).thenReturn(messageTest);
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/annulerDerniereAction")
-									.contentType(MediaTypes.HAL_JSON_VALUE))
+									.contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -202,7 +202,7 @@ public class ControleurPartieTest {
 		when(partieMock.terminerTour(2)).thenReturn(messageTest);
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/terminerTour")
-									.contentType(MediaTypes.HAL_JSON_VALUE))
+									.contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -218,7 +218,7 @@ public class ControleurPartieTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/creerSequence")
-			.content("").contentType(MediaTypes.HAL_JSON_VALUE))
+			.content("").contentType("application/json"))
 			.andExpect(status().isBadRequest())
 			.andReturn();
 
@@ -235,7 +235,7 @@ public class ControleurPartieTest {
 		String argument = asJsonString("blabla");
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/creerSequence")
-			.content("").contentType(MediaTypes.HAL_JSON_VALUE))
+			.content("").contentType("application/json"))
 			.andExpect(status().isBadRequest())
 			.andReturn();
 
@@ -252,7 +252,7 @@ public class ControleurPartieTest {
 		String argument = asJsonString(Arrays.asList(1));
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/ajouterJeton")
-			.content(argument).contentType(MediaTypes.HAL_JSON_VALUE))
+			.content(argument).contentType("application/json"))
 			.andExpect(status().isBadRequest())
 			.andReturn();
 
@@ -270,7 +270,7 @@ public class ControleurPartieTest {
 		String argument = asJsonString(Arrays.asList(1,3));
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/creerSequence")
-			.content(argument).contentType(MediaTypes.HAL_JSON_VALUE))
+			.content(argument).contentType("application/json"))
 			.andExpect(status().isForbidden())
 			.andReturn();
 

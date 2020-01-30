@@ -14,6 +14,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 /**
  * Controleur de la partie.
@@ -35,7 +36,7 @@ public class ControleurParties {
 		this.modeleAfficherParties = modeleAfficherParties;
 	}
 
-	@PostMapping(value = "/creerPartie")
+	@PostMapping(value = "/creerPartie", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EntityModel> creerPartie(@RequestBody String nomJoueur) {
 		int idPartie = listeParties.creerPartie();
 		return ajouterJoueur(idPartie, nomJoueur);
@@ -48,7 +49,7 @@ public class ControleurParties {
 		return new ResponseEntity<CollectionModel>(body, HttpStatus.OK);
     }
 
-    @PostMapping(value = "{idPartie}/ajouterJoueur")
+    @PostMapping(value = "{idPartie}/ajouterJoueur", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EntityModel> ajouterJoueur(@PathVariable int idPartie, @RequestBody String nomJoueur) {
 		Partie partie = listeParties.getPartie(idPartie);
 		MessagePartie message = new MessagePartie();

@@ -6,6 +6,9 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.hateoas.EntityModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.skyscreamer.jsonassert.JSONAssert;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
+import java.util.List;
 import java.util.Arrays;
 
 @Disabled
@@ -28,8 +32,11 @@ public class ControleursTestIntegration {
 
     @Test
 	public void creerPartieTest() throws Exception {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> entity = new HttpEntity<String>("Vincent", headers);
 		ResponseEntity<EntityModel> reponse = template.postForEntity(
-		creerUrl("/creerPartie"), "Vincent", EntityModel.class);
+		creerUrl("/creerPartie"), entity, EntityModel.class);
 
 		assertEquals(HttpStatus.CREATED, reponse.getStatusCode());
 
@@ -44,13 +51,17 @@ public class ControleursTestIntegration {
 
 	@Test
 	public void ajouterJoueurTest() throws Exception {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> entity = new HttpEntity<String>("Vincent", headers);
 		ResponseEntity<EntityModel> reponse = template.postForEntity(
-		  creerUrl("/creerPartie"), "Vincent", EntityModel.class);
+		  creerUrl("/creerPartie"), entity, EntityModel.class);
 		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
 		int idPartie = messageReponse.getIdPartie();
 
+		entity = new HttpEntity<String>("Katya", headers);
 		reponse = template.postForEntity(
-		  creerUrl("/"+idPartie+"/ajouterJoueur"), "Katya", EntityModel.class);
+		  creerUrl("/"+idPartie+"/ajouterJoueur"), entity, EntityModel.class);
 
 		assertEquals(HttpStatus.CREATED, reponse.getStatusCode());
 
@@ -63,12 +74,16 @@ public class ControleursTestIntegration {
 
 	@Test
 	public void demarrerPartieTest() throws Exception {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> entity = new HttpEntity<String>("Vincent", headers);
 		ResponseEntity<EntityModel> reponse = template.postForEntity(
-		  creerUrl("/creerPartie"), "Vincent", EntityModel.class);
+		  creerUrl("/creerPartie"), entity, EntityModel.class);
 		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
 		int idPartie = messageReponse.getIdPartie();
 
-		template.postForEntity(creerUrl("/"+idPartie+"/ajouterJoueur"), "Katya", EntityModel.class);
+		entity = new HttpEntity<String>("Katya", headers);
+		template.postForEntity(creerUrl("/"+idPartie+"/ajouterJoueur"), entity, EntityModel.class);
 		reponse = template.postForEntity(creerUrl("/"+idPartie+"/demarrerPartie"), null, EntityModel.class);
 
 		assertEquals(HttpStatus.OK, reponse.getStatusCode());
@@ -81,14 +96,19 @@ public class ControleursTestIntegration {
 
 	@Test
 	public void creerSequenceTest() throws Exception {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> entity = new HttpEntity<String>("Vincent", headers);
 		ResponseEntity<EntityModel> reponse = template.postForEntity(
-		  creerUrl("/creerPartie"), "Vincent", EntityModel.class);
+		  creerUrl("/creerPartie"), entity, EntityModel.class);
 		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
 		int idPartie = messageReponse.getIdPartie();
-		template.postForEntity(creerUrl("/"+idPartie+"/ajouterJoueur"), "Katya", EntityModel.class);
+		entity = new HttpEntity<String>("Katya", headers);
+		template.postForEntity(creerUrl("/"+idPartie+"/ajouterJoueur"), entity, EntityModel.class);
 		reponse = template.postForEntity(creerUrl("/"+idPartie+"/demarrerPartie"), null, EntityModel.class);
 
-		reponse = template.postForEntity(creerUrl("/"+idPartie+"/1/creerSequence"), Arrays.asList(1), EntityModel.class);
+		HttpEntity<List> entity2 = new HttpEntity<>(Arrays.asList(1), headers);
+		reponse = template.postForEntity(creerUrl("/"+idPartie+"/1/creerSequence"), entity2, EntityModel.class);
 		assertEquals(HttpStatus.OK, reponse.getStatusCode());
 
 		messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
