@@ -3,6 +3,7 @@ package rummikub.controleurs;
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
 import java.util.List;
+import java.util.Arrays;
 import java.lang.reflect.Method;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import org.springframework.http.MediaType;
 
 /**
@@ -47,44 +47,34 @@ public class ControleurPartie {
 		return executerAction("creerNouvelleSequence", idPartie, idJoueur, indexes);
     }
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/ajouterJeton", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "{idPartie}/{idJoueur}/ajouterJeton/{indexJeton}/{indexSequence}")
 	public ResponseEntity<EntityModel> ajouterJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
-	  @RequestBody
-	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
-	  List<Integer> indexes) {
-		return executerAction("ajouterJeton", idPartie, idJoueur, indexes);
+	  @PathVariable int indexJeton, @PathVariable int indexSequence){
+		return executerAction("ajouterJeton", idPartie, idJoueur, Arrays.asList(indexJeton,indexSequence));
     }
 
-    @PostMapping(value = "{idPartie}/{idJoueur}/fusionnerSequence", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "{idPartie}/{idJoueur}/fusionnerSequence/{indexSequenceD}/{indexSequenceA}")
 	public ResponseEntity<EntityModel> fusionnerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
-	  @RequestBody
-	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
-	  List<Integer> indexes) {
-		return executerAction("fusionnerSequence", idPartie, idJoueur, indexes);
+	  @PathVariable int indexSequenceD, @PathVariable int indexSequenceA) {
+		return executerAction("fusionnerSequence", idPartie, idJoueur, Arrays.asList(indexSequenceD, indexSequenceA));
     }
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/couperSequence", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "{idPartie}/{idJoueur}/couperSequence/{indexSequence}/{indexJeton}")
 	public ResponseEntity<EntityModel> couperSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
-	  @RequestBody
-	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
-	  List<Integer> indexes) {
-		return executerAction("couperSequence", idPartie, idJoueur, indexes);
+	  @PathVariable int indexSequence, @PathVariable int indexJeton) {
+		return executerAction("couperSequence", idPartie, idJoueur, Arrays.asList(indexSequence, indexJeton));
     }
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/deplacerJeton", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "{idPartie}/{idJoueur}/deplacerJeton/{indexSequenceD}/{indexJeton}/{indexSequenceA}")
 	public ResponseEntity<EntityModel> deplacerJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
-	  @RequestBody
-	  @Size(min = 3, max = 3, message = "3 valeurs attendues")
-	  List<Integer> indexes) {
-		return executerAction("deplacerJeton", idPartie, idJoueur, indexes);
+	  @PathVariable int indexSequenceD, @PathVariable int indexJeton, @PathVariable int indexSequenceA) {
+		return executerAction("deplacerJeton", idPartie, idJoueur, Arrays.asList(indexSequenceD, indexJeton, indexSequenceA));
     }
 
-    @PostMapping(value = "{idPartie}/{idJoueur}/remplacerJoker", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "{idPartie}/{idJoueur}/remplacerJoker/{indexJeton}/{indexSequence}")
 	public ResponseEntity<EntityModel> remplacerJoker(@PathVariable int idPartie, @PathVariable int idJoueur,
-	  @RequestBody
-	  @Size(min = 2, max = 2, message = "2 valeurs attendues")
-	  List<Integer> indexes) {
-		return executerAction("remplacerJoker", idPartie, idJoueur, indexes);
+	  @PathVariable int indexJeton, @PathVariable int indexSequence) {
+		return executerAction("remplacerJoker", idPartie, idJoueur, Arrays.asList(indexJeton, indexSequence));
     }
 
     @PostMapping(value = "{idPartie}/{idJoueur}/annulerDerniereAction")

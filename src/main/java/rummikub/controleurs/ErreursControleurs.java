@@ -34,7 +34,6 @@ class ErreursControleurs{
 		return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.METHOD_NOT_ALLOWED);
 	}
 
-
 	@ExceptionHandler(ConstraintViolationException.class)
 	ResponseEntity<EntityModel> mauvaiseTailleTableau(ConstraintViolationException ex) {
 		MessagePartie message = new MessagePartie();

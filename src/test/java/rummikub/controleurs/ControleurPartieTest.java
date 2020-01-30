@@ -91,10 +91,7 @@ public class ControleurPartieTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.ajouterJeton(2, Arrays.asList(1,2))).thenReturn(messageTest);
 
-		String argument = asJsonString(Arrays.asList(1,2));
-
-		MvcResult resultat = mockMvc.perform(post("/1/2/ajouterJeton")
-									.content(argument).contentType("application/json"))
+		MvcResult resultat = mockMvc.perform(post("/1/2/ajouterJeton/1/2"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -109,10 +106,7 @@ public class ControleurPartieTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.fusionnerSequence(2, Arrays.asList(1,4))).thenReturn(messageTest);
 
-		String argument = asJsonString(Arrays.asList(1,4));
-
-		MvcResult resultat = mockMvc.perform(post("/1/2/fusionnerSequence")
-									.content(argument).contentType("application/json"))
+		MvcResult resultat = mockMvc.perform(post("/1/2/fusionnerSequence/1/4"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -128,10 +122,7 @@ public class ControleurPartieTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.couperSequence(2, Arrays.asList(1,2))).thenReturn(messageTest);
 
-		String argument = asJsonString(Arrays.asList(1,2));
-
-		MvcResult resultat = mockMvc.perform(post("/1/2/couperSequence")
-									.content(argument).contentType("application/json"))
+		MvcResult resultat = mockMvc.perform(post("/1/2/couperSequence/1/2"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -147,10 +138,7 @@ public class ControleurPartieTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.deplacerJeton(2, Arrays.asList(1,3,2))).thenReturn(messageTest);
 
-		String argument = asJsonString(Arrays.asList(1,3,2));
-
-		MvcResult resultat = mockMvc.perform(post("/1/2/deplacerJeton")
-									.content(argument).contentType("application/json"))
+		MvcResult resultat = mockMvc.perform(post("/1/2/deplacerJeton/1/3/2"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -166,10 +154,7 @@ public class ControleurPartieTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.remplacerJoker(2, Arrays.asList(2,1))).thenReturn(messageTest);
 
-		String argument = asJsonString(Arrays.asList(2,1));
-
-		MvcResult resultat = mockMvc.perform(post("/1/2/remplacerJoker")
-									.content(argument).contentType("application/json"))
+		MvcResult resultat = mockMvc.perform(post("/1/2/remplacerJoker/2/1"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -244,20 +229,12 @@ public class ControleurPartieTest {
 	}
 
 	@Test
-	public void ajouterJetonTableauIncorrectTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
-			0, 0, "", "", 0, "", "ajouterJeton.indexes: 2 valeurs attendues");
+	public void ajouterJetonMalformeTest() throws Exception {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 
-		String argument = asJsonString(Arrays.asList(1));
-
-		MvcResult resultat = mockMvc.perform(post("/1/1/ajouterJeton")
-			.content(argument).contentType("application/json"))
-			.andExpect(status().isBadRequest())
+		MvcResult resultat = mockMvc.perform(post("/1/1/ajouterJeton/1"))
+			.andExpect(status().isNotFound())
 			.andReturn();
-
-        String resultatTest = asJsonString(messageTest);
-        JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 	}
 
 	@Test
