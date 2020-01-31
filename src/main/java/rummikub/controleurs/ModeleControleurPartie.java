@@ -22,10 +22,10 @@ public class ModeleControleurPartie implements RepresentationModelAssembler<Mess
 			return new EntityModel<>(message,
 			  linkTo(methodOn(ControleurPartie.class).afficherPartie(idPartie, idJoueur)).withRel("afficherPartie"),
 			  linkTo(methodOn(ControleurPartie.class).creerSequence(idPartie, idJoueur, null)).withRel("creerSequence"),
-			  linkTo(methodOn(ControleurPartie.class).fusionnerSequence(idPartie, idJoueur, 0, 0)).withRel("fusionnerSequence"),
-			  linkTo(methodOn(ControleurPartie.class).couperSequence(idPartie, idJoueur, 0, 0)).withRel("couperSequence"),
-			  linkTo(methodOn(ControleurPartie.class).deplacerJeton(idPartie, idJoueur, 0, 0, 0)).withRel("deplacerJeton"),
-			  linkTo(methodOn(ControleurPartie.class).remplacerJoker(idPartie, idJoueur, 0, 0)).withRel("remplacerJoker"),
+			  linkTo(methodOn(ControleurPartie.class).fusionnerSequence(idPartie, idJoueur, null)).withRel("fusionnerSequence"),
+			  linkTo(methodOn(ControleurPartie.class).couperSequence(idPartie, idJoueur, null)).withRel("couperSequence"),
+			  linkTo(methodOn(ControleurPartie.class).deplacerJeton(idPartie, idJoueur, null)).withRel("deplacerJeton"),
+			  linkTo(methodOn(ControleurPartie.class).remplacerJoker(idPartie, idJoueur, null)).withRel("remplacerJoker"),
 			  linkTo(methodOn(ControleurPartie.class).annulerDerniereAction(idPartie, idJoueur)).withRel("annulerDerniereAction"),
 			  linkTo(methodOn(ControleurPartie.class).terminerTour(idPartie, idJoueur)).withRel("terminerTour"));
 		}

@@ -221,7 +221,6 @@ public class Joueur {
      * Renvoie le nombre de jetons restants.
      *
      * @return le nombre de jetons restants
-     *
      */
     public int nombreJetonsRestants() {
         return listeJetons.size();
@@ -235,7 +234,7 @@ public class Joueur {
 	 * @param nomJoueur le nom du joueur à tester
 	 * @return true si le nom est valide
 	 */
-	public static boolean isNomValide(String nom){
-		return nom.matches("[\\w\\-]{1,15}+");
+	public static boolean isNomValide(String nomJoueur){
+		return nomJoueur.matches("[\\w\\-]{1,15}+");
 	}
 }

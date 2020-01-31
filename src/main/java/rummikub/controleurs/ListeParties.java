@@ -18,7 +18,6 @@ public class ListeParties {
 
 	/**
 	 * Construit une liste de parties.
-	 *
 	 */
 	public ListeParties() {
 		listeParties = new HashMap<>();
@@ -58,7 +57,8 @@ public class ListeParties {
 	/**
 	 * Retourne la partie correspondant à l'id.
 	 *
-	 * @return le partie.
+	 * @param id l'id de la partie à récupérer
+	 * @return la partie.
 	 */
 	public Partie getPartie(int id) {
 		return listeParties.get(id);

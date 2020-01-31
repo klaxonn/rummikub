@@ -24,6 +24,15 @@ class ErreursControleurs{
 		return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(java.lang.NullPointerException.class)
+	ResponseEntity<EntityModel> argumentManquant(java.lang.NullPointerException ex) {
+		MessagePartie message = new MessagePartie();
+		message.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
+		message.setMessageErreur("Argument incorrect");
+		EntityModel<MessagePartie> reponseAjout = new EntityModel<>(message);
+		return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.BAD_REQUEST);
+	}
+
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	ResponseEntity<EntityModel> methodePasAuthorisee(HttpRequestMethodNotSupportedException ex) {
 		MessagePartie message = new MessagePartie();

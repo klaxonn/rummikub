@@ -45,8 +45,11 @@ public class MessagePartie {
 	 * Construit un message.
 	 *
 	 * @param typeMessage le type de message
+	 * @param idPartie l'id de la partie
+	 * @param idJoueur l'id du joueur
 	 * @param nomJoueur le nom du joueur
 	 * @param jeuJoueur la représentation textuelle du jeu du joueur
+	 * @param idJoueurCourant l'id du joueur courant
 	 * @param plateau la représentation textuelle du plateau
 	 * @param messageErreur le message d'erreur
 	 */

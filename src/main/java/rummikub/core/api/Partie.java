@@ -24,6 +24,7 @@ public interface Partie {
      * Au cas où le nombre de joueurs est incorrect.
 	 * Il contient le message d'erreur
 	 *
+	 * @param joueur le joueur à ajouter
 	 * @return le message contenant les informations
 	 */
     MessagePartie ajouterJoueur(Joueur joueur);

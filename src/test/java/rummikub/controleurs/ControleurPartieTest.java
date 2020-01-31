@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.hateoas.MediaTypes;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -85,13 +86,35 @@ public class ControleurPartieTest {
 	}
 
 	@Test
+	public void creerNouvelleSequenceTableauVideFail() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "creerSequence.indexes: Au moins 1 jeton nécessaire");
+		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
+
+		String argument = asJsonString(new ArrayList<Integer>());
+
+		MvcResult resultat = mockMvc.perform(post("/1/1/creerSequence")
+									.content(argument).contentType("application/json"))
+									.andExpect(status().isBadRequest())
+									.andReturn();
+
+        String resultatTest = asJsonString(messageTest);
+        JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
+
+	}
+
+	@Test
 	public void ajouterJetonTest() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
 			1, 2, "Katya", "9bleu", 2, "10bleu 11bleu 12bleu\n4jaune", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.ajouterJeton(2, Arrays.asList(1,2))).thenReturn(messageTest);
 
-		MvcResult resultat = mockMvc.perform(post("/1/2/ajouterJeton/1/2"))
+		ParametresAction param = new ParametresAction();
+		param.paramAjouterJeton(1,2);
+		String argument = asJsonString(param);
+		MvcResult resultat = mockMvc.perform(post("/1/2/ajouterJeton")
+									.content(argument).contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -106,7 +129,12 @@ public class ControleurPartieTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.fusionnerSequence(2, Arrays.asList(1,4))).thenReturn(messageTest);
 
-		MvcResult resultat = mockMvc.perform(post("/1/2/fusionnerSequence/1/4"))
+		ParametresAction param = new ParametresAction();
+		param.paramFusionner(1,4);
+		String argument = asJsonString(param);
+
+		MvcResult resultat = mockMvc.perform(post("/1/2/fusionnerSequence")
+									.content(argument).contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -122,7 +150,12 @@ public class ControleurPartieTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.couperSequence(2, Arrays.asList(1,2))).thenReturn(messageTest);
 
-		MvcResult resultat = mockMvc.perform(post("/1/2/couperSequence/1/2"))
+		ParametresAction param = new ParametresAction();
+		param.paramCouper(1,2);
+		String argument = asJsonString(param);
+
+		MvcResult resultat = mockMvc.perform(post("/1/2/couperSequence")
+									.content(argument).contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -138,7 +171,12 @@ public class ControleurPartieTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.deplacerJeton(2, Arrays.asList(1,3,2))).thenReturn(messageTest);
 
-		MvcResult resultat = mockMvc.perform(post("/1/2/deplacerJeton/1/3/2"))
+		ParametresAction param = new ParametresAction();
+		param.paramDeplacer(1,3,2);
+		String argument = asJsonString(param);
+
+		MvcResult resultat = mockMvc.perform(post("/1/2/deplacerJeton")
+									.content(argument).contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -154,7 +192,12 @@ public class ControleurPartieTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.remplacerJoker(2, Arrays.asList(2,1))).thenReturn(messageTest);
 
-		MvcResult resultat = mockMvc.perform(post("/1/2/remplacerJoker/2/1"))
+		ParametresAction param = new ParametresAction();
+		param.paramRemplacerJoker(2,1);
+		String argument = asJsonString(param);
+
+		MvcResult resultat = mockMvc.perform(post("/1/2/remplacerJoker")
+									.content(argument).contentType("application/json"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -229,12 +272,22 @@ public class ControleurPartieTest {
 	}
 
 	@Test
-	public void ajouterJetonMalformeTest() throws Exception {
+	public void ajouterJetonArgumentIncorrectTest() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "Argument incorrect");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 
-		MvcResult resultat = mockMvc.perform(post("/1/1/ajouterJeton/1"))
-			.andExpect(status().isNotFound())
+		ParametresAction param = new ParametresAction();
+		param.paramFusionner(1,2);
+		String argument = asJsonString(param);
+
+		MvcResult resultat = mockMvc.perform(post("/1/1/ajouterJeton")
+			.content(argument).contentType("application/json"))
+			.andExpect(status().isBadRequest())
 			.andReturn();
+
+        String resultatTest = asJsonString(messageTest);
+        JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 	}
 
 	@Test
