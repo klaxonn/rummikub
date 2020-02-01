@@ -31,6 +31,7 @@ public class ControleurPartie {
 	private ModeleControleurPartie modeleControleurPartie;
 	private ModeleControleurParties modeleControleurParties;
 	private List<Integer> partiesTerminees;
+	private static final String CHEMIN_CLASSE_PARTIE = "rummikub.core.api.Partie";
 
 	@Autowired
 	public ControleurPartie(ListeParties listeParties, ModeleControleurPartie modeleControleurPartie,
@@ -109,7 +110,7 @@ public class ControleurPartie {
 		Partie partie = listeParties.getPartie(idPartie);
 		if(partie != null){
 			try{
-				Class<?> classePartie = Class.forName("rummikub.core.api.Partie");
+				Class<?> classePartie = Class.forName(CHEMIN_CLASSE_PARTIE);
 				if(arg == null) {
 					Method methode = classePartie.getMethod(action, int.class);
 					message = (MessagePartie) methode.invoke(partie, idJoueur);
@@ -126,7 +127,7 @@ public class ControleurPartie {
 				throw new ControleurErreurException(message, modeleControleurPartie, HttpStatus.FORBIDDEN);
 			}
 			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.FIN_DE_PARTIE)) {
-				listeParties.supprimerPartie(message.getIdPartie());
+				listeParties.supprimerPartie(idPartie);
 				partiesTerminees.add(message.getIdPartie());
 			}
 			message.setIdPartie(idPartie);
