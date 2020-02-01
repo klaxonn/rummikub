@@ -103,6 +103,7 @@ public class ControleurPartie {
 		MessagePartie message = new MessagePartie();
 		if(partiesTerminees.contains(idPartie)) {
 			message.setMessageErreur("La partie est terminée");
+			message.setTypeMessage(MessagePartie.TypeMessage.FIN_DE_PARTIE);
 			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.FORBIDDEN);
 		}
 		Partie partie = listeParties.getPartie(idPartie);

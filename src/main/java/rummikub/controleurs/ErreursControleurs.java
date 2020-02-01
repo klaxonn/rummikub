@@ -55,7 +55,9 @@ class ErreursControleurs{
 	@ExceptionHandler(ControleurErreurException.class)
 	ResponseEntity<EntityModel> erreurControleur(ControleurErreurException ex) {
 		MessagePartie message = ex.getMessagePartie();
-		message.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
+		if(message.getTypeMessage() == null) {
+			message.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
+		}
 		EntityModel<MessagePartie> reponseAjout = ex.getCreateurModele().toModel(message);
 		return new ResponseEntity<EntityModel>(reponseAjout, ex.getStatut());
 	}

@@ -33,9 +33,19 @@ public class ListePartiesTest {
 		Partie partie1 = listeParties.getPartie(idPartie1);
 		Partie partie2 = listeParties.getPartie(idPartie2);
 		assertNotSame(partie1, partie2);
-		assertNotEquals(null, partie1);
-		assertNotEquals(null, partie1);
-		assertEquals(null, listeParties.getPartie(3));
+		assertNotNull(partie1);
+		assertNotNull(partie1);
+		assertNull(listeParties.getPartie(3));
+	}
+
+    @Test
+	public void supprimerPartieTest(){
+		int idPartie = listeParties.creerPartie();
+		Partie partie = listeParties.getPartie(idPartie);
+		assertNotNull(listeParties.getPartie(idPartie));
+		listeParties.supprimerPartie(idPartie);
+		partie = listeParties.getPartie(idPartie);	
+		assertNull(listeParties.getPartie(idPartie));
 	}
 
     @Test
