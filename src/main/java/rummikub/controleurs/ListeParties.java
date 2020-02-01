@@ -63,4 +63,13 @@ public class ListeParties {
 	public Partie getPartie(int id) {
 		return listeParties.get(id);
 	}
+
+	/**
+	 * Supprime la partie correspondant à l'id.
+	 *
+	 * @param id l'id de la partie à supprimer
+	 */
+	public void supprimerPartie(int id) {
+		listeParties.remove(id);
+	}
 }

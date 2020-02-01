@@ -3,6 +3,7 @@ package rummikub.controleurs;
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.reflect.Method;
 import org.springframework.http.HttpStatus;
@@ -27,12 +28,17 @@ import org.springframework.http.MediaType;
 public class ControleurPartie {
 
 	private ListeParties listeParties;
-	private ModeleControleurPartie modeleControleur;
+	private ModeleControleurPartie modeleControleurPartie;
+	private ModeleControleurParties modeleControleurParties;
+	private List<Integer> partiesTerminees;
 
 	@Autowired
-	public ControleurPartie(ListeParties listeParties, ModeleControleurPartie modeleControleur){
+	public ControleurPartie(ListeParties listeParties, ModeleControleurPartie modeleControleurPartie,
+	  ModeleControleurParties modeleControleurParties){
 		this.listeParties = listeParties;
-		this.modeleControleur = modeleControleur;
+		this.modeleControleurPartie = modeleControleurPartie;
+		this.modeleControleurParties = modeleControleurParties;
+		partiesTerminees = new ArrayList<>();
 	}
 
     @GetMapping("{idPartie}/{idJoueur}/afficherPartie")
@@ -94,8 +100,12 @@ public class ControleurPartie {
     }
 
 	private ResponseEntity<EntityModel> executerAction(String action, int idPartie, int idJoueur, List<Integer> arg) {
-		Partie partie = listeParties.getPartie(idPartie);
 		MessagePartie message = new MessagePartie();
+		if(partiesTerminees.contains(idPartie)) {
+			message.setMessageErreur("La partie est terminée");
+			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.FORBIDDEN);
+		}
+		Partie partie = listeParties.getPartie(idPartie);
 		if(partie != null){
 			try{
 				Class<?> classePartie = Class.forName("rummikub.core.api.Partie");
@@ -112,15 +122,19 @@ public class ControleurPartie {
 			}
 
 			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.ERREUR)) {
-				throw new ControleurErreurException(message, modeleControleur, HttpStatus.FORBIDDEN);
+				throw new ControleurErreurException(message, modeleControleurPartie, HttpStatus.FORBIDDEN);
+			}
+			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.FIN_DE_PARTIE)) {
+				listeParties.supprimerPartie(message.getIdPartie());
+				partiesTerminees.add(message.getIdPartie());
 			}
 			message.setIdPartie(idPartie);
-			EntityModel<MessagePartie> body = modeleControleur.toModel(message);
+			EntityModel<MessagePartie> body = modeleControleurPartie.toModel(message);
 			return new ResponseEntity<EntityModel>(body, HttpStatus.OK);
 		}
 		else {
 			message.setMessageErreur("La partie n'existe pas");
-			throw new ControleurErreurException(message, modeleControleur, HttpStatus.NOT_FOUND);
+			throw new ControleurErreurException(message, modeleControleurPartie, HttpStatus.NOT_FOUND);
 		}
 	}
 }

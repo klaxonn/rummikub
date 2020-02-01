@@ -24,7 +24,7 @@ import org.springframework.hateoas.MediaTypes;
 import org.skyscreamer.jsonassert.JSONAssert;
 import java.nio.charset.Charset;
 
-@Import({ ModeleControleurPartie.class })
+@Import({ ModeleControleurPartie.class, ModeleControleurParties.class })
 @WebMvcTest(ControleurPartie.class)
 public class ControleurPartieTest {
 
@@ -237,6 +237,32 @@ public class ControleurPartieTest {
         String resultatTest = asJsonString(messageTest);
         JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 
+	}
+
+	@Test
+	public void finDePartieTest() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.FIN_DE_PARTIE,
+			2, 1, "Vincent", "", 1, "10bleu 11bleu 12bleu 13bleu", "");
+		when(listePartiesMock.getPartie(2)).thenReturn(partieMock);
+		when(partieMock.terminerTour(1)).thenReturn(messageTest);
+
+		mockMvc.perform(post("/2/1/terminerTour")
+				.contentType("application/json"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+        messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "La partie est terminée");
+		when(listePartiesMock.getPartie(2)).thenReturn(partieMock);
+		when(partieMock.afficherPartie(2)).thenReturn(messageTest);
+
+		MvcResult resultat = mockMvc.perform(get("/2/2/afficherPartie")
+									.contentType("application/json"))
+									.andExpect(status().isForbidden())
+									.andReturn();
+
+        String resultatTest = asJsonString(messageTest);
+        JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
 	}
 
 	@Test
