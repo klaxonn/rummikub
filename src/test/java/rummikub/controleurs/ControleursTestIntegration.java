@@ -20,8 +20,8 @@ import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
 
-@Disabled
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Disabled
 public class ControleursTestIntegration {
 
 	@LocalServerPort
@@ -36,7 +36,7 @@ public class ControleursTestIntegration {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> entity = new HttpEntity<String>("Vincent", headers);
 		ResponseEntity<EntityModel> reponse = template.postForEntity(
-		creerUrl("/creerPartie"), entity, EntityModel.class);
+		creerUrl("/0/creerPartie"), entity, EntityModel.class);
 
 		assertEquals(HttpStatus.CREATED, reponse.getStatusCode());
 
@@ -55,9 +55,11 @@ public class ControleursTestIntegration {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> entity = new HttpEntity<String>("Vincent", headers);
 		ResponseEntity<EntityModel> reponse = template.postForEntity(
-		  creerUrl("/creerPartie"), entity, EntityModel.class);
+		  creerUrl("/0/creerPartie"), entity, EntityModel.class);
 		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
 		int idPartie = messageReponse.getIdPartie();
+		String token = reponse.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+		headers.add(HttpHeaders.AUTHORIZATION, token);
 
 		entity = new HttpEntity<String>("Katya", headers);
 		reponse = template.postForEntity(
@@ -78,13 +80,15 @@ public class ControleursTestIntegration {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> entity = new HttpEntity<String>("Vincent", headers);
 		ResponseEntity<EntityModel> reponse = template.postForEntity(
-		  creerUrl("/creerPartie"), entity, EntityModel.class);
+		  creerUrl("/0/creerPartie"), entity, EntityModel.class);
 		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
 		int idPartie = messageReponse.getIdPartie();
+		String token = reponse.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+		headers.add(HttpHeaders.AUTHORIZATION, token);
 
 		entity = new HttpEntity<String>("Katya", headers);
 		template.postForEntity(creerUrl("/"+idPartie+"/ajouterJoueur"), entity, EntityModel.class);
-		reponse = template.postForEntity(creerUrl("/"+idPartie+"/demarrerPartie"), null, EntityModel.class);
+		reponse = template.postForEntity(creerUrl("/"+idPartie+"/1/demarrerPartie"), null, EntityModel.class);
 
 		assertEquals(HttpStatus.OK, reponse.getStatusCode());
 
@@ -100,12 +104,14 @@ public class ControleursTestIntegration {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> entity = new HttpEntity<String>("Vincent", headers);
 		ResponseEntity<EntityModel> reponse = template.postForEntity(
-		  creerUrl("/creerPartie"), entity, EntityModel.class);
+		  creerUrl("/0/creerPartie"), entity, EntityModel.class);
 		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
 		int idPartie = messageReponse.getIdPartie();
+		String token = reponse.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+		headers.add(HttpHeaders.AUTHORIZATION, token);
 		entity = new HttpEntity<String>("Katya", headers);
 		template.postForEntity(creerUrl("/"+idPartie+"/ajouterJoueur"), entity, EntityModel.class);
-		reponse = template.postForEntity(creerUrl("/"+idPartie+"/demarrerPartie"), null, EntityModel.class);
+		reponse = template.postForEntity(creerUrl("/"+idPartie+"/1/demarrerPartie"), null, EntityModel.class);
 
 		HttpEntity<List> entity2 = new HttpEntity<>(Arrays.asList(1), headers);
 		reponse = template.postForEntity(creerUrl("/"+idPartie+"/1/creerSequence"), entity2, EntityModel.class);

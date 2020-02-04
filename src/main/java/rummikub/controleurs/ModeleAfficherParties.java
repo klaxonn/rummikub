@@ -17,8 +17,7 @@ class ModeleAfficherParties implements RepresentationModelAssembler<PartieDispo,
 		int idPartie = partie.getId();
 
 		EntityModel<PartieDispo> resultat = new EntityModel<>(partie,
-		  linkTo(methodOn(ControleurParties.class).ajouterJoueur(idPartie, null)).withRel("ajouterJoueur"),
-		  linkTo(methodOn(ControleurParties.class).demarrerPartie(idPartie)).withRel("demarrerPartie"));
+		  linkTo(methodOn(ControleurParties.class).ajouterJoueur(idPartie, null)).withRel("ajouterJoueur"));
 
 		return resultat;
 	}

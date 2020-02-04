@@ -60,15 +60,23 @@ class PartieImpl implements Partie {
 		return new ArrayList<>();
 	}
 
-    public MessagePartie commencerPartie() {
-		if(!partieCommence && listeJoueurs.size() >= NOMBRE_MIN_JOUEURS_PARTIE) {
+    public MessagePartie commencerPartie(int indexJoueur) {
+		String messageErreur;
+		if(indexJoueur != 1) {
+			messageErreur = "Vous n'êtes pas autorisé à démarrer la partie";
+		}
+		else if(partieCommence) {
+			messageErreur = "Partie déjà commencée";
+		}
+		else if(listeJoueurs.size() < NOMBRE_MIN_JOUEURS_PARTIE) {
+			messageErreur = "Nombre de joueurs insuffisant";
+		}
+		else {
+			//On peut démarrer la partie
 			partieCommence = true;
 			return debutDuTour();
 		}
-		else {
-			String messageErreur = partieCommence ? "Partie déjà commencée" : "Nombre de joueurs insuffisant";
-			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, messageErreur);
-		}
+		return creerNouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, messageErreur);
     }
 
     private MessagePartie debutDuTour() {

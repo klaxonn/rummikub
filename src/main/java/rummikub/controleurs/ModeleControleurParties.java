@@ -12,14 +12,14 @@ class ModeleControleurParties implements RepresentationModelAssembler<MessagePar
   @Override
   public EntityModel<MessagePartie> toModel(MessagePartie message) {
 	int idPartie = message.getIdPartie();
+	int idJoueur = message.getIdJoueur();
 
 	EntityModel<MessagePartie> resultat = new EntityModel<>(message,
       linkTo(methodOn(ControleurParties.class).creerPartie(null)).withRel("creerPartie"),
       linkTo(methodOn(ControleurParties.class).listerPartiesDispos()).withRel("listerPartiesDispos"));
 
-    if(message.getIdPartie() > 0) {
-		resultat.add(linkTo(methodOn(ControleurParties.class).ajouterJoueur(idPartie, null)).withRel("ajouterJoueur"),
-					 linkTo(methodOn(ControleurParties.class).demarrerPartie(idPartie)).withRel("demarrerPartie"));
+	if(idJoueur == 1) {
+		resultat.add(linkTo(methodOn(ControleurParties.class).demarrerPartie(idPartie, idJoueur)).withRel("demarrerPartie"));
 	}
 	return resultat;
   }

@@ -44,7 +44,7 @@ public class ListePartiesTest {
 		Partie partie = listeParties.getPartie(idPartie);
 		assertNotNull(listeParties.getPartie(idPartie));
 		listeParties.supprimerPartie(idPartie);
-		partie = listeParties.getPartie(idPartie);	
+		partie = listeParties.getPartie(idPartie);
 		assertNull(listeParties.getPartie(idPartie));
 	}
 
@@ -62,7 +62,7 @@ public class ListePartiesTest {
 		List<PartieDispo> listePartiesDispos = new ArrayList<>(Arrays.asList(partie1, partie2));
 
 		assertEquals(listePartiesDispos, listeParties.listerPartiesDispos());
-		listeParties.getPartie(idPartie1).commencerPartie();
+		listeParties.getPartie(idPartie1).commencerPartie(1);
 		listePartiesDispos.remove(0);
 		assertEquals(listePartiesDispos, listeParties.listerPartiesDispos());
 	}

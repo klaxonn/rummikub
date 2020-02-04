@@ -2,6 +2,7 @@ package rummikub.controleurs;
 
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
+import rummikub.core.api.FabriquePartie;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import org.springframework.http.MediaType;
 
@@ -50,7 +50,7 @@ public class ControleurPartie {
 	@PostMapping(value = "{idPartie}/{idJoueur}/creerSequence", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<EntityModel> creerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
-	  @NotEmpty(message = "Au moins 1 jeton nécessaire")
+	  @Size(min=1, max = FabriquePartie.VALEUR_MAX, message = "Au moins 1 jeton nécessaire")
 	  List<Integer> indexes) {
 		return executerAction("creerNouvelleSequence", idPartie, idJoueur, indexes);
     }

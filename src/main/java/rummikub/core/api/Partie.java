@@ -31,6 +31,7 @@ public interface Partie {
 
     /**
      * Commence la partie.
+     * Seul le joueur qui a créé la partie peut la démarrer
 	 * Le message envoyé peut être de deux types :
 	 * Le message envoyé est de type DEBUT_NOUVEAU_TOUR.
 	 * Il contient l'id du premier joueur.
@@ -39,9 +40,10 @@ public interface Partie {
      * Au cas où le nombre de joueurs est incorrect.
 	 * Il contient le message d'erreur
 	 *
+	 * @param indexJoueur index du joueur qui souhaite démarrer la partie
 	 * @return le message contenant les informations
      */
-    MessagePartie commencerPartie();
+    MessagePartie commencerPartie(int indexJoueur);
 
     /**
      * Affiche la partie.
