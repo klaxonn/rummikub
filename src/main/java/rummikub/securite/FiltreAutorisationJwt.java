@@ -1,28 +1,24 @@
 package rummikub.securite;
 
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.net.MalformedURLException;
 
-public class FiltreAutorisationJwt extends BasicAuthenticationFilter {
+public class FiltreAutorisationJwt extends OncePerRequestFilter {
 
 	private ServiceJwt serviceJwt;
     private static final String HEADER = "Authorization";
     private static final String PREFIXE_HEADER = "Bearer ";
 
-	private static final Logger logger = LoggerFactory.getLogger(FiltreAutorisationJwt.class);
-
-    public FiltreAutorisationJwt(AuthenticationManager authenticationManager, ServiceJwt serviceJwt) {
-        super(authenticationManager);
+    public FiltreAutorisationJwt(ServiceJwt serviceJwt) {
         this.serviceJwt = serviceJwt;
     }
 
@@ -43,14 +39,21 @@ public class FiltreAutorisationJwt extends BasicAuthenticationFilter {
 		}
     }
 
-    private UsernamePasswordAuthenticationToken getAutorisation(HttpServletRequest requete, String token) {
+    private UsernamePasswordAuthenticationToken getAutorisation(HttpServletRequest requete, String token) throws MalformedURLException {
 		JoueurConnecte joueur = serviceJwt.parseToken(token);
 
 		if (joueur != null) {
-			logger.info("Autorisation Joueur trouvé: "+joueur);
-            return new UsernamePasswordAuthenticationToken(joueur.getNom(), null, new ArrayList<>());
+			URL url = new URL(requete.getRequestURL().toString());
+			String[] elements = url.getPath().substring(1).split("/");
+			int idPartieAdresse = Integer.parseInt(elements[0]);
+			int idJoueurAdresse = Integer.parseInt(elements[1]);
+			if(joueur.getId() == idJoueurAdresse && joueur.getIdPartie() == idPartieAdresse) {
+				return new UsernamePasswordAuthenticationToken(joueur.getNom(), null, new ArrayList<>());
+			}
+			else {
+				return null;
+			}
         }
-        logger.info("Autorisation Joueur non trouvé");
         return null;
     }
 }

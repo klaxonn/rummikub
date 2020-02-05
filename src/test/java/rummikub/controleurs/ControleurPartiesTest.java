@@ -28,7 +28,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.skyscreamer.jsonassert.JSONAssert;
 import java.nio.charset.Charset;
-import org.junit.jupiter.api.Disabled;
 
 @Import({ 	ModeleControleurParties.class,
 			ModeleAfficherParties.class,

@@ -1,5 +1,6 @@
 package rummikub.controleurs;
 
+import rummikub.core.api.MessagePartie;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,11 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import javax.validation.ConstraintViolationException;
-import rummikub.core.api.MessagePartie;
 
 @ControllerAdvice
 @RestController
-class ErreursControleurs{
+class ErreursControleurs {
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	ResponseEntity<EntityModel> argumentManquant(HttpMessageNotReadableException ex) {

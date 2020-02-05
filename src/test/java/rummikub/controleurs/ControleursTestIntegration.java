@@ -58,8 +58,6 @@ public class ControleursTestIntegration {
 		  creerUrl("/0/creerPartie"), entity, EntityModel.class);
 		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
 		int idPartie = messageReponse.getIdPartie();
-		String token = reponse.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-		headers.add(HttpHeaders.AUTHORIZATION, token);
 
 		entity = new HttpEntity<String>("Katya", headers);
 		reponse = template.postForEntity(
@@ -87,7 +85,7 @@ public class ControleursTestIntegration {
 
 		entity = new HttpEntity<String>("Katya", headers);
 		template.postForEntity(creerUrl("/"+idPartie+"/ajouterJoueur"), entity, EntityModel.class);
-		headers.add(HttpHeaders.AUTHORIZATION, tokenJoueur1);
+		headers.set(HttpHeaders.AUTHORIZATION, tokenJoueur1);
 		entity = new HttpEntity<String>("", headers);
 		reponse = template.postForEntity(creerUrl("/"+idPartie+"/1/demarrerPartie"), entity, EntityModel.class);
 
@@ -112,7 +110,7 @@ public class ControleursTestIntegration {
 
 		entity = new HttpEntity<String>("Katya", headers);
 		template.postForEntity(creerUrl("/"+idPartie+"/ajouterJoueur"), entity, EntityModel.class);
-		headers.add(HttpHeaders.AUTHORIZATION, tokenJoueur1);
+		headers.set(HttpHeaders.AUTHORIZATION, tokenJoueur1);
 		entity = new HttpEntity<String>("", headers);
 		reponse = template.postForEntity(creerUrl("/"+idPartie+"/1/demarrerPartie"), entity, EntityModel.class);
 
@@ -125,6 +123,36 @@ public class ControleursTestIntegration {
 			idPartie, 1, "Vincent", "", 1, "", "");
 		messageTest.setJeuJoueur(messageReponse.getJeuJoueur());
 		messageTest.setPlateau(messageReponse.getPlateau());
+		assertEquals(messageTest, messageReponse);
+	}
+
+	@Test
+	public void terminerTourMauvaisJoueurFail() throws Exception {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> entity = new HttpEntity<String>("Vincent", headers);
+		ResponseEntity<EntityModel> reponse = template.postForEntity(
+		  creerUrl("/0/creerPartie"), entity, EntityModel.class);
+		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
+		int idPartie = messageReponse.getIdPartie();
+		String tokenJoueur1 = reponse.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+
+		entity = new HttpEntity<String>("Katya", headers);
+		reponse = template.postForEntity(creerUrl("/"+idPartie+"/ajouterJoueur"), entity, EntityModel.class);
+		String tokenJoueur2 = reponse.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+
+		headers.set(HttpHeaders.AUTHORIZATION, tokenJoueur1);
+		entity = new HttpEntity<String>("", headers);
+		reponse = template.postForEntity(creerUrl("/"+idPartie+"/1/demarrerPartie"), entity, EntityModel.class);
+
+		headers.set(HttpHeaders.AUTHORIZATION, tokenJoueur2);
+		HttpEntity<List> entity2 = new HttpEntity<>(null, headers);
+		reponse = template.postForEntity(creerUrl("/"+idPartie+"/1/terminerPartie"), entity2, EntityModel.class);
+		assertEquals(HttpStatus.UNAUTHORIZED, reponse.getStatusCode());
+
+		messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "Opération non autorisée");
 		assertEquals(messageTest, messageReponse);
 	}
 

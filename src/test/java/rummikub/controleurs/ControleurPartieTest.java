@@ -26,7 +26,8 @@ import java.nio.charset.Charset;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-@Import({ ModeleControleurPartie.class, ModeleControleurParties.class })
+@Import({ ModeleControleurPartie.class,
+		  ModeleControleurParties.class})
 @WebMvcTest(ControleurPartie.class)
 public class ControleurPartieTest {
 
@@ -273,12 +274,11 @@ public class ControleurPartieTest {
 			2, 1, "Vincent", "", 1, "10bleu 11bleu 12bleu 13bleu", "");
 		when(listePartiesMock.getPartie(2)).thenReturn(partieMock);
 		when(partieMock.terminerTour(1)).thenReturn(messageTest);
-		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",2))
-											 .thenReturn(new JoueurConnecte(2,"Katya",2));
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",2));
 
 		mockMvc.perform(post("/2/1/terminerTour")
 				.contentType("application/json")
-				.header("Authorization", "Bearer bb"))
+				.header("Authorization", "Bearer aa"))
 				.andExpect(status().isOk())
 				.andReturn();
 
