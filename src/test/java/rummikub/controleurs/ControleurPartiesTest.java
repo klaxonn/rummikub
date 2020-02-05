@@ -4,8 +4,7 @@ import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
 import rummikub.core.jeu.Joueur;
 import rummikub.securite.ServiceJwt;
-import rummikub.joueurs.JoueurConnecte;
-import rummikub.joueurs.RepertoireJoueurConnecte;
+import rummikub.securite.JoueurConnecte;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +41,6 @@ public class ControleurPartiesTest {
 
 	@MockBean
 	private ListeParties listePartiesMock;
-
-	@MockBean
-	private RepertoireJoueurConnecte repertoireJoueurConnecte;
 
 	@MockBean
 	private Partie partieMock;

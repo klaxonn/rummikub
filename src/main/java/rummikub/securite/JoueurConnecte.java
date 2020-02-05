@@ -1,13 +1,9 @@
-package rummikub.joueurs;
+package rummikub.securite;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import lombok.Data;
 
-@Entity
 @Data
 public class JoueurConnecte {
-    @Id
     private int id;
     private int idPartie;
     private String nom;

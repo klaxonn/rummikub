@@ -3,8 +3,7 @@ package rummikub.controleurs;
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
 import rummikub.securite.ServiceJwt;
-import rummikub.joueurs.JoueurConnecte;
-import rummikub.joueurs.RepertoireJoueurConnecte;
+import rummikub.securite.JoueurConnecte;
 import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,9 +32,6 @@ public class ControleurPartieTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-
-	@MockBean
-	private RepertoireJoueurConnecte repertoireJoueurConnecte;
 
 	@MockBean
 	private ListeParties listePartiesMock;

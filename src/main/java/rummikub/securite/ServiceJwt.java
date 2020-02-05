@@ -1,6 +1,5 @@
 package rummikub.securite;
 
-import rummikub.joueurs.JoueurConnecte;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.JwtException;

@@ -1,6 +1,5 @@
 package rummikub.securite;
 
-import rummikub.joueurs.JoueurConnecte;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,6 +1,5 @@
 package rummikub.securite;
 
-import rummikub.joueurs.RepertoireJoueurConnecte;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,9 +14,6 @@ public class ConfigSecurite extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private ServiceJwt serviceJwt;
 
-	@Autowired
-	private RepertoireJoueurConnecte repertoireJoueurConnecte;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
@@ -27,8 +23,7 @@ public class ConfigSecurite extends WebSecurityConfigurerAdapter {
             .antMatchers("/*/ajouterJoueur").permitAll()
             .anyRequest().authenticated()
             .and()
-            .addFilter(new FiltreAutorisationJwt(authenticationManager(), serviceJwt,
-               repertoireJoueurConnecte))
+            .addFilter(new FiltreAutorisationJwt(authenticationManager(), serviceJwt))
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         ;

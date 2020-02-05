@@ -1,7 +1,5 @@
 package rummikub.securite;
 
-import rummikub.joueurs.JoueurConnecte;
-import rummikub.joueurs.RepertoireJoueurConnecte;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,17 +16,14 @@ import org.slf4j.LoggerFactory;
 public class FiltreAutorisationJwt extends BasicAuthenticationFilter {
 
 	private ServiceJwt serviceJwt;
-    private RepertoireJoueurConnecte repertoireJoueurConnecte;
     private static final String HEADER = "Authorization";
     private static final String PREFIXE_HEADER = "Bearer ";
 
 	private static final Logger logger = LoggerFactory.getLogger(FiltreAutorisationJwt.class);
 
-    public FiltreAutorisationJwt(AuthenticationManager authenticationManager, ServiceJwt serviceJwt,
-      RepertoireJoueurConnecte repertoireJoueurConnecte) {
+    public FiltreAutorisationJwt(AuthenticationManager authenticationManager, ServiceJwt serviceJwt) {
         super(authenticationManager);
         this.serviceJwt = serviceJwt;
-        this.repertoireJoueurConnecte = repertoireJoueurConnecte;
     }
 
     @Override
@@ -41,26 +36,21 @@ public class FiltreAutorisationJwt extends BasicAuthenticationFilter {
 			chain.doFilter(requete, reponse);
         }
         else {
-			UsernamePasswordAuthenticationToken authentication = getAutorisation(requete);
+			UsernamePasswordAuthenticationToken authentication = getAutorisation(requete,
+			  header.substring(PREFIXE_HEADER.length()));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			chain.doFilter(requete, reponse);
 		}
     }
 
-    private UsernamePasswordAuthenticationToken getAutorisation(HttpServletRequest requete) {
-        String token = requete.getHeader(HEADER);
+    private UsernamePasswordAuthenticationToken getAutorisation(HttpServletRequest requete, String token) {
+		JoueurConnecte joueur = serviceJwt.parseToken(token);
 
-        if (token != null) {
-			token = token.substring(7);
-			JoueurConnecte joueur = serviceJwt.parseToken(token);
-
-            if (joueur != null) {
-				logger.info("Autorisation Joueur trouvé: "+joueur);
-                return new UsernamePasswordAuthenticationToken(joueur.getNom(), null, new ArrayList<>());
-            }
-            logger.info("Autorisation Joueur non trouvé");
-            return null;
+		if (joueur != null) {
+			logger.info("Autorisation Joueur trouvé: "+joueur);
+            return new UsernamePasswordAuthenticationToken(joueur.getNom(), null, new ArrayList<>());
         }
+        logger.info("Autorisation Joueur non trouvé");
         return null;
     }
 }

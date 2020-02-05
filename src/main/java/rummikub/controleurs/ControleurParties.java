@@ -4,8 +4,7 @@ import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
 import rummikub.core.jeu.Joueur;
 import rummikub.securite.ServiceJwt;
-import rummikub.joueurs.JoueurConnecte;
-import rummikub.joueurs.RepertoireJoueurConnecte;
+import rummikub.securite.JoueurConnecte;
 import java.util.List;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,20 +30,17 @@ public class ControleurParties {
 	private ModeleControleurParties modeleControleurParties;
 	private ModeleControleurPartie modeleControleurPartie;
 	private ModeleAfficherParties modeleAfficherParties;
-    private RepertoireJoueurConnecte repertoireJoueurConnecte;
 	@Autowired
     private ServiceJwt serviceJwt;
 
 
 	@Autowired
 	public ControleurParties(ListeParties listeParties, ModeleControleurParties modeleControleurParties,
-	  ModeleControleurPartie modeleControleurPartie, ModeleAfficherParties modeleAfficherParties,
-	  RepertoireJoueurConnecte repertoireJoueurConnecte){
+	  ModeleControleurPartie modeleControleurPartie, ModeleAfficherParties modeleAfficherParties){
 		this.listeParties = listeParties;
 		this.modeleControleurParties = modeleControleurParties;
 		this.modeleControleurPartie = modeleControleurPartie;
 		this.modeleAfficherParties = modeleAfficherParties;
-		this.repertoireJoueurConnecte = repertoireJoueurConnecte;
 	}
 
 	@PostMapping(value = "/0/creerPartie", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -100,7 +96,6 @@ public class ControleurParties {
 		JoueurConnecte joueurConnecte = new JoueurConnecte(message.getIdJoueur(),
 														   message.getNomJoueur(),
 														   message.getIdPartie());
-		repertoireJoueurConnecte.save(joueurConnecte);
 		String token = serviceJwt.creerToken(joueurConnecte);
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "Bearer " + token);
