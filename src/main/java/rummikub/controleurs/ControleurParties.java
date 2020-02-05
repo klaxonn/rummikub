@@ -103,7 +103,7 @@ public class ControleurParties {
 		repertoireJoueurConnecte.save(joueurConnecte);
 		String token = serviceJwt.creerToken(joueurConnecte);
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorisation", "Bearer " + token);
+		headers.set("Authorization", "Bearer " + token);
 		return new ResponseEntity<EntityModel>(reponseAjout, headers, HttpStatus.CREATED);
 	}
 

@@ -28,6 +28,8 @@ public class ServiceJwt {
 
             JoueurConnecte joueur = new JoueurConnecte();
             joueur.setNom(body.getSubject());
+            joueur.setId(body.get("id", Integer.class));
+            joueur.setIdPartie(body.get("idPartie", Integer.class));
 
             return joueur;
 
@@ -37,10 +39,10 @@ public class ServiceJwt {
     }
 
     public String creerToken(JoueurConnecte joueur) {
-        Claims claims = Jwts.claims().setSubject(joueur.getNom());
-
         return Jwts.builder()
-                .setClaims(claims)
+                .setSubject(joueur.getNom())
+                .claim("id", joueur.getId())
+				.claim("idPartie", joueur.getIdPartie())
                 .signWith(cle)
                 .compact();
     }

@@ -2,14 +2,18 @@ package rummikub.controleurs;
 
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
+import rummikub.securite.ServiceJwt;
+import rummikub.joueurs.JoueurConnecte;
+import rummikub.joueurs.RepertoireJoueurConnecte;
 import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,24 +23,27 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.hateoas.MediaTypes;
-import org.skyscreamer.jsonassert.JSONAssert;
 import java.nio.charset.Charset;
-import org.junit.jupiter.api.Disabled;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 @Import({ ModeleControleurPartie.class, ModeleControleurParties.class })
 @WebMvcTest(ControleurPartie.class)
-@Disabled
 public class ControleurPartieTest {
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@MockBean
+	private RepertoireJoueurConnecte repertoireJoueurConnecte;
+
+	@MockBean
 	private ListeParties listePartiesMock;
 
 	private Partie partieMock = mock(Partie.class);
+
+	@MockBean
+	private ServiceJwt serviceJwtMock;
 
 	@Test
 	public void afficherPartieTest() throws Exception {
@@ -44,6 +51,7 @@ public class ControleurPartieTest {
 			1, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", 1, "", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.afficherPartie(1)).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
 
 		MvcResult resultat = mockMvc.perform(get("/1/1/afficherPartie")
 										.header("Authorization", "Bearer aa"))
@@ -61,6 +69,8 @@ public class ControleurPartieTest {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
 			0, 0, "", "", 0, "", "La partie n'existe pas");
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
+
 
 		MvcResult resultat = mockMvc.perform(get("/1/1/afficherPartie")
 									.header("Authorization", "Bearer aa"))
@@ -76,6 +86,7 @@ public class ControleurPartieTest {
 			1, 1, "Vincent", "13bleu", 1, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.creerNouvelleSequence(1, Arrays.asList(1,2,3))).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
 
 		String argument = asJsonString(Arrays.asList(1,2,3));
 
@@ -95,6 +106,7 @@ public class ControleurPartieTest {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
 			0, 0, "", "", 0, "", "creerSequence.indexes: Au moins 1 jeton nécessaire");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
 
 		String argument = asJsonString(new ArrayList<Integer>());
 
@@ -115,13 +127,14 @@ public class ControleurPartieTest {
 			1, 2, "Katya", "9bleu", 2, "10bleu 11bleu 12bleu\n4jaune", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.ajouterJeton(2, Arrays.asList(1,2))).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",1));
 
 		ParametresAction param = new ParametresAction();
 		param.paramAjouterJeton(1,2);
 		String argument = asJsonString(param);
 		MvcResult resultat = mockMvc.perform(post("/1/2/ajouterJeton")
 									.content(argument).contentType("application/json")
-									.header("Authorization", "Bearer aa"))
+									.header("Authorization", "Bearer bb"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -135,6 +148,7 @@ public class ControleurPartieTest {
 			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.fusionnerSequence(2, Arrays.asList(1,4))).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",1));
 
 		ParametresAction param = new ParametresAction();
 		param.paramFusionner(1,4);
@@ -142,7 +156,7 @@ public class ControleurPartieTest {
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/fusionnerSequence")
 									.content(argument).contentType("application/json")
-									.header("Authorization", "Bearer aa"))
+									.header("Authorization", "Bearer bb"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -157,6 +171,7 @@ public class ControleurPartieTest {
 			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu\n11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.couperSequence(2, Arrays.asList(1,2))).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",1));
 
 		ParametresAction param = new ParametresAction();
 		param.paramCouper(1,2);
@@ -164,7 +179,7 @@ public class ControleurPartieTest {
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/couperSequence")
 									.content(argument).contentType("application/json")
-									.header("Authorization", "Bearer aa"))
+									.header("Authorization", "Bearer bb"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -179,6 +194,7 @@ public class ControleurPartieTest {
 			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu\n12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.deplacerJeton(2, Arrays.asList(1,3,2))).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",1));
 
 		ParametresAction param = new ParametresAction();
 		param.paramDeplacer(1,3,2);
@@ -186,7 +202,7 @@ public class ControleurPartieTest {
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/deplacerJeton")
 									.content(argument).contentType("application/json")
-									.header("Authorization", "Bearer aa"))
+									.header("Authorization", "Bearer bb"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -201,6 +217,7 @@ public class ControleurPartieTest {
 			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.remplacerJoker(2, Arrays.asList(2,1))).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",1));
 
 		ParametresAction param = new ParametresAction();
 		param.paramRemplacerJoker(2,1);
@@ -208,7 +225,7 @@ public class ControleurPartieTest {
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/remplacerJoker")
 									.content(argument).contentType("application/json")
-									.header("Authorization", "Bearer aa"))
+									.header("Authorization", "Bearer bb"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -223,10 +240,11 @@ public class ControleurPartieTest {
 			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.annulerDerniereAction(2)).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",1));
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/annulerDerniereAction")
 									.contentType("application/json")
-									.header("Authorization", "Bearer aa"))
+									.header("Authorization", "Bearer bb"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -240,10 +258,11 @@ public class ControleurPartieTest {
 			1, 2, "Katya", "4jaune 9bleu 10bleu", 1, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.terminerTour(2)).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",1));
 
 		MvcResult resultat = mockMvc.perform(post("/1/2/terminerTour")
 									.contentType("application/json")
-									.header("Authorization", "Bearer aa"))
+									.header("Authorization", "Bearer bb"))
 									.andExpect(status().isOk())
 									.andReturn();
 
@@ -258,10 +277,12 @@ public class ControleurPartieTest {
 			2, 1, "Vincent", "", 1, "10bleu 11bleu 12bleu 13bleu", "");
 		when(listePartiesMock.getPartie(2)).thenReturn(partieMock);
 		when(partieMock.terminerTour(1)).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",2))
+											 .thenReturn(new JoueurConnecte(2,"Katya",2));
 
 		mockMvc.perform(post("/2/1/terminerTour")
 				.contentType("application/json")
-				.header("Authorization", "Bearer aa"))
+				.header("Authorization", "Bearer bb"))
 				.andExpect(status().isOk())
 				.andReturn();
 
@@ -269,10 +290,11 @@ public class ControleurPartieTest {
 			0, 0, "", "", 0, "", "La partie est terminée");
 		when(listePartiesMock.getPartie(2)).thenReturn(partieMock);
 		when(partieMock.afficherPartie(2)).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",2));
 
 		MvcResult resultat = mockMvc.perform(get("/2/2/afficherPartie")
 									.contentType("application/json")
-									.header("Authorization", "Bearer aa"))
+									.header("Authorization", "Bearer bb"))
 									.andExpect(status().isForbidden())
 									.andReturn();
 
@@ -285,6 +307,7 @@ public class ControleurPartieTest {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
 			0, 0, "", "", 0, "", "Argument manquant ou de mauvais type");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/creerSequence")
 			.content("").contentType("application/json")
@@ -301,6 +324,7 @@ public class ControleurPartieTest {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
 			0, 0, "", "", 0, "", "Argument manquant ou de mauvais type");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
 
 		String argument = asJsonString("blabla");
 
@@ -319,6 +343,7 @@ public class ControleurPartieTest {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
 			0, 0, "", "", 0, "", "Argument incorrect");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
 
 		ParametresAction param = new ParametresAction();
 		param.paramFusionner(1,2);
@@ -340,6 +365,7 @@ public class ControleurPartieTest {
 			1, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", 1, "", "Aucune séquence possible");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.creerNouvelleSequence(1, Arrays.asList(1,3))).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
 
 		String argument = asJsonString(Arrays.asList(1,3));
 

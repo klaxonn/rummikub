@@ -19,7 +19,7 @@ public class FiltreAutorisationJwt extends BasicAuthenticationFilter {
 
 	private ServiceJwt serviceJwt;
     private RepertoireJoueurConnecte repertoireJoueurConnecte;
-    private static final String HEADER = "Authorisation";
+    private static final String HEADER = "Authorization";
     private static final String PREFIXE_HEADER = "Bearer ";
 
 	private static final Logger logger = LoggerFactory.getLogger(FiltreAutorisationJwt.class);

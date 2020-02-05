@@ -23,7 +23,7 @@ public class ConfigSecurite extends WebSecurityConfigurerAdapter {
         http.cors().and()
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/0/creerPartie").permitAll()
+            .antMatchers("/0/*").permitAll()
             .antMatchers("/*/ajouterJoueur").permitAll()
             .anyRequest().authenticated()
             .and()
