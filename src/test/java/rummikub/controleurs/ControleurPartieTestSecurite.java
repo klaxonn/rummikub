@@ -60,9 +60,8 @@ public class ControleurPartieTestSecurite {
 
         String resultatTest = asJsonString(messageTest);
         JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
-
 	}
-	
+
 	@Test
 	public void creerNouvelleSequenceMauvaisePartie() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
@@ -82,7 +81,7 @@ public class ControleurPartieTestSecurite {
         String resultatTest = asJsonString(messageTest);
         JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
 	}
-	
+
 	@Test
 	public void creerNouvelleSequenceJoueurInconnu() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
@@ -101,9 +100,8 @@ public class ControleurPartieTestSecurite {
 
         String resultatTest = asJsonString(messageTest);
         JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
-
 	}
-	
+
 	@Test
 	public void creerNouvelleSequenceMauvaisHeader() throws Exception {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
@@ -122,6 +120,25 @@ public class ControleurPartieTestSecurite {
 
         String resultatTest = asJsonString(messageTest);
         JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
+	}
+
+	@Test
+	public void afficherPartieJoueurSupprimeFail() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "Opération non autorisée");
+		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
+		JoueurConnecte joueur = new JoueurConnecte(1,"Vincent",1);
+		joueur.desactive();
+		when(serviceJwtMock.parseToken("aa")).thenReturn(joueur);
+
+		MvcResult resultat = mockMvc.perform(get("/1/1/afficherPartie")
+										.header("Authorization", "Bearer aa"))
+										.andDo(print())
+										.andExpect(status().isUnauthorized())
+										.andReturn();
+
+		String resultatTest = asJsonString(messageTest);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
 	}
 
 	private static String asJsonString(final Object obj) {

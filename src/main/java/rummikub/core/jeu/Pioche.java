@@ -64,6 +64,15 @@ public class Pioche {
     }
 
     /**
+     * Remet les jetons dans la pioche.
+     *
+     * @param jetons la liste des jetons à remettre dans la pioche
+     */
+    public void remettreJetons(List<Jeton> jetons) {
+		listeJetons.addAll(jetons);
+    }
+
+    /**
      * Détermine si la pioche est vide.
      *
      * @return <code>true</code> si elle est vide

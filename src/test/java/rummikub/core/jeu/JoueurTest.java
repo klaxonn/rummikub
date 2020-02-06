@@ -30,7 +30,7 @@ public class JoueurTest {
     }
 
     @Test
-    public void nouveauJoueur() {
+    public void nouveauJoueurTest() {
         assertEquals("Kate", joueur.getNom());
         assertEquals("1rouge 10bleu 11jaune * 12vert 1rouge", joueur.afficheJetonsJoueur());
         assertEquals("Kate\n1rouge 10bleu 11jaune * 12vert 1rouge", joueur.toString());
@@ -45,7 +45,7 @@ public class JoueurTest {
     }
 
     @Test
-    public void utiliseJeton() {
+    public void utiliseJetonTest() {
         Jeton jeton = joueur.utiliseJeton(5);
         assertEquals("1rouge 10bleu 11jaune * 1rouge", joueur.afficheJetonsJoueur());
         assertEquals("12vert", jeton.toString());
@@ -53,7 +53,15 @@ public class JoueurTest {
     }
 
     @Test
-    public void utiliseJetonMauvaisIndexes() {
+    public void retireTouslesJetonsTest() {
+        List<Jeton> jetons = joueur.retireTouslesJetons();
+        assertEquals("", joueur.afficheJetonsJoueur());
+        assertEquals(0, joueur.nombreJetonsRestants());
+        assertEquals(6, jetons.size());
+    }
+
+    @Test
+    public void utiliseJetonMauvaisIndexesFail() {
         assertThrows(IndexOutOfBoundsException.class, () -> {
             joueur.utiliseJeton(0);
         });
@@ -65,7 +73,7 @@ public class JoueurTest {
     }
 
     @Test
-    public void utiliseJetons() {
+    public void utiliseJetonsTest() {
         List<Jeton> jetons = joueur.utiliseJetons(Arrays.asList(1, 4, 5));
         assertEquals("10bleu 11jaune 1rouge", joueur.afficheJetonsJoueur());
         assertEquals("[12vert, *, 1rouge]", jetons.toString());
@@ -73,7 +81,7 @@ public class JoueurTest {
     }
 
     @Test
-    public void utiliseJetonsMauvaisIndexes() {
+    public void utiliseJetonsMauvaisIndexesFail() {
         assertThrows(IndexOutOfBoundsException.class, () -> {
             joueur.utiliseJetons(Arrays.asList(1, 0, 7));
         });
@@ -82,7 +90,7 @@ public class JoueurTest {
     }
 
     @Test
-    public void ajouteJeton() {
+    public void ajouteJetonTest() {
         Jeton jeton = new JetonNormal(7, Couleur.ROUGE);
         joueur.ajouteJeton(jeton);
         assertEquals("1rouge 10bleu 11jaune * 12vert 1rouge 7rouge", joueur.afficheJetonsJoueur());
@@ -90,7 +98,7 @@ public class JoueurTest {
     }
 
     @Test
-    public void ajouteJetons() {
+    public void ajouteJetonsTest() {
         Jeton jeton1 = new JetonNormal(7, Couleur.ROUGE);
         Jeton jeton2 = new JetonNormal(12, Couleur.BLEU);
         List<Jeton> jetons = new ArrayList<>(Arrays.asList(jeton1, jeton2));
@@ -100,19 +108,19 @@ public class JoueurTest {
     }
 
     @Test
-    public void getScore() {
+    public void getScoreTest() {
         assertEquals(35, joueur.getScore());
     }
 
     @Test
-    public void aGagne() {
+    public void aGagneTest() {
         joueur.utiliseJetons(Arrays.asList(1, 2, 3, 4, 5, 6));
         assertTrue(joueur.aGagne());
         assertEquals(0, joueur.getScore());
     }
 
     @Test
-    public void estAutoriseATerminerleTour() {
+    public void estAutoriseATerminerleTourTest() {
         assertFalse(joueur.isAutoriseAterminerLeTour());
         joueur.utiliseJetons(Arrays.asList(2, 3, 5));
         assertTrue(joueur.isAutoriseAterminerLeTour());
@@ -120,14 +128,14 @@ public class JoueurTest {
     }
 
     @Test
-    public void pasAutoriseATerminerleTour() {
+    public void pasAutoriseATerminerleTourFail() {
         joueur.utiliseJetons(Arrays.asList(2, 3));
         assertFalse(joueur.isAutoriseAterminerLeTour());
         assertEquals(9, joueur.pointsRestantsNecessaires());
     }
 
     @Test
-    public void plusBesoinAutorisation() {
+    public void plusBesoinAutorisationTest() {
         joueur.utiliseJetons(Arrays.asList(2, 3, 5));
         assertTrue(joueur.aJoueAuMoins1Jeton());
         assertTrue(joueur.isAutoriseAterminerLeTour());

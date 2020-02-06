@@ -37,7 +37,7 @@ public class PiocheTest {
     }
 
     @Test
-    public void piocher1Jeton() {
+    public void piocher1JetonTest() {
         assertEquals(NOMBRE_TOTAL_JETONS, pioche.nombreJetonsRestants());
         pioche.piocher1Jeton();
         assertFalse(pioche.isVide());
@@ -53,5 +53,17 @@ public class PiocheTest {
         assertThrows(UnsupportedOperationException.class, () -> {
 			pioche.piocher1Jeton();
         });
+    }
+
+    @Test
+    public void remettreJetonsTest() {
+		List<Jeton> jetons = new ArrayList<>();
+		for (int i = 1; i <= 3; i++) {
+			Jeton jeton = new JetonNormal(i, Couleur.ROUGE);
+            jetons.add(jeton);
+		}
+        assertEquals(NOMBRE_TOTAL_JETONS, pioche.nombreJetonsRestants());
+        pioche.remettreJetons(jetons);
+        assertEquals(NOMBRE_TOTAL_JETONS + 3, pioche.nombreJetonsRestants());
     }
 }

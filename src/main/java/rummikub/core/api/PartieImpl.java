@@ -41,7 +41,7 @@ class PartieImpl implements Partie {
     }
 
 	public MessagePartie ajouterJoueur(Joueur joueur) {
-		if(!partieCommence && listeJoueurs.size() < NOMBRE_MAX_JOUEURS_PARTIE) {
+		if(!partieCommence && nombreJoueurs() < NOMBRE_MAX_JOUEURS_PARTIE) {
 			listeJoueurs.add(joueur);
             joueur.setPiocheInitiale(pioche.piocheInitiale());
 			return creerNouveauMessage(listeJoueurs.indexOf(joueur), MessagePartie.TypeMessage.AJOUTER_JOUEUR, "");
@@ -52,9 +52,15 @@ class PartieImpl implements Partie {
 		}
 	}
 
+	public int nombreJoueurs() {
+		return (int) listeJoueurs.stream().filter(joueur -> joueur != null)
+										  .count();
+	}
+
 	public List<String> listeJoueursPrets(){
 		if(!partieCommence) {
-			return listeJoueurs.stream().map((joueur) -> joueur.getNom())
+			return listeJoueurs.stream().filter(joueur -> joueur != null)
+										.map((joueur) -> joueur.getNom())
 										.collect(Collectors.toList());
 		}
 		return new ArrayList<>();
@@ -62,28 +68,40 @@ class PartieImpl implements Partie {
 
     public MessagePartie commencerPartie(int indexJoueur) {
 		String messageErreur;
-		if(indexJoueur != 1) {
-			messageErreur = "Vous n'êtes pas autorisé à démarrer la partie";
-		}
-		else if(partieCommence) {
+		if(partieCommence) {
 			messageErreur = "Partie déjà commencée";
 		}
-		else if(listeJoueurs.size() < NOMBRE_MIN_JOUEURS_PARTIE) {
+		else if(nombreJoueurs() < NOMBRE_MIN_JOUEURS_PARTIE) {
 			messageErreur = "Nombre de joueurs insuffisant";
 		}
 		else {
-			//On peut démarrer la partie
 			partieCommence = true;
 			return debutDuTour();
 		}
 		return creerNouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, messageErreur);
     }
 
+    public MessagePartie quitterPartie(int indexJoueur) {
+		int indexReelJoueur = indexJoueur - 1;
+		if(correctIndex(indexReelJoueur) && nombreJoueurs() > NOMBRE_MIN_JOUEURS_PARTIE) {
+			pioche.remettreJetons(listeJoueurs.get(indexReelJoueur).retireTouslesJetons());
+			listeJoueurs.set(indexReelJoueur, null);
+			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.RESULTAT_ACTION, "");
+		}
+		else {
+			String messageErreur = nombreJoueurs() <= NOMBRE_MIN_JOUEURS_PARTIE ? "Minimum joueurs atteint" : "Joueur inexistant";
+			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, messageErreur);
+		}
+	}
+
     private MessagePartie debutDuTour() {
 		MessagePartie message = creerNouveauMessage(numJoueur, MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR, "");
-		numJoueur = (numJoueur + 1) % listeJoueurs.size();
+		do {
+			numJoueur = (numJoueur + 1) % listeJoueurs.size();
+			joueurEnCours = listeJoueurs.get(numJoueur);
+		}
+		while(joueurEnCours == null);
 		message.setIdJoueurCourant(numJoueur + 1);
-		joueurEnCours = listeJoueurs.get(numJoueur);
 		joueurEnCours.initialiserNouveauTour();
         historique.reinitialiserHistorique();
 		return message;
@@ -92,10 +110,10 @@ class PartieImpl implements Partie {
 	private MessagePartie creerNouveauMessage(int indexJoueur, MessagePartie.TypeMessage type, String messageErreur){
 		MessagePartie message = new MessagePartie();
 		message.setTypeMessage(type);
-		message.setPlateau(plateau.toString());
 		message.setMessageErreur(messageErreur);
 		if(correctIndex(indexJoueur)){
 			Joueur joueur = listeJoueurs.get(indexJoueur);
+			message.setPlateau(plateau.toString());
 			message.setNomJoueur(joueur.getNom());
 			message.setIdJoueur(indexJoueur + 1);
 			message.setJeuJoueur(joueur.afficheJetonsJoueur());
@@ -107,7 +125,8 @@ class PartieImpl implements Partie {
 	}
 
 	private boolean correctIndex(int indexJoueur){
-		return indexJoueur >= 0 && indexJoueur < listeJoueurs.size();
+		return indexJoueur >= 0 && indexJoueur < listeJoueurs.size()
+		   && listeJoueurs.get(indexJoueur) != null;
 	}
 
 	public MessagePartie afficherPartie(int indexJoueur){
@@ -189,14 +208,13 @@ class PartieImpl implements Partie {
 		if(partieCommence) {
 			int indexReelJoueur = indexJoueur - 1;
 			if(isJoueurCourant(indexReelJoueur)){
-				switch(type) {
-					case ANNULER_COMMANDE:
-						historique.annulerDerniereCommande();
-						return creerNouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.RESULTAT_ACTION, "");
-					case TERMINER_TOUR:
-						return traitementFinDeTour(indexReelJoueur);
-					default:
-						return null;
+				if(type.equals(TypeAction.ANNULER_COMMANDE)) {
+					historique.annulerDerniereCommande();
+					return creerNouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.RESULTAT_ACTION, "");
+				}
+				else {
+					//type = TERMINER_TOUR
+					return traitementFinDeTour(indexReelJoueur);
 				}
 			}
 			else {

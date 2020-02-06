@@ -18,9 +18,11 @@ public class ModeleControleurPartie implements RepresentationModelAssembler<Mess
 			return new EntityModel<>(message);
 		}
 
+		EntityModel<MessagePartie> resultat = new EntityModel<>(message,
+		  linkTo(methodOn(ControleurParties.class).quitterPartie(idPartie, idJoueur)).withRel("quitterPartie"));
+
 		if(idJoueur == message.getIdJoueurCourant()) {
-			return new EntityModel<>(message,
-			  linkTo(methodOn(ControleurPartie.class).afficherPartie(idPartie, idJoueur)).withRel("afficherPartie"),
+			resultat.add(linkTo(methodOn(ControleurPartie.class).afficherPartie(idPartie, idJoueur)).withRel("afficherPartie"),
 			  linkTo(methodOn(ControleurPartie.class).creerSequence(idPartie, idJoueur, null)).withRel("creerSequence"),
 			  linkTo(methodOn(ControleurPartie.class).fusionnerSequence(idPartie, idJoueur, null)).withRel("fusionnerSequence"),
 			  linkTo(methodOn(ControleurPartie.class).couperSequence(idPartie, idJoueur, null)).withRel("couperSequence"),
@@ -30,8 +32,10 @@ public class ModeleControleurPartie implements RepresentationModelAssembler<Mess
 			  linkTo(methodOn(ControleurPartie.class).terminerTour(idPartie, idJoueur)).withRel("terminerTour"));
 		}
 		else {
-			return new EntityModel<>(message,
-			linkTo(methodOn(ControleurPartie.class).afficherPartie(idPartie, idJoueur)).withRel("afficherPartie"));
+			resultat.add(
+			  linkTo(methodOn(ControleurPartie.class).afficherPartie(idPartie, idJoueur)).withRel("afficherPartie"));
 		}
+
+		return resultat;
 	}
 }

@@ -2,13 +2,13 @@ package rummikub.controleurs;
 
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
-import rummikub.core.jeu.Joueur;
 import rummikub.securite.ServiceJwt;
 import rummikub.securite.JoueurConnecte;
 import java.util.List;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +27,24 @@ import javax.validation.constraints.Size;
 public class ControleurParties {
 
 	private ListeParties listeParties;
+	private ListeJoueurs joueurs;
 	private ModeleControleurParties modeleControleurParties;
 	private ModeleControleurPartie modeleControleurPartie;
 	private ModeleAfficherParties modeleAfficherParties;
+
 	@Autowired
     private ServiceJwt serviceJwt;
 
 
 	@Autowired
 	public ControleurParties(ListeParties listeParties, ModeleControleurParties modeleControleurParties,
-	  ModeleControleurPartie modeleControleurPartie, ModeleAfficherParties modeleAfficherParties){
+	  ModeleControleurPartie modeleControleurPartie, ModeleAfficherParties modeleAfficherParties,
+	  ListeJoueurs joueurs){
 		this.listeParties = listeParties;
 		this.modeleControleurParties = modeleControleurParties;
 		this.modeleControleurPartie = modeleControleurPartie;
 		this.modeleAfficherParties = modeleAfficherParties;
+		this.joueurs = joueurs;
 	}
 
 	@PostMapping(value = "/0/creerPartie", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -65,11 +69,11 @@ public class ControleurParties {
 		Partie partie = listeParties.getPartie(idPartie);
 		MessagePartie message = new MessagePartie();
 		if(partie != null) {
-			Joueur joueur = creerJoueur(nom, message);
+			JoueurConnecte joueur = creerJoueur(nom, message);
 			message = partie.ajouterJoueur(joueur);
 			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.AJOUTER_JOUEUR)) {
 				message.setIdPartie(idPartie);
-				return finaliserCreerJoueur(message);
+				return finaliserCreerJoueur(joueur, message);
 			}
 			else {
 				throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.FORBIDDEN);
@@ -81,9 +85,9 @@ public class ControleurParties {
 		}
     }
 
-    private Joueur creerJoueur(String nomJoueur, MessagePartie message) {
+    private JoueurConnecte creerJoueur(String nomJoueur, MessagePartie message) {
 		try {
-			return new Joueur(nomJoueur);
+			return new JoueurConnecte(nomJoueur);
 		}
 		catch(IllegalArgumentException ex) {
 			message.setMessageErreur(ex.getMessage());
@@ -91,12 +95,12 @@ public class ControleurParties {
 		}
 	}
 
-	private ResponseEntity<EntityModel> finaliserCreerJoueur(MessagePartie message) {
+	private ResponseEntity<EntityModel> finaliserCreerJoueur(JoueurConnecte joueur, MessagePartie message) {
 		EntityModel<MessagePartie> reponseAjout = modeleControleurParties.toModel(message);
-		JoueurConnecte joueurConnecte = new JoueurConnecte(message.getIdJoueur(),
-														   message.getNomJoueur(),
-														   message.getIdPartie());
-		String token = serviceJwt.creerToken(joueurConnecte);
+		joueur.setId(message.getIdJoueur());
+		joueur.setIdPartie(message.getIdPartie());
+		joueurs.ajouterJoueur(joueur);
+		String token = serviceJwt.creerToken(joueur);
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "Bearer " + token);
 		return new ResponseEntity<EntityModel>(reponseAjout, headers, HttpStatus.CREATED);
@@ -113,6 +117,25 @@ public class ControleurParties {
 			}
 			message.setIdPartie(idPartie);
 			EntityModel<MessagePartie> body = modeleControleurPartie.toModel(message);
+			return new ResponseEntity<EntityModel>(body, HttpStatus.OK);
+		}
+		else {
+			message.setMessageErreur("La partie n'existe pas");
+			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@DeleteMapping(value = "{idPartie}/{idJoueur}/quitterPartie")
+	public ResponseEntity<EntityModel> quitterPartie(@PathVariable int idPartie, @PathVariable int idJoueur) {
+		Partie partie = listeParties.getPartie(idPartie);
+		MessagePartie message = new MessagePartie();
+		if(partie != null) {
+			message = partie.quitterPartie(idJoueur);
+			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.ERREUR)) {
+				throw new ControleurErreurException(message, modeleControleurPartie, HttpStatus.FORBIDDEN);
+			}
+			joueurs.retirerJoueur(idPartie, idJoueur);
+			EntityModel<MessagePartie> body = modeleControleurParties.toModel(message);
 			return new ResponseEntity<EntityModel>(body, HttpStatus.OK);
 		}
 		else {

@@ -25,8 +25,7 @@ public class ServiceJwt {
                     .parseClaimsJws(token)
                     .getBody();
 
-            JoueurConnecte joueur = new JoueurConnecte();
-            joueur.setNom(body.getSubject());
+            JoueurConnecte joueur = new JoueurConnecte(body.getSubject());
             joueur.setId(body.get("id", Integer.class));
             joueur.setIdPartie(body.get("idPartie", Integer.class));
 

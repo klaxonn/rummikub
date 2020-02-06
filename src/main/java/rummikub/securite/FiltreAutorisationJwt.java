@@ -47,7 +47,8 @@ public class FiltreAutorisationJwt extends OncePerRequestFilter {
 			String[] elements = url.getPath().substring(1).split("/");
 			int idPartieAdresse = Integer.parseInt(elements[0]);
 			int idJoueurAdresse = Integer.parseInt(elements[1]);
-			if(joueur.getId() == idJoueurAdresse && joueur.getIdPartie() == idPartieAdresse) {
+			if(joueur.getId() == idJoueurAdresse && joueur.getIdPartie() == idPartieAdresse
+			  && !joueur.isDesactive()) {
 				return new UsernamePasswordAuthenticationToken(joueur.getNom(), null, new ArrayList<>());
 			}
 			else {

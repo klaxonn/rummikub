@@ -142,6 +142,19 @@ public class Joueur {
         return listeJetonsAUtiliser;
     }
 
+    /**
+     * Retire tous les jetons.
+     *
+     * @return la liste de tous les jetons
+     */
+    public List<Jeton> retireTouslesJetons() {
+        ArrayList<Jeton> jetons = new ArrayList<>(listeJetons);
+        listeJetons.removeAll(listeJetons);
+        return jetons;
+    }
+
+
+
     private boolean isIndexCorrect(int index) {
         return index >= 1 && index <= listeJetons.size();
     }

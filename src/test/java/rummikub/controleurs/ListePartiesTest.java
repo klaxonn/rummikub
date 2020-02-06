@@ -46,6 +46,7 @@ public class ListePartiesTest {
 		listeParties.supprimerPartie(idPartie);
 		partie = listeParties.getPartie(idPartie);
 		assertNull(listeParties.getPartie(idPartie));
+		assertTrue(listeParties.isPartieSupprimee(idPartie));
 	}
 
     @Test

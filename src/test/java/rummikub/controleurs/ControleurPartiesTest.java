@@ -5,14 +5,15 @@ import rummikub.core.api.MessagePartie;
 import rummikub.core.jeu.Joueur;
 import rummikub.securite.ServiceJwt;
 import rummikub.securite.JoueurConnecte;
-import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,6 +41,9 @@ public class ControleurPartiesTest {
 
 	@MockBean
 	private ListeParties listePartiesMock;
+
+	@MockBean
+	private ListeJoueurs listeJoueursMock;
 
 	@MockBean
 	private Partie partieMock;
@@ -188,24 +192,6 @@ public class ControleurPartiesTest {
 	}
 
 	@Test
-	public void demarrerMauvaisJoueurFail() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
-			0, 0, "", "", 0, "", "Vous ne pouvez pas démarrer la partie");
-		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
-		when(partieMock.commencerPartie(2)).thenReturn(messageTest);
-		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(2,"Katya",1));
-
-		MvcResult resultat = mockMvc.perform(post("/1/2/demarrerPartie")
-										.contentType("application/json")
-										.header("Authorization", "Bearer aa"))
-										.andExpect(status().isForbidden())
-										.andReturn();
-
-		String resultatTest = asJsonString(messageTest);
-		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
-	}
-
-	@Test
 	public void listerPartiesDisposTest() throws Exception {
 		List<PartieDispo> resultatList = new ArrayList<>();
 		PartieDispo joueur1 = new PartieDispo(1, Arrays.asList("Vincent","Kate"));
@@ -219,6 +205,62 @@ public class ControleurPartiesTest {
 										.andDo(print())
 										.andExpect(status().isOk())
 										.andReturn();
+	}
+
+	@Test
+	public void quitterPartieTest() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+			0, 0, "", "",  0, "", "");
+		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
+		when(partieMock.quitterPartie(1)).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
+
+		MvcResult resultat = mockMvc.perform(delete("/1/1/quitterPartie")
+										.contentType("application/json")
+										.header("Authorization", "Bearer aa"))
+										.andDo(print())
+										.andExpect(status().isOk())
+										.andReturn();
+
+		String resultatTest = asJsonString(messageTest);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
+	}
+
+	@Test
+	public void quitterPartiePasAssezJoueursFail() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "",  0, "", "Nombre de joueurs insuffisant");
+		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
+		when(partieMock.quitterPartie(1)).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
+
+		MvcResult resultat = mockMvc.perform(delete("/1/1/quitterPartie")
+										.contentType("application/json")
+										.header("Authorization", "Bearer aa"))
+										.andDo(print())
+										.andExpect(status().isForbidden())
+										.andReturn();
+
+		String resultatTest = asJsonString(messageTest);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
+	}
+
+	@Test
+	public void quitterPartieMauvaisePartieFail() throws Exception {
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "",  0, "", "La partie n'existe pas");
+		when(listePartiesMock.getPartie(2)).thenReturn(null);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",2));
+
+		MvcResult resultat = mockMvc.perform(delete("/2/1/quitterPartie")
+										.contentType("application/json")
+										.header("Authorization", "Bearer aa"))
+										.andDo(print())
+										.andExpect(status().isNotFound())
+										.andReturn();
+
+		String resultatTest = asJsonString(messageTest);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(), false);
 	}
 
 	private static String asJsonString(final Object obj) {

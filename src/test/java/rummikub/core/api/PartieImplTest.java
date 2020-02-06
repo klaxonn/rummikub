@@ -107,6 +107,7 @@ public class PartieImplTest {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
 			0, 0, "", "", 0, "", "Partie Pleine");
 		assertEquals(messageTest, message);
+		assertEquals(Partie.NOMBRE_MAX_JOUEURS_PARTIE, partie.nombreJoueurs());
 	}
 
     @Test
@@ -117,6 +118,47 @@ public class PartieImplTest {
 		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
 			0, 0, "", "", 0, "", "Partie déjà commencée");
 		assertEquals(messageTest, message);
+	}
+
+	@Test
+    public void quitterPartieTest() {
+		when(plateauMock.toString()).thenReturn("");
+		Joueur joueur3 = new Joueur("Bob");
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur2);
+		partie.ajouterJoueur(joueur3);
+		assertEquals(3, partie.nombreJoueurs());
+		assertEquals("[Vincent, Katya, Bob]", partie.listeJoueursPrets().toString());
+		MessagePartie message = partie.quitterPartie(3);
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+			0, 0, "", "", 0, "", "");
+		assertEquals(messageTest, message);
+		assertEquals("[Vincent, Katya]", partie.listeJoueursPrets().toString());
+		assertEquals(2, partie.nombreJoueurs());
+	}
+
+	@Test
+    public void quitterPartieMauvaisJoueurFail() {
+		when(plateauMock.toString()).thenReturn("");
+		Joueur joueur3 = new Joueur("Bob");
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur2);
+		partie.ajouterJoueur(joueur3);
+		assertEquals(3, partie.nombreJoueurs());
+		assertEquals("[Vincent, Katya, Bob]", partie.listeJoueursPrets().toString());
+		MessagePartie message = partie.quitterPartie(4);
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "Joueur inexistant");
+		assertEquals(messageTest, message);
+		assertEquals("[Vincent, Katya, Bob]", partie.listeJoueursPrets().toString());
+	}
+
+	@Test
+    public void quitterPartiePasAssezJoueursFail() {
+		when(plateauMock.toString()).thenReturn("");
+		MessagePartie message = partie.quitterPartie(1);
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "Minimum joueurs atteint");
+		assertEquals(messageTest, message);
+		assertEquals("[Vincent, Katya]", partie.listeJoueursPrets().toString());
 	}
 
 	@Test
@@ -131,6 +173,7 @@ public class PartieImplTest {
 			0, 0, "", "", 0, "", "Partie déjà commencée");
 		assertEquals(messageTest, message);
 		assertEquals("[]", partie.listeJoueursPrets().toString());
+		assertEquals(2, partie.nombreJoueurs());
 
 	}
 
@@ -146,14 +189,18 @@ public class PartieImplTest {
 		assertEquals(messageTest, message);
     }
 
-	@Test
-    public void commencerPartieJoueurPasAutorise() {
+    @Test
+    public void commencerPartieAvecJoueurSupprimeTest() {
 		when(plateauMock.toString()).thenReturn("");
-        MessagePartie message = partie.commencerPartie(JOUEUR2);
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
-			0, 0, "", "", 0, "", "Vous n'êtes pas autorisé à démarrer la partie");
+		Joueur joueur3 = new Joueur("Bob");
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur2);
+		partie.ajouterJoueur(joueur3);
+		partie.quitterPartie(1);
+		MessagePartie message = partie.commencerPartie(JOUEUR2);
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,
+			0, 0, "", "",  JOUEUR2, "", "");
 		assertEquals(messageTest, message);
-    }
+	}
 
     @Test
     public void afficherPartieTest() {
@@ -174,6 +221,20 @@ public class PartieImplTest {
 			0, 0, "", "", 0, "", "Joueur inexistant");
 		assertEquals(messageTest, message);
 
+    }
+
+    @Test
+    public void afficherPartieJoueurSupprimeFail() {
+		when(plateauMock.toString()).thenReturn("");
+		Joueur joueur3 = new Joueur("Bob");
+		when(piocheMock.piocheInitiale()).thenReturn(jetonsPiochesJoueur2);
+		partie.ajouterJoueur(joueur3);
+		partie.quitterPartie(3);
+		partie.commencerPartie(JOUEUR1);
+		MessagePartie message = partie.afficherPartie(JOUEUR_INCONNU);
+		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+			0, 0, "", "", 0, "", "Joueur inexistant");
+		assertEquals(messageTest, message);
     }
 
 	@Test

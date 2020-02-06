@@ -31,7 +31,6 @@ public interface Partie {
 
     /**
      * Commence la partie.
-     * Seul le joueur qui a créé la partie peut la démarrer
 	 * Le message envoyé peut être de deux types :
 	 * Le message envoyé est de type DEBUT_NOUVEAU_TOUR.
 	 * Il contient l'id du premier joueur.
@@ -44,6 +43,19 @@ public interface Partie {
 	 * @return le message contenant les informations
      */
     MessagePartie commencerPartie(int indexJoueur);
+
+    /**
+     * Quitter la partie.
+	 * Le message envoyé peut être de deux types :
+	 * Le message envoyé est de type RESULTAT_ACTION.
+     *
+     * Le message envoyé est de type ERREUR.
+	 * Il contient le message d'erreur
+	 *
+	 * @param indexJoueur index du joueur qui souhaite quitter la partie
+	 * @return le message contenant les informations
+     */
+    MessagePartie quitterPartie(int indexJoueur);
 
     /**
      * Affiche la partie.
@@ -203,10 +215,18 @@ public interface Partie {
     MessagePartie terminerTour(int indexJoueur);
 
     /**
-     * Retourne la liste des joueurs de la partie avant qu'elle ne démarre
+     * Retourne la liste des joueurs de la partie avant qu'elle ne démarre.
      *
      * @return la liste
      */
     List<String> listeJoueursPrets();
+
+     /**
+     * Retourne le nombre de joueurs de la partie.
+     *
+     * @return le nombre de joueurs
+     */
+    int nombreJoueurs();
+
 }
 

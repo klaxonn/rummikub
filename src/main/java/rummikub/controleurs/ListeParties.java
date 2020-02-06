@@ -15,12 +15,14 @@ import org.springframework.stereotype.Component;
 public class ListeParties {
 
 	private Map<Integer, Partie> listeParties;
+	private List<Integer> partiesTerminees;
 
 	/**
 	 * Construit une liste de parties.
 	 */
 	public ListeParties() {
 		listeParties = new HashMap<>();
+		partiesTerminees = new ArrayList<>();
 	}
 
 	/**
@@ -58,7 +60,7 @@ public class ListeParties {
 	 * Retourne la partie correspondant à l'id.
 	 *
 	 * @param id l'id de la partie à récupérer
-	 * @return la partie.
+	 * @return la partie ou null si la partie n'existe pas
 	 */
 	public Partie getPartie(int id) {
 		return listeParties.get(id);
@@ -71,5 +73,16 @@ public class ListeParties {
 	 */
 	public void supprimerPartie(int id) {
 		listeParties.remove(id);
+		partiesTerminees.add(id);
+	}
+
+	/**
+	 * Détermine si la partie a été supprimée.
+	 *
+	 * @param id l'id de la partie à tester
+	 * @return true si elle a été supprimée
+	 */
+	public boolean isPartieSupprimee(int id) {
+		return partiesTerminees.contains(id);
 	}
 }
