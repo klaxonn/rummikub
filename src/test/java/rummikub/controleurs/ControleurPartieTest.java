@@ -51,6 +51,7 @@ public class ControleurPartieTest {
 		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
 
 		MvcResult resultat = mockMvc.perform(get("/1/1/afficherPartie")
+										.contentType("application/json")
 										.header("Authorization", "Bearer aa"))
 										.andDo(print())
 										.andExpect(status().isOk())
@@ -70,6 +71,7 @@ public class ControleurPartieTest {
 
 
 		MvcResult resultat = mockMvc.perform(get("/1/1/afficherPartie")
+									.contentType("application/json")
 									.header("Authorization", "Bearer aa"))
 									.andExpect(status().isNotFound())
 									.andReturn();

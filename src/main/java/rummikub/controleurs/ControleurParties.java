@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.CollectionModel;
@@ -18,12 +19,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpHeaders;
+import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.Size;
 
 /**
  * Controleur de la partie.
  */
 @RestController
+@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@Validated
 public class ControleurParties {
 
 	private ListeParties listeParties;
@@ -34,7 +38,6 @@ public class ControleurParties {
 
 	@Autowired
     private ServiceJwt serviceJwt;
-
 
 	@Autowired
 	public ControleurParties(ListeParties listeParties, ModeleControleurParties modeleControleurParties,
@@ -47,7 +50,7 @@ public class ControleurParties {
 		this.joueurs = joueurs;
 	}
 
-	@PostMapping(value = "/0/creerPartie", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/0/creerPartie")
 	public ResponseEntity<EntityModel> creerPartie(
 	  @Size(min=1, max = 15, message = "Le nom doit avoir entre 1 et 15 caractéres")
 	  @RequestBody String nom) {
@@ -62,7 +65,7 @@ public class ControleurParties {
 		return new ResponseEntity<CollectionModel>(body, HttpStatus.OK);
     }
 
-    @PostMapping(value = "{idPartie}/ajouterJoueur", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "{idPartie}/ajouterJoueur")
 	public ResponseEntity<EntityModel> ajouterJoueur(@PathVariable int idPartie,
 	  @Size(min=1, max = 15, message = "Le nom doit avoir entre 1 et 15 caractéres")
 	  @RequestBody String nom) {

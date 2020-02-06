@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.http.MediaType;
  */
 @Validated
 @RestController
+@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ControleurPartie {
 
 	private ListeParties listeParties;
@@ -45,7 +47,7 @@ public class ControleurPartie {
 		return executerAction("afficherPartie", idPartie, idJoueur, null);
 	}
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/creerSequence", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "{idPartie}/{idJoueur}/creerSequence")
 	public ResponseEntity<EntityModel> creerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @Size(min=1, max = FabriquePartie.VALEUR_MAX, message = "Au moins 1 jeton nécessaire")
@@ -53,35 +55,35 @@ public class ControleurPartie {
 		return executerAction("creerNouvelleSequence", idPartie, idJoueur, indexes);
     }
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/ajouterJeton", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "{idPartie}/{idJoueur}/ajouterJeton")
 	public ResponseEntity<EntityModel> ajouterJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody ParametresAction param) {
 		return executerAction("ajouterJeton", idPartie, idJoueur,
 		  Arrays.asList(param.getIndexJeton(), param.getIndexSequenceArrivee()));
     }
 
-    @PostMapping(value = "{idPartie}/{idJoueur}/fusionnerSequence", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "{idPartie}/{idJoueur}/fusionnerSequence")
 	public ResponseEntity<EntityModel> fusionnerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody ParametresAction param) {
 		return executerAction("fusionnerSequence", idPartie, idJoueur,
 		  Arrays.asList(param.getIndexSequenceDepart(), param.getIndexSequenceArrivee()));
     }
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/couperSequence", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "{idPartie}/{idJoueur}/couperSequence")
 	public ResponseEntity<EntityModel> couperSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody ParametresAction param) {
 		return executerAction("couperSequence", idPartie, idJoueur,
 		  Arrays.asList(param.getIndexSequenceDepart(), param.getIndexJeton()));
     }
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/deplacerJeton", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "{idPartie}/{idJoueur}/deplacerJeton")
 	public ResponseEntity<EntityModel> deplacerJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody ParametresAction param) {
 		return executerAction("deplacerJeton", idPartie, idJoueur,
 		  Arrays.asList(param.getIndexSequenceDepart(), param.getIndexJeton(), param.getIndexSequenceArrivee()));
     }
 
-    @PostMapping(value = "{idPartie}/{idJoueur}/remplacerJoker", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "{idPartie}/{idJoueur}/remplacerJoker")
 	public ResponseEntity<EntityModel> remplacerJoker(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody ParametresAction param) {
 		return executerAction("remplacerJoker", idPartie, idJoueur,

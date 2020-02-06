@@ -5,11 +5,14 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import javax.validation.ConstraintViolationException;
+import javax.servlet.http.HttpServletResponse;
 
 @ControllerAdvice
 @RestController
@@ -24,8 +27,14 @@ class ErreursControleurs {
 		return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+	String typeNonAccepte(HttpMediaTypeNotAcceptableException ex, HttpServletResponse reponse) {
+		reponse.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+		return "Type accepté : " + MediaType.APPLICATION_JSON_VALUE + "\n";
+	}
+
 	@ExceptionHandler(java.lang.NullPointerException.class)
-	ResponseEntity<EntityModel> argumentManquant(java.lang.NullPointerException ex) {
+	ResponseEntity<EntityModel> argumentIncorrect(java.lang.NullPointerException ex) {
 		MessagePartie message = new MessagePartie();
 		message.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
 		message.setMessageErreur("Argument incorrect");

@@ -201,10 +201,23 @@ public class ControleurPartiesTest {
 
 		when(listePartiesMock.listerPartiesDispos()).thenReturn(resultatList);
 
-		MvcResult resultat = mockMvc.perform(get("/0/listerPartiesDispos"))
+		MvcResult resultat = mockMvc.perform(get("/0/listerPartiesDispos")
+										.contentType("application/json"))
 										.andDo(print())
 										.andExpect(status().isOk())
 										.andReturn();
+	}
+
+	@Test
+	public void mauvaisTypeAccepteTest() throws Exception {
+		MvcResult resultat = mockMvc.perform(get("/0/listerPartiesDispos")
+										.contentType("application/json")
+										.accept("text/plain"))
+										.andDo(print())
+										.andExpect(status().isNotAcceptable())
+										.andReturn();
+
+		assertEquals("Type accepté : application/json\n", resultat.getResponse().getContentAsString());
 	}
 
 	@Test
