@@ -2,6 +2,7 @@ package rummikub.controleurs;
 
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
+import static rummikub.core.api.MessagePartie.TypeMessage.*;
 import rummikub.securite.ServiceJwt;
 import rummikub.securite.JoueurConnecte;
 import java.util.List;
@@ -74,7 +75,7 @@ public class ControleurParties {
 		if(partie != null) {
 			JoueurConnecte joueur = creerJoueur(nom, message);
 			message = partie.ajouterJoueur(joueur);
-			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.AJOUTER_JOUEUR)) {
+			if(message.getTypeMessage().equals(AJOUTER_JOUEUR)) {
 				message.setIdPartie(idPartie);
 				return finaliserCreerJoueur(joueur, message);
 			}
@@ -115,7 +116,7 @@ public class ControleurParties {
 		MessagePartie message = new MessagePartie();
 		if(partie != null) {
 			message = partie.commencerPartie(idJoueur);
-			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.ERREUR)) {
+			if(message.getTypeMessage().equals(ERREUR)) {
 				throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.FORBIDDEN);
 			}
 			message.setIdPartie(idPartie);
@@ -134,7 +135,7 @@ public class ControleurParties {
 		MessagePartie message = new MessagePartie();
 		if(partie != null) {
 			message = partie.quitterPartie(idJoueur);
-			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.ERREUR)) {
+			if(message.getTypeMessage().equals(ERREUR)) {
 				throw new ControleurErreurException(message, modeleControleurPartie, HttpStatus.FORBIDDEN);
 			}
 			joueurs.retirerJoueur(idPartie, idJoueur);

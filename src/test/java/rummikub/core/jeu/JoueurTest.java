@@ -1,6 +1,6 @@
 package rummikub.core.jeu;
 
-import rummikub.core.pieces.Couleur;
+import static rummikub.core.pieces.Couleur.*;
 import rummikub.core.pieces.Jeton;
 import rummikub.core.pieces.JetonNormal;
 import rummikub.core.pieces.Joker;
@@ -18,11 +18,11 @@ public class JoueurTest {
 
     @BeforeEach
     public void initialisation() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.ROUGE);
-        Jeton jeton2 = new JetonNormal(10, Couleur.BLEU);
-        Jeton jeton3 = new JetonNormal(11, Couleur.JAUNE);
-        Jeton jeton4 = new JetonNormal(12, Couleur.VERT);
-        jeton5 = new JetonNormal(1, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, ROUGE);
+        Jeton jeton2 = new JetonNormal(10, BLEU);
+        Jeton jeton3 = new JetonNormal(11, JAUNE);
+        Jeton jeton4 = new JetonNormal(12, VERT);
+        jeton5 = new JetonNormal(1, ROUGE);
         Jeton joker = new Joker();
         joueur = new Joueur("Kate");
         joueur.setPiocheInitiale(Arrays.asList(
@@ -91,7 +91,7 @@ public class JoueurTest {
 
     @Test
     public void ajouteJetonTest() {
-        Jeton jeton = new JetonNormal(7, Couleur.ROUGE);
+        Jeton jeton = new JetonNormal(7, ROUGE);
         joueur.ajouteJeton(jeton);
         assertEquals("1rouge 10bleu 11jaune * 12vert 1rouge 7rouge", joueur.afficheJetonsJoueur());
         assertEquals(42, joueur.getScore());
@@ -99,8 +99,8 @@ public class JoueurTest {
 
     @Test
     public void ajouteJetonsTest() {
-        Jeton jeton1 = new JetonNormal(7, Couleur.ROUGE);
-        Jeton jeton2 = new JetonNormal(12, Couleur.BLEU);
+        Jeton jeton1 = new JetonNormal(7, ROUGE);
+        Jeton jeton2 = new JetonNormal(12, BLEU);
         List<Jeton> jetons = new ArrayList<>(Arrays.asList(jeton1, jeton2));
         joueur.ajouteJetons(jetons);
         assertEquals("1rouge 10bleu 11jaune * 12vert 1rouge 7rouge 12bleu", joueur.afficheJetonsJoueur());

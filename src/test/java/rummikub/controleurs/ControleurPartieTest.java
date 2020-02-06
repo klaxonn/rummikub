@@ -2,6 +2,7 @@ package rummikub.controleurs;
 
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
+import static rummikub.core.api.MessagePartie.TypeMessage.*;
 import rummikub.securite.ServiceJwt;
 import rummikub.securite.JoueurConnecte;
 import static org.mockito.Mockito.*;
@@ -44,7 +45,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void afficherPartieTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.AFFICHER_PARTIE,
+		MessagePartie messageTest = new MessagePartie(AFFICHER_PARTIE,
 			1, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", 1, "", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.afficherPartie(1)).thenReturn(messageTest);
@@ -64,7 +65,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void afficherPartieFail() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "La partie n'existe pas");
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
 		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
@@ -81,7 +82,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void creerNouvelleSequenceTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+		MessagePartie messageTest = new MessagePartie(RESULTAT_ACTION,
 			1, 1, "Vincent", "13bleu", 1, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.creerNouvelleSequence(1, Arrays.asList(1,2,3))).thenReturn(messageTest);
@@ -102,7 +103,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void creerNouvelleSequenceTableauVideFail() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "creerSequence.indexes: Au moins 1 jeton nécessaire");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
@@ -122,7 +123,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void ajouterJetonTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+		MessagePartie messageTest = new MessagePartie(RESULTAT_ACTION,
 			1, 2, "Katya", "9bleu", 2, "10bleu 11bleu 12bleu\n4jaune", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.ajouterJeton(2, Arrays.asList(1,2))).thenReturn(messageTest);
@@ -143,7 +144,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void fusionnerSequenceTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+		MessagePartie messageTest = new MessagePartie(RESULTAT_ACTION,
 			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.fusionnerSequence(2, Arrays.asList(1,4))).thenReturn(messageTest);
@@ -166,7 +167,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void couperSequenceTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+		MessagePartie messageTest = new MessagePartie(RESULTAT_ACTION,
 			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu\n11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.couperSequence(2, Arrays.asList(1,2))).thenReturn(messageTest);
@@ -189,7 +190,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void deplacerJetonTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+		MessagePartie messageTest = new MessagePartie(RESULTAT_ACTION,
 			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu\n12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.deplacerJeton(2, Arrays.asList(1,3,2))).thenReturn(messageTest);
@@ -212,7 +213,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void remplacerJokerTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+		MessagePartie messageTest = new MessagePartie(RESULTAT_ACTION,
 			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.remplacerJoker(2, Arrays.asList(2,1))).thenReturn(messageTest);
@@ -235,7 +236,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void annulerActionTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+		MessagePartie messageTest = new MessagePartie(RESULTAT_ACTION,
 			1, 2, "Katya", "4jaune 9bleu", 2, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.annulerDerniereAction(2)).thenReturn(messageTest);
@@ -253,7 +254,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void finDeTourTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,
+		MessagePartie messageTest = new MessagePartie(DEBUT_NOUVEAU_TOUR,
 			1, 2, "Katya", "4jaune 9bleu 10bleu", 1, "10bleu 11bleu 12bleu", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.terminerTour(2)).thenReturn(messageTest);
@@ -272,7 +273,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void finDePartieTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.FIN_DE_PARTIE,
+		MessagePartie messageTest = new MessagePartie(FIN_DE_PARTIE,
 			2, 1, "Vincent", "", 1, "10bleu 11bleu 12bleu 13bleu", "");
 		when(listePartiesMock.getPartie(2)).thenReturn(partieMock);
 		when(partieMock.terminerTour(1)).thenReturn(messageTest);
@@ -284,7 +285,7 @@ public class ControleurPartieTest {
 				.andExpect(status().isOk())
 				.andReturn();
 
-        messageTest = new MessagePartie(MessagePartie.TypeMessage.FIN_DE_PARTIE,
+        messageTest = new MessagePartie(FIN_DE_PARTIE,
 			0, 0, "", "", 0, "", "La partie est terminée");
 		when(listePartiesMock.getPartie(2)).thenReturn(partieMock);
 		when(listePartiesMock.isPartieSupprimee(2)).thenReturn(true);
@@ -303,7 +304,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void creerSequenceSansArgument() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Argument manquant ou de mauvais type");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
@@ -320,7 +321,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void creerSequenceMauvaisTypeArgument() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Argument manquant ou de mauvais type");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
@@ -339,7 +340,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void ajouterJetonArgumentIncorrectTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Argument incorrect");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
@@ -360,7 +361,7 @@ public class ControleurPartieTest {
 
 	@Test
 	public void creerSequenceFail() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			1, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", 1, "", "Aucune séquence possible");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.creerNouvelleSequence(1, Arrays.asList(1,3))).thenReturn(messageTest);

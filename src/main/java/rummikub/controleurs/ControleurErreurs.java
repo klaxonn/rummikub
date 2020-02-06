@@ -1,6 +1,7 @@
 package rummikub.controleurs;
 
 import rummikub.core.api.MessagePartie;
+import static rummikub.core.api.MessagePartie.TypeMessage.*;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,7 +22,7 @@ class ErreursControleurs {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	ResponseEntity<EntityModel> argumentManquant(HttpMessageNotReadableException ex) {
 		MessagePartie message = new MessagePartie();
-		message.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
+		message.setTypeMessage(ERREUR);
 		message.setMessageErreur("Argument manquant ou de mauvais type");
 		EntityModel<MessagePartie> reponseAjout = new EntityModel<>(message);
 		return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.BAD_REQUEST);
@@ -36,7 +37,7 @@ class ErreursControleurs {
 	@ExceptionHandler(java.lang.NullPointerException.class)
 	ResponseEntity<EntityModel> argumentIncorrect(java.lang.NullPointerException ex) {
 		MessagePartie message = new MessagePartie();
-		message.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
+		message.setTypeMessage(ERREUR);
 		message.setMessageErreur("Argument incorrect");
 		EntityModel<MessagePartie> reponseAjout = new EntityModel<>(message);
 		return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.BAD_REQUEST);
@@ -45,7 +46,7 @@ class ErreursControleurs {
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	ResponseEntity<EntityModel> methodePasAuthorisee(HttpRequestMethodNotSupportedException ex) {
 		MessagePartie message = new MessagePartie();
-		message.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
+		message.setTypeMessage(ERREUR);
 		String messageErreur = "Méthode " + ex.getMethod() + " non autorisée";
 		message.setMessageErreur(messageErreur);
 		EntityModel<MessagePartie> reponseAjout = new EntityModel<>(message);
@@ -55,7 +56,7 @@ class ErreursControleurs {
 	@ExceptionHandler(ConstraintViolationException.class)
 	ResponseEntity<EntityModel> mauvaiseTailleTableau(ConstraintViolationException ex) {
 		MessagePartie message = new MessagePartie();
-		message.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
+		message.setTypeMessage(ERREUR);
 		message.setMessageErreur(ex.getMessage());
 		EntityModel<MessagePartie> reponseAjout = new EntityModel<>(message);
 		return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.BAD_REQUEST);
@@ -65,7 +66,7 @@ class ErreursControleurs {
 	ResponseEntity<EntityModel> erreurControleur(ControleurErreurException ex) {
 		MessagePartie message = ex.getMessagePartie();
 		if(message.getTypeMessage() == null) {
-			message.setTypeMessage(MessagePartie.TypeMessage.ERREUR);
+			message.setTypeMessage(ERREUR);
 		}
 		EntityModel<MessagePartie> reponseAjout = ex.getCreateurModele().toModel(message);
 		return new ResponseEntity<EntityModel>(reponseAjout, ex.getStatut());

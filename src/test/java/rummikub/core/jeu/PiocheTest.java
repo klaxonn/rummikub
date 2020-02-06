@@ -1,7 +1,7 @@
 package rummikub.core.jeu;
 
-import rummikub.core.api.FabriquePartie;
-import rummikub.core.pieces.Couleur;
+import static rummikub.core.api.FabriquePartie.*;
+import static rummikub.core.pieces.Couleur.*;
 import rummikub.core.pieces.Jeton;
 import rummikub.core.pieces.JetonNormal;
 import java.util.List;
@@ -13,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PiocheTest {
 
     private Pioche pioche;
-    private static final int NOMBRE_TOTAL_JETONS = FabriquePartie.VALEUR_MAX * FabriquePartie.NB_JEUX_JETONS;
+    private static final int NOMBRE_TOTAL_JETONS = VALEUR_MAX * NB_JEUX_JETONS;
 
 	@BeforeEach
     private void initialisation() {
 		List<Jeton> jetons = new ArrayList<>();
-        for (int i = 1; i <= FabriquePartie.VALEUR_MAX; i++) {
-			for (int j = 1; j <= FabriquePartie.NB_JEUX_JETONS; j++) {
-				Jeton jeton = new JetonNormal(i, Couleur.BLEU);
+        for (int i = 1; i <= VALEUR_MAX; i++) {
+			for (int j = 1; j <= NB_JEUX_JETONS; j++) {
+				Jeton jeton = new JetonNormal(i, BLEU);
                 jetons.add(jeton);
 			}
 		}
@@ -59,7 +59,7 @@ public class PiocheTest {
     public void remettreJetonsTest() {
 		List<Jeton> jetons = new ArrayList<>();
 		for (int i = 1; i <= 3; i++) {
-			Jeton jeton = new JetonNormal(i, Couleur.ROUGE);
+			Jeton jeton = new JetonNormal(i, ROUGE);
             jetons.add(jeton);
 		}
         assertEquals(NOMBRE_TOTAL_JETONS, pioche.nombreJetonsRestants());

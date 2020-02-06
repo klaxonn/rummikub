@@ -1,5 +1,6 @@
 package rummikub.core.api;
 
+import static rummikub.core.api.MessagePartie.TypeMessage.*;
 import rummikub.core.jeu.Joueur;
 import rummikub.core.jeu.Pioche;
 import rummikub.core.jeu.commands.*;
@@ -44,11 +45,11 @@ class PartieImpl implements Partie {
 		if(!partieCommence && nombreJoueurs() < NOMBRE_MAX_JOUEURS_PARTIE) {
 			listeJoueurs.add(joueur);
             joueur.setPiocheInitiale(pioche.piocheInitiale());
-			return creerNouveauMessage(listeJoueurs.indexOf(joueur), MessagePartie.TypeMessage.AJOUTER_JOUEUR, "");
+			return creerNouveauMessage(listeJoueurs.indexOf(joueur), AJOUTER_JOUEUR, "");
 		}
 		else {
 			String messageErreur = partieCommence ? "Partie déjà commencée" : "Partie Pleine";
-			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, messageErreur);
+			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, ERREUR, messageErreur);
 		}
 	}
 
@@ -78,7 +79,7 @@ class PartieImpl implements Partie {
 			partieCommence = true;
 			return debutDuTour();
 		}
-		return creerNouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, messageErreur);
+		return creerNouveauMessage(INDEX_JOUEUR_ERREUR, ERREUR, messageErreur);
     }
 
     public MessagePartie quitterPartie(int indexJoueur) {
@@ -86,16 +87,16 @@ class PartieImpl implements Partie {
 		if(correctIndex(indexReelJoueur) && nombreJoueurs() > NOMBRE_MIN_JOUEURS_PARTIE) {
 			pioche.remettreJetons(listeJoueurs.get(indexReelJoueur).retireTouslesJetons());
 			listeJoueurs.set(indexReelJoueur, null);
-			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.RESULTAT_ACTION, "");
+			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, RESULTAT_ACTION, "");
 		}
 		else {
 			String messageErreur = nombreJoueurs() <= NOMBRE_MIN_JOUEURS_PARTIE ? "Minimum joueurs atteint" : "Joueur inexistant";
-			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, messageErreur);
+			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, ERREUR, messageErreur);
 		}
 	}
 
     private MessagePartie debutDuTour() {
-		MessagePartie message = creerNouveauMessage(numJoueur, MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR, "");
+		MessagePartie message = creerNouveauMessage(numJoueur, DEBUT_NOUVEAU_TOUR, "");
 		do {
 			numJoueur = (numJoueur + 1) % listeJoueurs.size();
 			joueurEnCours = listeJoueurs.get(numJoueur);
@@ -134,7 +135,7 @@ class PartieImpl implements Partie {
 		if(partieCommence) {
 			int indexReelJoueur = indexJoueur - 1;
 			if(correctIndex(indexReelJoueur)){
-				return creerNouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.AFFICHER_PARTIE, "");
+				return creerNouveauMessage(indexReelJoueur, AFFICHER_PARTIE, "");
 			}
 			else {
 				messageErreur = "Joueur inexistant";
@@ -143,7 +144,7 @@ class PartieImpl implements Partie {
 		else {
 			messageErreur = "Partie non commencée";
 		}
-		return creerNouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, messageErreur);
+		return creerNouveauMessage(INDEX_JOUEUR_ERREUR, ERREUR, messageErreur);
 	}
 
 	public MessagePartie creerNouvelleSequence(int indexJoueur, List<Integer> indexes) {
@@ -177,18 +178,18 @@ class PartieImpl implements Partie {
 				try{
 					action.doCommand();
 					historique.ajouterCommande(action);
-					return creerNouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.RESULTAT_ACTION, "");
+					return creerNouveauMessage(indexReelJoueur, RESULTAT_ACTION, "");
 				}
 				catch(Exception e){
-					return creerNouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.ERREUR, e.getMessage());
+					return creerNouveauMessage(indexReelJoueur, ERREUR, e.getMessage());
 				}
 			}
 			else {
-				return creerNouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.ERREUR, "Ce n'est pas votre tour");
+				return creerNouveauMessage(indexReelJoueur, ERREUR, "Ce n'est pas votre tour");
 			}
 		}
 		else {
-			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, "Partie non commencée");
+			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, ERREUR, "Partie non commencée");
 		}
     }
 
@@ -210,7 +211,7 @@ class PartieImpl implements Partie {
 			if(isJoueurCourant(indexReelJoueur)){
 				if(type.equals(TypeAction.ANNULER_COMMANDE)) {
 					historique.annulerDerniereCommande();
-					return creerNouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.RESULTAT_ACTION, "");
+					return creerNouveauMessage(indexReelJoueur, RESULTAT_ACTION, "");
 				}
 				else {
 					//type = TERMINER_TOUR
@@ -218,11 +219,11 @@ class PartieImpl implements Partie {
 				}
 			}
 			else {
-				return creerNouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.ERREUR, "Ce n'est pas votre tour");
+				return creerNouveauMessage(indexReelJoueur, ERREUR, "Ce n'est pas votre tour");
 			}
 		}
 		else {
-			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, MessagePartie.TypeMessage.ERREUR, "Partie non commencée");
+			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, ERREUR, "Partie non commencée");
 		}
     }
 
@@ -234,14 +235,14 @@ class PartieImpl implements Partie {
 				return piocher();
 			}
 		} else {
-			return creerNouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.ERREUR, "plateau non valide");
+			return creerNouveauMessage(indexReelJoueur, ERREUR, "plateau non valide");
 		}
 	}
 
     private MessagePartie joueurAJoue(int indexReelJoueur) {
         if (joueurEnCours.isAutoriseAterminerLeTour()) {
 			if(joueurEnCours.aGagne()){
-				return creerNouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.FIN_DE_PARTIE, "");
+				return creerNouveauMessage(indexReelJoueur, FIN_DE_PARTIE, "");
 			}
 			else {
 				return debutDuTour();
@@ -249,7 +250,7 @@ class PartieImpl implements Partie {
         }
         else {
 			String messageErreur = "" + joueurEnCours.pointsRestantsNecessaires() + " points restants nécessaires";
-			return creerNouveauMessage(indexReelJoueur, MessagePartie.TypeMessage.ERREUR, messageErreur);
+			return creerNouveauMessage(indexReelJoueur, ERREUR, messageErreur);
         }
     }
 

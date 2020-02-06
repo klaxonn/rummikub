@@ -2,7 +2,7 @@ package rummikub.core.plateau;
 
 import rummikub.core.pieces.Couleur;
 import rummikub.core.pieces.Jeton;
-import rummikub.core.api.FabriquePartie;
+import static rummikub.core.api.FabriquePartie.VALEUR_MAX;
 import rummikub.core.pieces.Joker;
 import java.util.Collections;
 import java.util.List;
@@ -85,7 +85,7 @@ class Suite extends SequenceAbstraite {
         int valeurJoker = -1;
         if (valeurPremierElement(collectionJetons) > 1) {
             valeurJoker = valeurPremierElement(collectionJetons) - 1;
-        } else if (valeurDernierElement(collectionJetons) < FabriquePartie.VALEUR_MAX) {
+        } else if (valeurDernierElement(collectionJetons) < VALEUR_MAX) {
             valeurJoker = valeurDernierElement(collectionJetons) + 1;
         }
         return valeurJoker;

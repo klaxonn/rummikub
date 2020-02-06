@@ -1,5 +1,6 @@
 package rummikub.core.plateau;
 
+import static rummikub.core.pieces.Couleur.*;
 import rummikub.core.pieces.Couleur;
 import rummikub.core.pieces.Jeton;
 import rummikub.core.pieces.JetonNormal;
@@ -33,19 +34,19 @@ public class PlateauTest {
 
         suiteTest = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {
-            Jeton jeton = new JetonNormal(i, Couleur.ROUGE);
+            Jeton jeton = new JetonNormal(i, ROUGE);
             suiteTest.add(jeton);
         }
 
         couleurSequenceTest = new ArrayList<>();
-        for (Couleur couleur : Couleur.values()) {
+        for (Couleur couleur : values()) {
             Jeton jeton = new JetonNormal(6, couleur);
             couleurSequenceTest.add(jeton);
         }
 
         suiteTest2 = new ArrayList<>();
         for (int i = 6; i <= 7; i++) {
-            Jeton jeton = new JetonNormal(i, Couleur.ROUGE);
+            Jeton jeton = new JetonNormal(i, ROUGE);
             suiteTest2.add(jeton);
         }
     }
@@ -70,8 +71,8 @@ public class PlateauTest {
     @Test
     public void ajouteSequenceCouleurAvecJoker() {
         Joker joker = new Joker();
-        Jeton jeton1 = new JetonNormal(10, Couleur.VERT);
-        Jeton jeton2 = new JetonNormal(10, Couleur.BLEU);
+        Jeton jeton1 = new JetonNormal(10, VERT);
+        Jeton jeton2 = new JetonNormal(10, BLEU);
         int index = plateau.creerSequence(Arrays.asList(joker, jeton1, jeton2));
         assertEquals("10rouge* 10vert 10bleu", plateau.toString());
         assertEquals(1, index);
@@ -97,7 +98,7 @@ public class PlateauTest {
     @Test
     public void ajoute1Jeton() {
         plateau.creerSequence(suiteTest);
-        Jeton jeton = new JetonNormal(6, Couleur.ROUGE);
+        Jeton jeton = new JetonNormal(6, ROUGE);
         plateau.ajouterJeton(1, jeton);
         assertEquals("1rouge 2rouge 3rouge 4rouge 5rouge 6rouge", plateau.toString());
     }
@@ -113,7 +114,7 @@ public class PlateauTest {
     @Test
     public void retire1Jeton() {
         plateau.creerSequence(suiteTest);
-        Jeton jeton = new JetonNormal(6, Couleur.ROUGE);
+        Jeton jeton = new JetonNormal(6, ROUGE);
         int index = plateau.ajouterJeton(1, jeton);
         plateau.retirerJeton(1, index);
         assertEquals("1rouge 2rouge 3rouge 4rouge 5rouge", plateau.toString());
@@ -132,7 +133,7 @@ public class PlateauTest {
     @Test
     public void deplacerJetonSequence1Jeton() {
         plateau.creerSequence(suiteTest);
-        Jeton jeton = new JetonNormal(6, Couleur.ROUGE);
+        Jeton jeton = new JetonNormal(6, ROUGE);
         List<Jeton> liste = new ArrayList<>();
         liste.add(jeton);
         plateau.creerSequence(liste);
@@ -171,14 +172,14 @@ public class PlateauTest {
 
     @Test
     public void remplacerJoker() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.ROUGE);
-        Jeton jeton2 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton3 = new JetonNormal(1, Couleur.JAUNE);
+        Jeton jeton1 = new JetonNormal(1, ROUGE);
+        Jeton jeton2 = new JetonNormal(1, BLEU);
+        Jeton jeton3 = new JetonNormal(1, JAUNE);
         Joker joker = new Joker();
 
         plateau.creerSequence(Arrays.asList(jeton1, jeton2, jeton3, joker));
 
-        Jeton jeton4 = new JetonNormal(1, Couleur.VERT);
+        Jeton jeton4 = new JetonNormal(1, VERT);
         Joker joker2 = plateau.remplacerJoker(1, jeton4);
         assertEquals("1rouge 1bleu 1jaune 1vert", plateau.toString());
         assertSame(joker, joker2);
@@ -186,14 +187,14 @@ public class PlateauTest {
 
     @Test
     public void remplacerJeton() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.ROUGE);
-        Jeton jeton2 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton3 = new JetonNormal(1, Couleur.JAUNE);
-        Jeton jeton4 = new JetonNormal(1, Couleur.VERT);
+        Jeton jeton1 = new JetonNormal(1, ROUGE);
+        Jeton jeton2 = new JetonNormal(1, BLEU);
+        Jeton jeton3 = new JetonNormal(1, JAUNE);
+        Jeton jeton4 = new JetonNormal(1, VERT);
         plateau.creerSequence(Arrays.asList(jeton1, jeton2, jeton3, jeton4));
 
         Joker joker = new Joker();
-        joker.setValeurAndCouleur(1, Couleur.BLEU);
+        joker.setValeurAndCouleur(1, BLEU);
         Jeton jeton5 = plateau.remplacerJetonParJoker(1, joker);
         assertEquals("1rouge 1bleu* 1jaune 1vert", plateau.toString());
         assertSame(jeton2, jeton5);

@@ -1,5 +1,6 @@
 package rummikub.core.plateau;
 
+import static rummikub.core.pieces.Couleur.*;
 import rummikub.core.pieces.Couleur;
 import rummikub.core.pieces.Jeton;
 import rummikub.core.pieces.JetonNormal;
@@ -31,12 +32,12 @@ public class PlateauTestFail {
 
         suiteTest = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {
-            Jeton jeton = new JetonNormal(i, Couleur.ROUGE);
+            Jeton jeton = new JetonNormal(i, ROUGE);
             suiteTest.add(jeton);
         }
 
         couleurSequenceTest = new ArrayList<>();
-        for (Couleur couleur : Couleur.values()) {
+        for (Couleur couleur : values()) {
             Jeton jeton = new JetonNormal(6, couleur);
             couleurSequenceTest.add(jeton);
         }
@@ -44,8 +45,8 @@ public class PlateauTestFail {
 
     @Test
     public void creerSequenceFail() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.ROUGE);
-        Jeton jeton2 = new JetonNormal(2, Couleur.BLEU);
+        Jeton jeton1 = new JetonNormal(1, ROUGE);
+        Jeton jeton2 = new JetonNormal(2, BLEU);
         assertThrows(UnsupportedOperationException.class, () -> {
             plateau.creerSequence(Arrays.asList(jeton1, jeton2));
         });
@@ -63,7 +64,7 @@ public class PlateauTestFail {
     @Test
     public void ajouteJetonFail() {
         plateau.creerSequence(suiteTest);
-        Jeton jeton = new JetonNormal(7, Couleur.ROUGE);
+        Jeton jeton = new JetonNormal(7, ROUGE);
         assertThrows(UnsupportedOperationException.class, () -> {
             plateau.ajouterJeton(1, jeton);
         });
@@ -73,7 +74,7 @@ public class PlateauTestFail {
     @Test
     public void ajouteJetonMauvaisIndexSequence() {
         plateau.creerSequence(suiteTest);
-        Jeton jeton = new JetonNormal(7, Couleur.ROUGE);
+        Jeton jeton = new JetonNormal(7, ROUGE);
         assertThrows(IndexOutOfBoundsException.class, () -> {
             plateau.ajouterJeton(2, jeton);
         });
@@ -83,7 +84,7 @@ public class PlateauTestFail {
     @Test
     public void supprime1JetonMauvaisIndexSequence() {
         plateau.creerSequence(suiteTest);
-        Jeton jeton = new JetonNormal(6, Couleur.ROUGE);
+        Jeton jeton = new JetonNormal(6, ROUGE);
         plateau.ajouterJeton(1, jeton);
         assertThrows(IndexOutOfBoundsException.class, () -> {
             plateau.retirerJeton(3, 1);
@@ -204,13 +205,13 @@ public class PlateauTestFail {
 
     @Test
     public void remplacerJokerMauvaisIndex() throws UnsupportedOperationException {
-        Jeton jeton1 = new JetonNormal(1, Couleur.ROUGE);
-        Jeton jeton2 = new JetonNormal(3, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, ROUGE);
+        Jeton jeton2 = new JetonNormal(3, ROUGE);
         Joker joker = new Joker();
 
         plateau.creerSequence(Arrays.asList(jeton1, joker, jeton2));
 
-        Jeton jeton3 = new JetonNormal(2, Couleur.ROUGE);
+        Jeton jeton3 = new JetonNormal(2, ROUGE);
         assertThrows(IndexOutOfBoundsException.class, () -> {
             plateau.remplacerJoker(2, jeton3);
         });
@@ -220,9 +221,9 @@ public class PlateauTestFail {
 
     @Test
     public void remplacerJetonMauvaisIndex() throws UnsupportedOperationException {
-        Jeton jeton1 = new JetonNormal(1, Couleur.ROUGE);
-        Jeton jeton2 = new JetonNormal(2, Couleur.ROUGE);
-        Jeton jeton3 = new JetonNormal(3, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, ROUGE);
+        Jeton jeton2 = new JetonNormal(2, ROUGE);
+        Jeton jeton3 = new JetonNormal(3, ROUGE);
 
         plateau.creerSequence(Arrays.asList(jeton1, jeton2, jeton3));
         Joker joker = new Joker();

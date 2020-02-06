@@ -2,7 +2,7 @@ package rummikub.controleurs;
 
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
-import rummikub.core.jeu.Joueur;
+import static rummikub.core.api.MessagePartie.TypeMessage.*;
 import rummikub.securite.ServiceJwt;
 import rummikub.securite.JoueurConnecte;
 import java.util.ArrayList;
@@ -53,12 +53,11 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void creerPartieTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.AJOUTER_JOUEUR,
+		MessagePartie messageTest = new MessagePartie(AJOUTER_JOUEUR,
 			1, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", 0, "", "");
 		when(listePartiesMock.creerPartie()).thenReturn(1);
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
-		when(partieMock.ajouterJoueur(any(Joueur.class))).thenReturn(messageTest);
-		when(partieMock.ajouterJoueur(any(Joueur.class))).thenReturn(messageTest);
+		when(partieMock.ajouterJoueur(any(JoueurConnecte.class))).thenReturn(messageTest);
 		when(serviceJwtMock.creerToken(any(JoueurConnecte.class))).thenReturn("aa");
 
 		MvcResult resultat = mockMvc.perform(post("/0/creerPartie")
@@ -74,7 +73,7 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void ajouterJoueurMauvaisePartieFail() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "La partie n'existe pas");
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
 
@@ -89,7 +88,7 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void ajouterJoueurMauvaiseMethode() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Méthode GET non autorisée");
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
 
@@ -104,7 +103,7 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void ajouterJoueurJoueurInvalideFail() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Nom non valide");
 		when(listePartiesMock.creerPartie()).thenReturn(1);
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
@@ -120,11 +119,11 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void ajouterJoueurTropdeJoueursFail() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			1, 0, "", "", 0, "", "Partie Pleine");
 		when(listePartiesMock.creerPartie()).thenReturn(1);
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
-		when(partieMock.ajouterJoueur(any(Joueur.class))).thenReturn(messageTest);
+		when(partieMock.ajouterJoueur(any(JoueurConnecte.class))).thenReturn(messageTest);
 
 		MvcResult resultat = mockMvc.perform(post("/1/ajouterJoueur")
 										.content("Vincent").contentType("application/json"))
@@ -137,7 +136,7 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void demarrerPartieTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,
+		MessagePartie messageTest = new MessagePartie(DEBUT_NOUVEAU_TOUR,
 			0, 0, "", "",  1, "", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.commencerPartie(1)).thenReturn(messageTest);
@@ -156,7 +155,7 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void demarrerPartieMauvaisePartieFail() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "La partie n'existe pas");
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
 		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
@@ -175,7 +174,7 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void demarrerPartieDemarreeFail() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Partie déjà commencée");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.commencerPartie(1)).thenReturn(messageTest);
@@ -222,7 +221,7 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void quitterPartieTest() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+		MessagePartie messageTest = new MessagePartie(RESULTAT_ACTION,
 			0, 0, "", "",  0, "", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.quitterPartie(1)).thenReturn(messageTest);
@@ -241,7 +240,7 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void quitterPartiePasAssezJoueursFail() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "",  0, "", "Nombre de joueurs insuffisant");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.quitterPartie(1)).thenReturn(messageTest);
@@ -260,7 +259,7 @@ public class ControleurPartiesTest {
 
 	@Test
 	public void quitterPartieMauvaisePartieFail() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "",  0, "", "La partie n'existe pas");
 		when(listePartiesMock.getPartie(2)).thenReturn(null);
 		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",2));

@@ -2,6 +2,7 @@ package rummikub.controleurs;
 
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
+import static rummikub.core.api.MessagePartie.TypeMessage.*;
 import rummikub.securite.ServiceJwt;
 import rummikub.securite.JoueurConnecte;
 import static org.mockito.Mockito.*;
@@ -44,7 +45,7 @@ public class ControleurPartieTestSecurite {
 
 	@Test
 	public void creerNouvelleSequenceMauvaisJoueur() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Opération non autorisée");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.creerNouvelleSequence(1, Arrays.asList(1,2,3))).thenReturn(messageTest);
@@ -64,7 +65,7 @@ public class ControleurPartieTestSecurite {
 
 	@Test
 	public void creerNouvelleSequenceMauvaisePartie() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Opération non autorisée");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.creerNouvelleSequence(1, Arrays.asList(1,2,3))).thenReturn(messageTest);
@@ -84,7 +85,7 @@ public class ControleurPartieTestSecurite {
 
 	@Test
 	public void creerNouvelleSequenceJoueurInconnu() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Opération non autorisée");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.creerNouvelleSequence(1, Arrays.asList(1,2,3))).thenReturn(messageTest);
@@ -104,7 +105,7 @@ public class ControleurPartieTestSecurite {
 
 	@Test
 	public void creerNouvelleSequenceMauvaisHeader() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Opération non autorisée");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.creerNouvelleSequence(1, Arrays.asList(1,2,3))).thenReturn(messageTest);
@@ -124,7 +125,7 @@ public class ControleurPartieTestSecurite {
 
 	@Test
 	public void afficherPartieJoueurSupprimeFail() throws Exception {
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Opération non autorisée");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		JoueurConnecte joueur = new JoueurConnecte(1,"Vincent",1);

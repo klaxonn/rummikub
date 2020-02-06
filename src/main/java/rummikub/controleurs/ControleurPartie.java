@@ -2,7 +2,8 @@ package rummikub.controleurs;
 
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
-import rummikub.core.api.FabriquePartie;
+import static rummikub.core.api.MessagePartie.TypeMessage.*;
+import static rummikub.core.api.FabriquePartie.VALEUR_MAX;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +51,7 @@ public class ControleurPartie {
 	@PostMapping(value = "{idPartie}/{idJoueur}/creerSequence")
 	public ResponseEntity<EntityModel> creerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
-	  @Size(min=1, max = FabriquePartie.VALEUR_MAX, message = "Au moins 1 jeton nécessaire")
+	  @Size(min=1, max = VALEUR_MAX, message = "Au moins 1 jeton nécessaire")
 	  List<Integer> indexes) {
 		return executerAction("creerNouvelleSequence", idPartie, idJoueur, indexes);
     }
@@ -104,7 +105,7 @@ public class ControleurPartie {
 		MessagePartie message = new MessagePartie();
 		if(listeParties.isPartieSupprimee(idPartie)) {
 			message.setMessageErreur("La partie est terminée");
-			message.setTypeMessage(MessagePartie.TypeMessage.FIN_DE_PARTIE);
+			message.setTypeMessage(FIN_DE_PARTIE);
 			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.FORBIDDEN);
 		}
 		Partie partie = listeParties.getPartie(idPartie);
@@ -123,10 +124,10 @@ public class ControleurPartie {
 			catch(Exception e) {
 			}
 
-			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.ERREUR)) {
+			if(message.getTypeMessage().equals(ERREUR)) {
 				throw new ControleurErreurException(message, modeleControleurPartie, HttpStatus.FORBIDDEN);
 			}
-			if(message.getTypeMessage().equals(MessagePartie.TypeMessage.FIN_DE_PARTIE)) {
+			if(message.getTypeMessage().equals(FIN_DE_PARTIE)) {
 				listeParties.supprimerPartie(idPartie);
 			}
 			message.setIdPartie(idPartie);

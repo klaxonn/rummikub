@@ -1,6 +1,6 @@
 package rummikub.core.plateau;
 
-import rummikub.core.pieces.Couleur;
+import static rummikub.core.pieces.Couleur.*;
 import rummikub.core.pieces.Jeton;
 import rummikub.core.pieces.JetonNormal;
 import rummikub.core.pieces.Joker;
@@ -20,16 +20,16 @@ public class SequenceCouleurTest {
 
     @Test
     public void nouvelleSequence() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(1, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(1, ROUGE);
         SequenceAbstraite sequence1 = new SequenceCouleur(Arrays.asList(jeton1, jeton2), fabrique);
         assertEquals("1bleu 1rouge", sequence1.toString());
     }
 
     @Test
     public void nouvelleSequenceDifferenteValeur() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(2, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(2, ROUGE);
         assertThrows(UnsupportedOperationException.class, () -> {
             new SequenceCouleur(Arrays.asList(jeton1, jeton2), fabrique);
         });
@@ -37,8 +37,8 @@ public class SequenceCouleurTest {
 
     @Test
     public void nouvelleSequenceDeuxJetonsMemeValeur() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(1, Couleur.BLEU);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(1, BLEU);
         assertThrows(UnsupportedOperationException.class, () -> {
             new SequenceCouleur(Arrays.asList(jeton1, jeton2), fabrique);
         });
@@ -46,7 +46,7 @@ public class SequenceCouleurTest {
 
     @Test
     public void nouvelleSequenceAvecJoker() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
         Joker joker = new Joker();
         SequenceAbstraite sequence1 = new SequenceCouleur(Arrays.asList(jeton1, joker), fabrique);
         assertEquals("1bleu 1rouge*", sequence1.toString());
@@ -54,8 +54,8 @@ public class SequenceCouleurTest {
 
     @Test
     public void nouvelleSequenceFausseAvecJoker() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(2, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(2, ROUGE);
         Joker joker = new Joker();
         assertThrows(UnsupportedOperationException.class, () -> {
             new SequenceCouleur(Arrays.asList(jeton1, jeton2, joker), fabrique);
@@ -65,10 +65,10 @@ public class SequenceCouleurTest {
 
     @Test
     public void nouvelleSequenceAvecJokerAvecSequenceComplete() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(1, Couleur.JAUNE);
-        Jeton jeton3 = new JetonNormal(1, Couleur.VERT);
-        Jeton jeton4 = new JetonNormal(1, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(1, JAUNE);
+        Jeton jeton3 = new JetonNormal(1, VERT);
+        Jeton jeton4 = new JetonNormal(1, ROUGE);
         Joker joker = new Joker();
         assertThrows(UnsupportedOperationException.class, () -> {
             new SequenceCouleur(Arrays.asList(jeton1, jeton2, jeton3, jeton4, joker), fabrique);
@@ -104,9 +104,9 @@ public class SequenceCouleurTest {
 
     @Test
     public void fusion2ValidSequences() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(1, Couleur.ROUGE);
-        Jeton jeton3 = new JetonNormal(1, Couleur.JAUNE);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(1, ROUGE);
+        Jeton jeton3 = new JetonNormal(1, JAUNE);
         SequenceAbstraite sequence1 = new SequenceCouleur(Arrays.asList(jeton1), fabrique);
         SequenceAbstraite sequence2 = new SequenceCouleur(Arrays.asList(jeton2, jeton3), fabrique);
         SequenceAbstraite sequence3 = sequence1.fusionnerSequence(sequence2);
@@ -116,9 +116,9 @@ public class SequenceCouleurTest {
 
     @Test
     public void fusionCouleursCommunes() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton3 = new JetonNormal(1, Couleur.JAUNE);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(1, BLEU);
+        Jeton jeton3 = new JetonNormal(1, JAUNE);
         SequenceAbstraite sequence1 = new SequenceCouleur(Arrays.asList(jeton1), fabrique);
         SequenceAbstraite sequence2 = new SequenceCouleur(Arrays.asList(jeton2, jeton3), fabrique);
         assertThrows(UnsupportedOperationException.class, () -> {
@@ -130,9 +130,9 @@ public class SequenceCouleurTest {
 
     @Test
     public void fusionValeursDifferentes() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(2, Couleur.VERT);
-        Jeton jeton3 = new JetonNormal(2, Couleur.JAUNE);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(2, VERT);
+        Jeton jeton3 = new JetonNormal(2, JAUNE);
         SequenceAbstraite sequence1 = new SequenceCouleur(Arrays.asList(jeton1), fabrique);
         SequenceAbstraite sequence2 = new SequenceCouleur(Arrays.asList(jeton2, jeton3), fabrique);
         assertThrows(UnsupportedOperationException.class, () -> {
@@ -144,8 +144,8 @@ public class SequenceCouleurTest {
 
     @Test
     public void retirerJetonHorsIndex() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(1, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(1, ROUGE);
         SequenceAbstraite sequence1 = new SequenceCouleur(Arrays.asList(jeton1, jeton2), fabrique);
         assertThrows(UnsupportedOperationException.class, () -> {
             sequence1.retirerJeton(0);
@@ -158,8 +158,8 @@ public class SequenceCouleurTest {
 
     @Test
     public void retirerJeton() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(1, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(1, ROUGE);
         SequenceAbstraite sequence1 = new SequenceCouleur(Arrays.asList(jeton1, jeton2), fabrique);
         Jeton jeton3 = sequence1.retirerJeton(2);
         assertEquals("1bleu", sequence1.toString());
@@ -171,8 +171,8 @@ public class SequenceCouleurTest {
 
     @Test
     public void couperSequence() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(1, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(1, ROUGE);
         SequenceAbstraite suite1 = new SequenceCouleur(Arrays.asList(jeton1, jeton2), fabrique);
         SequenceAbstraite suite2 = suite1.couperSequence(2);
         assertEquals("1bleu", suite1.toString());
@@ -184,8 +184,8 @@ public class SequenceCouleurTest {
 
     @Test
     public void couperSequenceHorsLimites() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(1, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(1, ROUGE);
         SequenceAbstraite suite1 = new SequenceCouleur(Arrays.asList(jeton1, jeton2), fabrique);
         assertThrows(UnsupportedOperationException.class, () -> {
             suite1.couperSequence(0);
@@ -197,14 +197,14 @@ public class SequenceCouleurTest {
 
     @Test
     public void remplacerJoker() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
         Joker joker = new Joker();
-        joker.setValeurAndCouleur(1, Couleur.ROUGE);
+        joker.setValeurAndCouleur(1, ROUGE);
 
         SequenceAbstraite sequence1 = new SequenceCouleur(Arrays.asList(jeton1, joker), fabrique);
         assertEquals("1bleu 1rouge*", sequence1.toString());
 
-        Jeton jeton3 = new JetonNormal(1, Couleur.ROUGE);
+        Jeton jeton3 = new JetonNormal(1, ROUGE);
         Joker joker2 = sequence1.remplacerJoker(jeton3);
         assertEquals("1bleu 1rouge", sequence1.toString());
         assertFalse(joker2.isUtilise());
@@ -213,12 +213,12 @@ public class SequenceCouleurTest {
 
     @Test
     public void remplacerJokerAvecValeurDifferente() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
         Joker joker = new Joker();
-        joker.setValeurAndCouleur(1, Couleur.ROUGE);
+        joker.setValeurAndCouleur(1, ROUGE);
         SequenceAbstraite sequence1 = new SequenceCouleur(Arrays.asList(jeton1, joker), fabrique);
 
-        Jeton jeton2 = new JetonNormal(1, Couleur.VERT);
+        Jeton jeton2 = new JetonNormal(1, VERT);
         assertThrows(UnsupportedOperationException.class, () -> {
             sequence1.remplacerJoker(jeton2);
         });
@@ -226,11 +226,11 @@ public class SequenceCouleurTest {
 
     @Test
     public void remplacerJokerQuandPasDeJOker() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.BLEU);
-        Jeton jeton2 = new JetonNormal(1, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, BLEU);
+        Jeton jeton2 = new JetonNormal(1, ROUGE);
         SequenceCouleur sequence1 = new SequenceCouleur(Arrays.asList(jeton1, jeton2), fabrique);
 
-        Jeton jeton3 = new JetonNormal(1, Couleur.BLEU);
+        Jeton jeton3 = new JetonNormal(1, BLEU);
         assertThrows(UnsupportedOperationException.class, () -> {
             sequence1.remplacerJoker(jeton3);
         });

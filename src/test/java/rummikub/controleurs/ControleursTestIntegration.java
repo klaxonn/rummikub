@@ -1,6 +1,7 @@
 package rummikub.controleurs;
 
 import rummikub.core.api.MessagePartie;
+import static rummikub.core.api.MessagePartie.TypeMessage.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -42,7 +43,7 @@ public class ControleursTestIntegration {
 
 		MessagePartie messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
 		int idPartie = messageReponse.getIdPartie();
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.AJOUTER_JOUEUR,
+		MessagePartie messageTest = new MessagePartie(AJOUTER_JOUEUR,
 			idPartie, 1, "Vincent", "", 0, "", "");
 
 		messageTest.setJeuJoueur(messageReponse.getJeuJoueur());
@@ -66,7 +67,7 @@ public class ControleursTestIntegration {
 		assertEquals(HttpStatus.CREATED, reponse.getStatusCode());
 
 		messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.AJOUTER_JOUEUR,
+		MessagePartie messageTest = new MessagePartie(AJOUTER_JOUEUR,
 			idPartie, 2, "Katya", "", 0, "", "");
 		messageTest.setJeuJoueur(messageReponse.getJeuJoueur());
 		assertEquals(messageTest, messageReponse);
@@ -92,7 +93,7 @@ public class ControleursTestIntegration {
 		assertEquals(HttpStatus.OK, reponse.getStatusCode());
 
 		messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.DEBUT_NOUVEAU_TOUR,
+		MessagePartie messageTest = new MessagePartie(DEBUT_NOUVEAU_TOUR,
 			idPartie, 0, "", "",  1, "", "");
 		assertEquals(messageTest, messageReponse);
 	}
@@ -119,7 +120,7 @@ public class ControleursTestIntegration {
 		assertEquals(HttpStatus.OK, reponse.getStatusCode());
 
 		messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.RESULTAT_ACTION,
+		MessagePartie messageTest = new MessagePartie(RESULTAT_ACTION,
 			idPartie, 1, "Vincent", "", 1, "", "");
 		messageTest.setJeuJoueur(messageReponse.getJeuJoueur());
 		messageTest.setPlateau(messageReponse.getPlateau());
@@ -151,7 +152,7 @@ public class ControleursTestIntegration {
 		assertEquals(HttpStatus.UNAUTHORIZED, reponse.getStatusCode());
 
 		messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
-		MessagePartie messageTest = new MessagePartie(MessagePartie.TypeMessage.ERREUR,
+		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Opération non autorisée");
 		assertEquals(messageTest, messageReponse);
 	}
