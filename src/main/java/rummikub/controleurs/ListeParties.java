@@ -71,7 +71,7 @@ public class ListeParties {
 	 *
 	 * @param id l'id de la partie à supprimer
 	 */
-	public void supprimerPartie(int id) {
+	public void setPartieTerminee(int id) {
 		listeParties.remove(id);
 		partiesTerminees.add(id);
 	}
@@ -82,7 +82,24 @@ public class ListeParties {
 	 * @param id l'id de la partie à tester
 	 * @return true si elle a été supprimée
 	 */
-	public boolean isPartieSupprimee(int id) {
+	public boolean isPartieTerminee(int id) {
 		return partiesTerminees.contains(id);
+	}
+
+	/**
+	 * Arrête la partie correspondant à l'id.
+	 *
+	 * @param id l'id de la partie à supprimer
+	 * @return true si la partie a été arrete
+	 */
+	public boolean arreterPartie(int id) {
+		Partie partie = listeParties.get(id);
+		if(partie != null && partie.nombreJoueurs() <= Partie.NOMBRE_MIN_JOUEURS_PARTIE) {
+			setPartieTerminee(id);
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }

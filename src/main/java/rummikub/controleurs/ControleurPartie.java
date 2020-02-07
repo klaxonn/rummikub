@@ -103,7 +103,7 @@ public class ControleurPartie {
 
 	private ResponseEntity<EntityModel> executerAction(String action, int idPartie, int idJoueur, List<Integer> arg) {
 		MessagePartie message = new MessagePartie();
-		if(listeParties.isPartieSupprimee(idPartie)) {
+		if(listeParties.isPartieTerminee(idPartie)) {
 			message.setMessageErreur("La partie est terminée");
 			message.setTypeMessage(FIN_DE_PARTIE);
 			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.FORBIDDEN);
@@ -128,7 +128,7 @@ public class ControleurPartie {
 				throw new ControleurErreurException(message, modeleControleurPartie, HttpStatus.FORBIDDEN);
 			}
 			if(message.getTypeMessage().equals(FIN_DE_PARTIE)) {
-				listeParties.supprimerPartie(idPartie);
+				listeParties.setPartieTerminee(idPartie);
 			}
 			message.setIdPartie(idPartie);
 			EntityModel<MessagePartie> body = modeleControleurPartie.toModel(message);

@@ -3,8 +3,6 @@ package rummikub.controleurs;
 import rummikub.core.api.Partie;
 import rummikub.core.api.MessagePartie;
 import static rummikub.core.api.MessagePartie.TypeMessage.*;
-import rummikub.securite.ServiceJwt;
-import rummikub.securite.JoueurConnecte;
 import java.util.List;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,23 +30,20 @@ import javax.validation.constraints.Size;
 public class ControleurParties {
 
 	private ListeParties listeParties;
-	private ListeJoueurs joueurs;
+	private ListeJoueurs listeJoueurs;
 	private ModeleControleurParties modeleControleurParties;
 	private ModeleControleurPartie modeleControleurPartie;
 	private ModeleAfficherParties modeleAfficherParties;
 
 	@Autowired
-    private ServiceJwt serviceJwt;
-
-	@Autowired
 	public ControleurParties(ListeParties listeParties, ModeleControleurParties modeleControleurParties,
 	  ModeleControleurPartie modeleControleurPartie, ModeleAfficherParties modeleAfficherParties,
-	  ListeJoueurs joueurs){
+	  ListeJoueurs listeJoueurs){
 		this.listeParties = listeParties;
 		this.modeleControleurParties = modeleControleurParties;
 		this.modeleControleurPartie = modeleControleurPartie;
 		this.modeleAfficherParties = modeleAfficherParties;
-		this.joueurs = joueurs;
+		this.listeJoueurs = listeJoueurs;
 	}
 
 	@PostMapping(value = "/0/creerPartie")
@@ -73,11 +68,10 @@ public class ControleurParties {
 		Partie partie = listeParties.getPartie(idPartie);
 		MessagePartie message = new MessagePartie();
 		if(partie != null) {
-			JoueurConnecte joueur = creerJoueur(nom, message);
-			message = partie.ajouterJoueur(joueur);
+			message = listeJoueurs.ajouterJoueur(nom, idPartie);
 			if(message.getTypeMessage().equals(AJOUTER_JOUEUR)) {
-				message.setIdPartie(idPartie);
-				return finaliserCreerJoueur(joueur, message);
+				EntityModel<MessagePartie> reponseAjout = modeleControleurParties.toModel(message);
+				return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.CREATED);
 			}
 			else {
 				throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.FORBIDDEN);
@@ -88,27 +82,6 @@ public class ControleurParties {
 			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.NOT_FOUND);
 		}
     }
-
-    private JoueurConnecte creerJoueur(String nomJoueur, MessagePartie message) {
-		try {
-			return new JoueurConnecte(nomJoueur);
-		}
-		catch(IllegalArgumentException ex) {
-			message.setMessageErreur(ex.getMessage());
-			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.FORBIDDEN);
-		}
-	}
-
-	private ResponseEntity<EntityModel> finaliserCreerJoueur(JoueurConnecte joueur, MessagePartie message) {
-		EntityModel<MessagePartie> reponseAjout = modeleControleurParties.toModel(message);
-		joueur.setId(message.getIdJoueur());
-		joueur.setIdPartie(message.getIdPartie());
-		joueurs.ajouterJoueur(joueur);
-		String token = serviceJwt.creerToken(joueur);
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "Bearer " + token);
-		return new ResponseEntity<EntityModel>(reponseAjout, headers, HttpStatus.CREATED);
-	}
 
     @PostMapping(value = "{idPartie}/{idJoueur}/demarrerPartie")
 	public ResponseEntity<EntityModel> demarrerPartie(@PathVariable int idPartie, @PathVariable int idJoueur) {
@@ -138,9 +111,31 @@ public class ControleurParties {
 			if(message.getTypeMessage().equals(ERREUR)) {
 				throw new ControleurErreurException(message, modeleControleurPartie, HttpStatus.FORBIDDEN);
 			}
-			joueurs.retirerJoueur(idPartie, idJoueur);
+			listeJoueurs.retirerJoueur(idPartie, idJoueur);
 			EntityModel<MessagePartie> body = modeleControleurParties.toModel(message);
 			return new ResponseEntity<EntityModel>(body, HttpStatus.OK);
+		}
+		else {
+			message.setMessageErreur("La partie n'existe pas");
+			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@DeleteMapping(value = "{idPartie}/{idJoueur}/arreterPartie")
+	public ResponseEntity<EntityModel> arreterPartie(@PathVariable int idPartie, @PathVariable int idJoueur) {
+		MessagePartie message = new MessagePartie();
+		Partie partie = listeParties.getPartie(idPartie);
+		if(partie != null) {
+			if(listeParties.arreterPartie(idPartie)) {
+				listeJoueurs.retirerTousJoueurs(idPartie);
+				message.setTypeMessage(FIN_DE_PARTIE);
+				EntityModel<MessagePartie> body = modeleControleurParties.toModel(message);
+				return new ResponseEntity<EntityModel>(body, HttpStatus.OK);
+			}
+			else {
+				message.setMessageErreur("Trop de joueurs pour supprimer la partie");
+				throw new ControleurErreurException(message, modeleControleurPartie, HttpStatus.FORBIDDEN);
+			}
 		}
 		else {
 			message.setMessageErreur("La partie n'existe pas");

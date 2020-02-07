@@ -130,7 +130,7 @@ public class PartieImplTest {
 		assertEquals(3, partie.nombreJoueurs());
 		assertEquals("[Vincent, Katya, Bob]", partie.listeJoueursPrets().toString());
 		MessagePartie message = partie.quitterPartie(3);
-		MessagePartie messageTest = new MessagePartie(RESULTAT_ACTION,
+		MessagePartie messageTest = new MessagePartie(FIN_DE_PARTIE,
 			0, 0, "", "", 0, "", "");
 		assertEquals(messageTest, message);
 		assertEquals("[Vincent, Katya]", partie.listeJoueursPrets().toString());

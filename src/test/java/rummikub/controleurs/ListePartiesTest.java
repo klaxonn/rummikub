@@ -39,14 +39,41 @@ public class ListePartiesTest {
 	}
 
     @Test
-	public void supprimerPartieTest(){
+	public void partieTermineeTest(){
 		int idPartie = listeParties.creerPartie();
 		Partie partie = listeParties.getPartie(idPartie);
 		assertNotNull(listeParties.getPartie(idPartie));
-		listeParties.supprimerPartie(idPartie);
+		listeParties.setPartieTerminee(idPartie);
 		partie = listeParties.getPartie(idPartie);
 		assertNull(listeParties.getPartie(idPartie));
-		assertTrue(listeParties.isPartieSupprimee(idPartie));
+		assertTrue(listeParties.isPartieTerminee(idPartie));
+	}
+
+    @Test
+	public void arreterPartieTest(){
+		int idPartie = listeParties.creerPartie();
+		Partie partie = listeParties.getPartie(idPartie);
+		assertNotNull(listeParties.getPartie(idPartie));
+		assertTrue(listeParties.arreterPartie(idPartie));
+		partie = listeParties.getPartie(idPartie);
+		assertNull(listeParties.getPartie(idPartie));
+		assertTrue(listeParties.isPartieTerminee(idPartie));
+	}
+
+	@Test
+	public void arreterPartieMauvaiseFail(){
+		int idPartie = listeParties.creerPartie();
+		assertFalse(listeParties.arreterPartie(-1));
+	}
+
+	@Test
+	public void arreterPartieTropJoueursFail(){
+		int idPartie = listeParties.creerPartie();
+		Partie partie = listeParties.getPartie(idPartie);
+		for(int i=1; i<= Partie.NOMBRE_MIN_JOUEURS_PARTIE + 1; i++) {
+			partie.ajouterJoueur(new Joueur("Joueur"+i));
+		}
+		assertFalse(listeParties.arreterPartie(idPartie));
 	}
 
     @Test

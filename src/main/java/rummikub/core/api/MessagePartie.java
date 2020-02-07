@@ -11,6 +11,7 @@ public class MessagePartie {
     private int idPartie;
     private int idJoueur;
 	private String nomJoueur;
+	private String token;
 	private String jeuJoueur;
     private int idJoueurCourant;
     private String plateau;
@@ -39,6 +40,7 @@ public class MessagePartie {
 		this.idJoueurCourant = 0;
         this.plateau = "";
         this.messageErreur = "";
+        this.token = "";
 	}
 
     /**
@@ -63,6 +65,7 @@ public class MessagePartie {
         this.messageErreur = messageErreur;
         this.idJoueur = idJoueur;
         this.idPartie = idPartie;
+        this.token = "";
 	}
 }
 

@@ -87,7 +87,7 @@ class PartieImpl implements Partie {
 		if(correctIndex(indexReelJoueur) && nombreJoueurs() > NOMBRE_MIN_JOUEURS_PARTIE) {
 			pioche.remettreJetons(listeJoueurs.get(indexReelJoueur).retireTouslesJetons());
 			listeJoueurs.set(indexReelJoueur, null);
-			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, RESULTAT_ACTION, "");
+			return creerNouveauMessage(INDEX_JOUEUR_ERREUR, FIN_DE_PARTIE, "");
 		}
 		else {
 			String messageErreur = nombreJoueurs() <= NOMBRE_MIN_JOUEURS_PARTIE ? "Minimum joueurs atteint" : "Joueur inexistant";

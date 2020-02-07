@@ -288,7 +288,7 @@ public class ControleurPartieTest {
         messageTest = new MessagePartie(FIN_DE_PARTIE,
 			0, 0, "", "", 0, "", "La partie est terminée");
 		when(listePartiesMock.getPartie(2)).thenReturn(partieMock);
-		when(listePartiesMock.isPartieSupprimee(2)).thenReturn(true);
+		when(listePartiesMock.isPartieTerminee(2)).thenReturn(true);
 		when(partieMock.afficherPartie(2)).thenReturn(messageTest);
 		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",2));
 
