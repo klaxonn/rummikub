@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 
 /**
  * Représentation d'un joueur.
- *
  */
 public class Joueur {
 
@@ -51,7 +50,6 @@ public class Joueur {
 
     /**
      * Initialise le joueur pour un nouveau tour.
-     *
      */
     public void initialiserNouveauTour() {
         peutJouer = isAutoriseAterminerLeTour();
@@ -62,7 +60,6 @@ public class Joueur {
      * Détermine si le joueur a posé au moins un jeton.
      *
      * @return <code>true</code> s'il a posé au moins un jeton (sauf joker)
-     *
      */
     public boolean aJoueAuMoins1Jeton() {
         return totalPointsJoues != 0;
@@ -72,7 +69,6 @@ public class Joueur {
      * Renvoie le nom du joueur.
      *
      * @return le nom
-     *
      */
     public String getNom() {
         return nomJoueur;
@@ -82,7 +78,6 @@ public class Joueur {
      * Renvoie la représentation textuelle des jetons du joueur.
      *
      * @return la représentation des jetons
-     *
      */
     public String afficheJetonsJoueur() {
         return listeJetons.stream().map((jeton) -> jeton.toString())
@@ -93,7 +88,6 @@ public class Joueur {
      * Détermine si le joueur a gagné.
      *
      * @return <code>true</code> s'il a gagné
-     *
      */
     public boolean aGagne() {
         return listeJetons.isEmpty();
@@ -122,7 +116,7 @@ public class Joueur {
      *
      * @param indexJetons les index des jetons
      * @return la liste des jetons
-     * @throws IndexOutOfBoundsException si les index ne sont pas compris entre
+     * @throws IndexOutOfBoundsException si les index ne sont pas tous compris entre
      * 1 et le nombre total de jetons
      */
     public List<Jeton> utiliseJetons(List<Integer> indexJetons) {
@@ -197,7 +191,6 @@ public class Joueur {
      * Renvoie le score du joueur.
      *
      * @return le score
-     *
      */
     public int getScore() {
         return calculerSommeValeurs(listeJetons);
@@ -210,7 +203,6 @@ public class Joueur {
      * dépassé dans un tour précédent.
      *
      * @return <code>true</code> si c'est possible
-     *
      */
     public boolean isAutoriseAterminerLeTour() {
         boolean limiteDepassee = totalPointsJoues >= SCORE_MINIMUM_POUR_COMMENCER;
@@ -223,7 +215,6 @@ public class Joueur {
      * tour.
      *
      * @return le nombre de points
-     *
      */
     public int pointsRestantsNecessaires() {
         int score = SCORE_MINIMUM_POUR_COMMENCER - totalPointsJoues;
@@ -231,7 +222,7 @@ public class Joueur {
     }
 
     /**
-     * Renvoie le nombre de jetons restants.
+     * Renvoie le nombre de jetons restants dans le jeu du joueur.
      *
      * @return le nombre de jetons restants
      */

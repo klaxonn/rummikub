@@ -6,8 +6,11 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
+/**
+ * Représentation HATEAOS pour les actions avant et après une partie.
+ */
 @Component
-class ModeleControleurParties implements RepresentationModelAssembler<MessagePartie, EntityModel<MessagePartie>> {
+public class ModeleControleurParties implements RepresentationModelAssembler<MessagePartie, EntityModel<MessagePartie>> {
 
   @Override
   public EntityModel<MessagePartie> toModel(MessagePartie message) {
@@ -15,7 +18,7 @@ class ModeleControleurParties implements RepresentationModelAssembler<MessagePar
 	int idJoueur = message.getIdJoueur();
 
 	EntityModel<MessagePartie> resultat = new EntityModel<>(message,
-      linkTo(methodOn(ControleurParties.class).creerPartie(null)).withRel("creerPartie"),
+      linkTo(methodOn(ControleurParties.class).creerPartie(null, null)).withRel("creerPartie"),
       linkTo(methodOn(ControleurParties.class).listerPartiesDispos()).withRel("listerPartiesDispos"),
 	  linkTo(methodOn(ControleurParties.class).demarrerPartie(idPartie, idJoueur)).withRel("demarrerPartie"));
 

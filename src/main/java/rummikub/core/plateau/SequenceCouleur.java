@@ -18,8 +18,8 @@ class SequenceCouleur extends SequenceAbstraite {
     /**
      * Crée une nouvelle séquence de couleurs.
      *
-     * Si la séquence de couleurs contient un joker libre, ses valeurs seront
-     * calculées pour obtenir une séquence valide si possible.
+     * Si la séquence de couleurs contient un joker libre, sa valeur sera
+     * calculée pour obtenir une séquence valide si possible.
      *
      * @param collectionJetons la liste de jetons constituant la séquence
      * @param fabrique la fabrique de séquences

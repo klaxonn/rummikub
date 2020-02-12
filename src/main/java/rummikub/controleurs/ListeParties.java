@@ -80,7 +80,7 @@ public class ListeParties {
 	 * Détermine si la partie a été supprimée.
 	 *
 	 * @param id l'id de la partie à tester
-	 * @return true si elle a été supprimée
+	 * @return <code>true</code> si elle a été supprimée
 	 */
 	public boolean isPartieTerminee(int id) {
 		return partiesTerminees.contains(id);
@@ -90,7 +90,7 @@ public class ListeParties {
 	 * Arrête la partie correspondant à l'id.
 	 *
 	 * @param id l'id de la partie à supprimer
-	 * @return true si la partie a été arrete
+	 * @return <code>true</code> si la partie a été arrêtée
 	 */
 	public boolean arreterPartie(int id) {
 		Partie partie = listeParties.get(id);

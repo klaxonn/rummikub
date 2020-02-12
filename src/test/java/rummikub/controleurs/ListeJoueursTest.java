@@ -31,10 +31,10 @@ public class ListeJoueursTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.ajouterJoueur(new JoueurConnecte("Vincent")))
 		   .thenReturn(messageTest);
-		when(serviceJwtMock.creerToken(new JoueurConnecte(1,"Vincent",1)))
+		when(serviceJwtMock.creerToken(new JoueurConnecte(1,"Vincent",1,"192.168.1.1")))
 		  .thenReturn("aa");
 
-		MessagePartie message = listeJoueurs.ajouterJoueur("Vincent", 1);
+		MessagePartie message = listeJoueurs.ajouterJoueur("Vincent", 1,"192.168.1.1");
 		messageTest.setToken("aa");
 		assertEquals(messageTest, message);
 	}
@@ -48,7 +48,7 @@ public class ListeJoueursTest {
 		when(partieMock.ajouterJoueur(new JoueurConnecte("Vincent")))
 		   .thenReturn(messageTest);
 
-		MessagePartie message = listeJoueurs.ajouterJoueur("Vincent", 1);
+		MessagePartie message = listeJoueurs.ajouterJoueur("Vincent", 1, "192.168.1.1");
 		assertEquals(messageTest, message);
 	}
 
@@ -59,7 +59,7 @@ public class ListeJoueursTest {
 		Partie partieMock = mock(Partie.class);
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 
-		MessagePartie message = listeJoueurs.ajouterJoueur("Vincent!!!", 1);
+		MessagePartie message = listeJoueurs.ajouterJoueur("Vincent!!!", 1, "192.168.1.1");
 		assertEquals(messageTest, message);
 	}
 
@@ -71,10 +71,10 @@ public class ListeJoueursTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.ajouterJoueur(new JoueurConnecte("Vincent")))
 		   .thenReturn(messageTest);
-		when(serviceJwtMock.creerToken(new JoueurConnecte(1,"Vincent",1)))
+		when(serviceJwtMock.creerToken(new JoueurConnecte(1,"Vincent",1,"192.168.1.1")))
 		  .thenReturn("aa");
 
-		listeJoueurs.ajouterJoueur("Vincent", 1);
+		listeJoueurs.ajouterJoueur("Vincent", 1, "192.168.1.1");
 		assertFalse(listeJoueurs.retirerJoueur(1,2));
 		assertFalse(listeJoueurs.retirerJoueur(2,1));
 		assertTrue(listeJoueurs.retirerJoueur(1,1));
@@ -89,15 +89,15 @@ public class ListeJoueursTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.ajouterJoueur(new JoueurConnecte("Vincent")))
 		   .thenReturn(messageTest);
-		when(serviceJwtMock.creerToken(new JoueurConnecte(1,"Vincent",1)))
+		when(serviceJwtMock.creerToken(new JoueurConnecte(1,"Vincent",1,"192.168.1.1")))
 		  .thenReturn("aa");
-		listeJoueurs.ajouterJoueur("Vincent", 1);
+		listeJoueurs.ajouterJoueur("Vincent", 1, "192.168.1.1");
 
 		when(partieMock.ajouterJoueur(new JoueurConnecte("Katya")))
 		   .thenReturn(messageTest);
-		when(serviceJwtMock.creerToken(new JoueurConnecte(2,"Katya",1)))
+		when(serviceJwtMock.creerToken(new JoueurConnecte(2,"Katya",1,"192.168.1.1")))
 		  .thenReturn("aa");
-		listeJoueurs.ajouterJoueur("Katya", 1);
+		listeJoueurs.ajouterJoueur("Katya", 1, "192.168.1.2");
 
 		assertFalse(listeJoueurs.retirerTousJoueurs(2));
 		assertTrue(listeJoueurs.retirerTousJoueurs(1));

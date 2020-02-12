@@ -22,7 +22,7 @@ public class ParametresAction {
 	}
 
 	/**
-	 * Paramètres pour déplacer un jeton de la sequence de départ à celle d'arrivée.
+	 * Paramètres pour déplacer un jeton de la séquence de départ à celle d'arrivée.
 	 *
 	 * @param indexSequenceDepart index de la séquence qui contient le jeton
 	 * @param indexJeton index du jeton à déplacer
@@ -35,7 +35,7 @@ public class ParametresAction {
 	}
 
 	/**
-	 * Paramètres pour fusionner la sequence d'arrivée avec la séquence de départ.
+	 * Paramètres pour fusionner la séquence d'arrivée avec la séquence de départ.
 	 *
 	 * @param indexSequenceFusionnee index de la séquence à fusionner
 	 * @param indexSequence index de la séquence qui sera supprimée après fusion
@@ -46,7 +46,7 @@ public class ParametresAction {
 	}
 
 	/**
-	 * Paramètres pour couper la séquence de depart au niveau du jeton.
+	 * Paramètres pour couper la séquence de départ au niveau du jeton.
 	 *
 	 * @param indexSequenceDepart index de la séquence à couper
 	 * @param indexJeton index du jeton qui sera le premier dans la nouvelle séquence

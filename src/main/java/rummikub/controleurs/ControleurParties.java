@@ -20,9 +20,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.Size;
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * Controleur de la partie.
+ * Controleur qui s'occupe des actions avant et après une partie.
  */
 @RestController
 @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,9 +50,9 @@ public class ControleurParties {
 	@PostMapping(value = "/0/creerPartie")
 	public ResponseEntity<EntityModel> creerPartie(
 	  @Size(min=1, max = 15, message = "Le nom doit avoir entre 1 et 15 caractéres")
-	  @RequestBody String nom) {
+	  @RequestBody String nom, HttpServletRequest requete) {
 		int idPartie = listeParties.creerPartie();
-		return ajouterJoueur(idPartie, nom);
+		return ajouterJoueur(idPartie, nom, requete);
     }
 
     @GetMapping(value = "/0/listerPartiesDispos")
@@ -64,11 +65,12 @@ public class ControleurParties {
     @PostMapping(value = "{idPartie}/ajouterJoueur")
 	public ResponseEntity<EntityModel> ajouterJoueur(@PathVariable int idPartie,
 	  @Size(min=1, max = 15, message = "Le nom doit avoir entre 1 et 15 caractéres")
-	  @RequestBody String nom) {
+	  @RequestBody String nom, HttpServletRequest requete) {
 		Partie partie = listeParties.getPartie(idPartie);
 		MessagePartie message = new MessagePartie();
 		if(partie != null) {
-			message = listeJoueurs.ajouterJoueur(nom, idPartie);
+			String adresseIP = requete.getLocalAddr();
+			message = listeJoueurs.ajouterJoueur(nom, idPartie, adresseIP);
 			if(message.getTypeMessage().equals(AJOUTER_JOUEUR)) {
 				EntityModel<MessagePartie> reponseAjout = modeleControleurParties.toModel(message);
 				return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.CREATED);

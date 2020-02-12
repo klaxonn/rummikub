@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -58,10 +59,13 @@ public class ControleurPartiesTest {
 		messageTest.setToken("aa");
 		when(listePartiesMock.creerPartie()).thenReturn(1);
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
-		when(listeJoueursMock.ajouterJoueur("Vincent", 1)).thenReturn(messageTest);
+		when(listeJoueursMock.ajouterJoueur("Vincent", 1, "192.168.1.1")).thenReturn(messageTest);
 
 		MvcResult resultat = mockMvc.perform(post("/0/creerPartie")
-										.content("Vincent").contentType("application/json"))
+										.content("Vincent").contentType("application/json")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andDo(print())
 										.andExpect(status().isCreated())
 										.andReturn();
@@ -77,7 +81,10 @@ public class ControleurPartiesTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
 
 		MvcResult resultat = mockMvc.perform(post("/1/ajouterJoueur")
-										.content("Vincent").contentType("application/json"))
+										.content("Vincent").contentType("application/json")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andExpect(status().isNotFound())
 										.andReturn();
 
@@ -92,7 +99,10 @@ public class ControleurPartiesTest {
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
 
 		MvcResult resultat = mockMvc.perform(get("/1/ajouterJoueur")
-										.content("Vincent").contentType("application/json"))
+										.content("Vincent").contentType("application/json")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andExpect(status().isMethodNotAllowed())
 										.andReturn();
 
@@ -106,10 +116,13 @@ public class ControleurPartiesTest {
 			0, 0, "", "", 0, "", "Nom non valide");
 		when(listePartiesMock.creerPartie()).thenReturn(1);
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
-		when(listeJoueursMock.ajouterJoueur("&é_ç", 1)).thenReturn(messageTest);
+		when(listeJoueursMock.ajouterJoueur("&é_ç", 1, "192.168.1.1")).thenReturn(messageTest);
 
 		MvcResult resultat = mockMvc.perform(post("/1/ajouterJoueur")
-										.content("&é_ç").contentType("application/json"))
+										.content("&é_ç").contentType("application/json")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andExpect(status().isForbidden())
 										.andReturn();
 
@@ -123,11 +136,14 @@ public class ControleurPartiesTest {
 			0, 0, "", "",  1, "", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.commencerPartie(1)).thenReturn(messageTest);
-		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1, "192.168.1.1"));
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/demarrerPartie")
 										.contentType("application/json")
-										.header("Authorization", "Bearer aa"))
+										.header("Authorization", "Bearer aa")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andDo(print())
 										.andExpect(status().isOk())
 										.andReturn();
@@ -141,11 +157,14 @@ public class ControleurPartiesTest {
 		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "La partie n'existe pas");
 		when(listePartiesMock.getPartie(1)).thenReturn(null);
-		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1, "192.168.1.1"));
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/demarrerPartie")
 										.contentType("application/json")
-										.header("Authorization", "Bearer aa"))
+										.header("Authorization", "Bearer aa")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andDo(print())
 										.andExpect(status().isNotFound())
 										.andReturn();
@@ -161,11 +180,14 @@ public class ControleurPartiesTest {
 			0, 0, "", "", 0, "", "Partie déjà commencée");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.commencerPartie(1)).thenReturn(messageTest);
-		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1, "192.168.1.1"));
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/demarrerPartie")
 										.contentType("application/json")
-										.header("Authorization", "Bearer aa"))
+										.header("Authorization", "Bearer aa")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andExpect(status().isForbidden())
 										.andReturn();
 
@@ -184,7 +206,8 @@ public class ControleurPartiesTest {
 		when(listePartiesMock.listerPartiesDispos()).thenReturn(resultatList);
 
 		MvcResult resultat = mockMvc.perform(get("/0/listerPartiesDispos")
-										.contentType("application/json"))
+										.contentType("application/json")
+										.secure(true))
 										.andDo(print())
 										.andExpect(status().isOk())
 										.andReturn();
@@ -194,7 +217,8 @@ public class ControleurPartiesTest {
 	public void mauvaisTypeAccepteTest() throws Exception {
 		MvcResult resultat = mockMvc.perform(get("/0/listerPartiesDispos")
 										.contentType("application/json")
-										.accept("text/plain"))
+										.accept("text/plain")
+										.secure(true))
 										.andDo(print())
 										.andExpect(status().isNotAcceptable())
 										.andReturn();
@@ -208,11 +232,14 @@ public class ControleurPartiesTest {
 			0, 0, "", "",  0, "", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.quitterPartie(1)).thenReturn(messageTest);
-		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1, "192.168.1.1"));
 
 		MvcResult resultat = mockMvc.perform(delete("/1/1/quitterPartie")
 										.contentType("application/json")
-										.header("Authorization", "Bearer aa"))
+										.header("Authorization", "Bearer aa")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andDo(print())
 										.andExpect(status().isOk())
 										.andReturn();
@@ -227,11 +254,14 @@ public class ControleurPartiesTest {
 			0, 0, "", "",  0, "", "Nombre de joueurs insuffisant");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.quitterPartie(1)).thenReturn(messageTest);
-		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1, "192.168.1.1"));
 
 		MvcResult resultat = mockMvc.perform(delete("/1/1/quitterPartie")
 										.contentType("application/json")
-										.header("Authorization", "Bearer aa"))
+										.header("Authorization", "Bearer aa")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andDo(print())
 										.andExpect(status().isForbidden())
 										.andReturn();
@@ -245,11 +275,14 @@ public class ControleurPartiesTest {
 		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "",  0, "", "La partie n'existe pas");
 		when(listePartiesMock.getPartie(2)).thenReturn(null);
-		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",2));
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",2, "192.168.1.1"));
 
 		MvcResult resultat = mockMvc.perform(delete("/2/1/quitterPartie")
 										.contentType("application/json")
-										.header("Authorization", "Bearer aa"))
+										.header("Authorization", "Bearer aa")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andDo(print())
 										.andExpect(status().isNotFound())
 										.andReturn();
@@ -264,11 +297,14 @@ public class ControleurPartiesTest {
 			0, 0, "", "",  0, "", "");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(listePartiesMock.arreterPartie(1)).thenReturn(true);
-		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1, "192.168.1.1"));
 
 		MvcResult resultat = mockMvc.perform(delete("/1/1/arreterPartie")
 										.contentType("application/json")
-										.header("Authorization", "Bearer aa"))
+										.header("Authorization", "Bearer aa")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andDo(print())
 										.andExpect(status().isOk())
 										.andReturn();
@@ -283,11 +319,14 @@ public class ControleurPartiesTest {
 			0, 0, "", "",  0, "", "Trop de joueurs pour supprimer la partie");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(listePartiesMock.arreterPartie(1)).thenReturn(false);
-		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1));
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1, "192.168.1.1"));
 
 		MvcResult resultat = mockMvc.perform(delete("/1/1/arreterPartie")
 										.contentType("application/json")
-										.header("Authorization", "Bearer aa"))
+										.header("Authorization", "Bearer aa")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andDo(print())
 										.andExpect(status().isForbidden())
 										.andReturn();
@@ -301,11 +340,14 @@ public class ControleurPartiesTest {
 		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "",  0, "", "La partie n'existe pas");
 		when(listePartiesMock.getPartie(2)).thenReturn(null);
-		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",2));
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",2, "192.168.1.1"));
 
 		MvcResult resultat = mockMvc.perform(delete("/2/1/arreterPartie")
 										.contentType("application/json")
-										.header("Authorization", "Bearer aa"))
+										.header("Authorization", "Bearer aa")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.1");
+																			return r;}))
 										.andDo(print())
 										.andExpect(status().isNotFound())
 										.andReturn();

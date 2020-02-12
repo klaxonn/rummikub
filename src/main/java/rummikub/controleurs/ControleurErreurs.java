@@ -15,6 +15,9 @@ import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import javax.validation.ConstraintViolationException;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Controleur qui s'occupe des erreurs pouvant survenir.
+ */
 @ControllerAdvice
 @RestController
 class ErreursControleurs {

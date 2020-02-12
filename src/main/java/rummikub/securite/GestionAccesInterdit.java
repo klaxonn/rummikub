@@ -9,8 +9,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Gestion des échecs d'autorisation
+ */
 public class GestionAccesInterdit implements AuthenticationEntryPoint {
 
+	/**
+	 * Envoie un message en cas d'échec d'autorisation
+	 */
     @Override
     public void commence(HttpServletRequest requete, HttpServletResponse reponse,
 	   AuthenticationException authException) throws IOException {

@@ -33,7 +33,7 @@ public class Pioche {
     /**
      * Retire un jeton à la pioche.
      *
-     * @return un jeton aléatoire contenu dans la pioche
+     * @return un jeton de la pioche choisi aléatoirement
      * @throws UnsupportedOperationException si la pioche est vide
      */
     public Jeton piocher1Jeton() {
@@ -51,7 +51,7 @@ public class Pioche {
     /**
      * Retire <code>NB_INITIAL_JETONS</code> jetons à la pioche.
      *
-     * @return la liste des jetons aléatoires contenus dans la pioche
+     * @return la liste des jetons choisis aléatoirement
      *
      */
     public List<Jeton> piocheInitiale() {
@@ -76,7 +76,6 @@ public class Pioche {
      * Détermine si la pioche est vide.
      *
      * @return <code>true</code> si elle est vide
-     *
      */
     public boolean isVide() {
         return listeJetons.isEmpty();
@@ -86,7 +85,6 @@ public class Pioche {
      * Retourne le nombre restant de jetons dans la pioche.
      *
      * @return le nonbre de jetons restants
-     *
      */
     public int nombreJetonsRestants() {
         return listeJetons.size();

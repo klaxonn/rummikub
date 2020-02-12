@@ -7,7 +7,7 @@ public class ServiceJwtTest {
 
 	@Test
 	public void creerTokenTest() {
-		JoueurConnecte joueur = new JoueurConnecte(1,"Vincent",1);
+		JoueurConnecte joueur = new JoueurConnecte(1,"Vincent",1,"192.168.1.1");
 		ServiceJwt serviceJwt = new ServiceJwt();
 		String token = serviceJwt.creerToken(joueur);
 		JoueurConnecte joueur2 = serviceJwt.parseToken(token);

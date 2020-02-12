@@ -23,7 +23,7 @@ import javax.validation.constraints.Size;
 import org.springframework.http.MediaType;
 
 /**
- * Controleur de la partie.
+ * Controleur qui s'occupe des actions pendant une partie.
  */
 @Validated
 @RestController

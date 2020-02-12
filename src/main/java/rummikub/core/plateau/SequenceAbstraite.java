@@ -253,9 +253,9 @@ public abstract class SequenceAbstraite {
     }
 
     /**
-     * Renvoie la liste des jetons contenus dans la séquence.
+     * Renvoie une copie de la liste des jetons contenus dans la séquence.
      *
-     * @return la liste de jetons. Ils ne sont pas retirés de la liste.
+     * @return la liste de jetons
      *
      */
     public List<Jeton> getJetons() {

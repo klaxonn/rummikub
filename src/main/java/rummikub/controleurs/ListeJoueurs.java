@@ -21,6 +21,12 @@ public class ListeJoueurs {
     private ServiceJwt serviceJwt;
     private ListeParties listeParties;
 
+	/**
+	 * Construit une liste de joueurs.
+	 *
+	 * @param listeParties la liste des parties
+	 * @param serviceJwt le service de gestion des tokens
+	 */
 	@Autowired
 	public ListeJoueurs(ListeParties listeParties, ServiceJwt serviceJwt) {
 		joueurs = new ArrayList<>();
@@ -30,8 +36,16 @@ public class ListeJoueurs {
 
 	/**
 	 * Ajoute un joueur dans la partie.
+	 * Le message envoyé peut être de deux types :
+	 * Le message envoyé est de type AJOUTER_JOUEUR en cas de réussite.
+     *
+     * Le message envoyé est de type ERREUR en cas d'échec.
+	 *
+	 * @param nomJoueur nom du joueur
+	 * @param idPartie l'id de la partie que veut joindre le joueur
+	 * @return le message contenant les informations
 	 */
-	public MessagePartie ajouterJoueur(String nomJoueur, int idPartie) {
+	public MessagePartie ajouterJoueur(String nomJoueur, int idPartie, String adresseIP) {
 		MessagePartie message = new MessagePartie();
 		try {
 			JoueurConnecte joueur = new JoueurConnecte(nomJoueur);
@@ -40,7 +54,7 @@ public class ListeJoueurs {
 			if(message.getTypeMessage().equals(AJOUTER_JOUEUR)) {
 				int idJoueur = message.getIdJoueur();
 				message.setIdPartie(idPartie);
-				String token = configJoueur(joueur, idPartie, idJoueur);
+				String token = configJoueur(joueur, idPartie, idJoueur, adresseIP);
 				message.setToken("Bearer " + token);
 			}
 			return message;
@@ -52,9 +66,10 @@ public class ListeJoueurs {
 		}
 	}
 
-	private String configJoueur(JoueurConnecte joueur, int idPartie, int idJoueur) {
+	private String configJoueur(JoueurConnecte joueur, int idPartie, int idJoueur, String adresseIP) {
 		joueur.setId(idJoueur);
 		joueur.setIdPartie(idPartie);
+		joueur.setAdresseIP(adresseIP);
 		joueurs.add(joueur);
 		return serviceJwt.creerToken(joueur);
 	}
@@ -64,7 +79,7 @@ public class ListeJoueurs {
 	 *
 	 * @param idPartie l'id de la partie
 	 * @param idJoueur l'id du joueur
-	 * @return true si le joueur a été supprimé
+	 * @return <code>true</code> si le joueur a été supprimé
 	 */
 	public boolean retirerJoueur(int idPartie, int idJoueur) {
 		return joueurs.stream().filter(i -> i.getId() == idJoueur &&
@@ -74,20 +89,20 @@ public class ListeJoueurs {
 							   .isPresent();
 	}
 
+	private boolean supprimeJoueur(JoueurConnecte joueur) {
+		joueur.desactive();
+		return joueurs.remove(joueur);
+	}
+
 	/**
 	 * Supprime tous les joueurs d'une partie.
 	 *
 	 * @param idPartie l'id de la partie
-	 * @return true si tous les joueurs ont été supprimés
+	 * @return <code>true</code> si tous les joueurs ont été supprimés
 	 */
 	public boolean retirerTousJoueurs(int idPartie) {
 		joueurs.stream().filter(i -> i.getIdPartie() == idPartie)
 						.forEach(i-> i.desactive());
 		return joueurs.removeIf(i -> i.getIdPartie() == idPartie);
-	}
-
-	private boolean supprimeJoueur(JoueurConnecte joueur) {
-		joueur.desactive();
-		return joueurs.remove(joueur);
 	}
 }

@@ -19,7 +19,7 @@ class Suite extends SequenceAbstraite {
     /**
      * Crée une nouvelle suite.
      *
-     * Si la suite contient un joker libre, ses valeurs seront calculées pour
+     * Si la suite contient un joker libre, sa valeur sera calculée pour
      * obtenir une suite valide si possible.
      *
      * @param collectionJetons la liste de jetons constituant la suite

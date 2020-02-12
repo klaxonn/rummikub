@@ -175,7 +175,15 @@ public class PartieImplTest {
 		assertEquals(messageTest, message);
 		assertEquals("[]", partie.listeJoueursPrets().toString());
 		assertEquals(2, partie.nombreJoueurs());
+	}
 
+	@Test
+    public void commencerPartieMauvaisJoueurFail() {
+		when(plateauMock.toString()).thenReturn("");
+        MessagePartie message = partie.commencerPartie(JOUEUR_INCONNU);
+		MessagePartie messageTest = new MessagePartie(ERREUR,
+			0, 0, "", "", 0, "", "Joueur inexistant");
+		assertEquals(messageTest, message);
 	}
 
 	@Test

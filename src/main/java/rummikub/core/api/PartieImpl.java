@@ -30,6 +30,10 @@ class PartieImpl implements Partie {
 
     /**
      * Crée une nouvelle partie.
+     *
+     * @param pioche la pioche
+     * @param plateau le plateau
+     * @param historique l'historique
      */
     public PartieImpl(Pioche pioche, Plateau plateau, Historique historique) {
 		this.pioche = pioche;
@@ -41,6 +45,7 @@ class PartieImpl implements Partie {
 		numJoueur = -1;
     }
 
+	@Override
 	public MessagePartie ajouterJoueur(Joueur joueur) {
 		if(!partieCommence && nombreJoueurs() < NOMBRE_MAX_JOUEURS_PARTIE) {
 			listeJoueurs.add(joueur);
@@ -53,11 +58,13 @@ class PartieImpl implements Partie {
 		}
 	}
 
+	@Override
 	public int nombreJoueurs() {
 		return (int) listeJoueurs.stream().filter(joueur -> joueur != null)
 										  .count();
 	}
 
+	@Override
 	public List<String> listeJoueursPrets(){
 		if(!partieCommence) {
 			return listeJoueurs.stream().filter(joueur -> joueur != null)
@@ -67,9 +74,14 @@ class PartieImpl implements Partie {
 		return new ArrayList<>();
 	}
 
+	@Override
     public MessagePartie commencerPartie(int indexJoueur) {
 		String messageErreur;
-		if(partieCommence) {
+		int indexReelJoueur = indexJoueur - 1;
+		if(!correctIndex(indexReelJoueur)) {
+			messageErreur = "Joueur inexistant";
+		}
+		else if(partieCommence) {
 			messageErreur = "Partie déjà commencée";
 		}
 		else if(nombreJoueurs() < NOMBRE_MIN_JOUEURS_PARTIE) {
@@ -82,6 +94,7 @@ class PartieImpl implements Partie {
 		return creerNouveauMessage(INDEX_JOUEUR_ERREUR, ERREUR, messageErreur);
     }
 
+	@Override
     public MessagePartie quitterPartie(int indexJoueur) {
 		int indexReelJoueur = indexJoueur - 1;
 		if(correctIndex(indexReelJoueur) && nombreJoueurs() > NOMBRE_MIN_JOUEURS_PARTIE) {
@@ -130,6 +143,7 @@ class PartieImpl implements Partie {
 		   && listeJoueurs.get(indexJoueur) != null;
 	}
 
+	@Override
 	public MessagePartie afficherPartie(int indexJoueur){
 		String messageErreur = "";
 		if(partieCommence) {
@@ -147,26 +161,32 @@ class PartieImpl implements Partie {
 		return creerNouveauMessage(INDEX_JOUEUR_ERREUR, ERREUR, messageErreur);
 	}
 
+	@Override
 	public MessagePartie creerNouvelleSequence(int indexJoueur, List<Integer> indexes) {
         return executerAction(indexJoueur, new CreerNouvelleSequence(plateau, joueurEnCours, indexes));
     }
 
+	@Override
     public MessagePartie ajouterJeton(int indexJoueur, List<Integer> indexes) {
         return executerAction(indexJoueur, new AjouterJeton(plateau, joueurEnCours, indexes));
     }
 
+	@Override
     public MessagePartie fusionnerSequence(int indexJoueur, List<Integer> indexes) {
 		return executerAction(indexJoueur, new FusionnerSequences(plateau, indexes));
     }
 
+	@Override
     public MessagePartie couperSequence(int indexJoueur, List<Integer> indexes) {
 		return executerAction(indexJoueur, new CouperSequence(plateau, indexes));
     }
 
+	@Override
     public MessagePartie deplacerJeton(int indexJoueur, List<Integer> indexes) {
 		return executerAction(indexJoueur, new DeplacerJeton(plateau, indexes));
     }
 
+	@Override
     public MessagePartie remplacerJoker(int indexJoueur, List<Integer> indexes) {
 		return executerAction(indexJoueur, new RemplacerJoker(plateau, joueurEnCours, indexes));
     }
@@ -197,10 +217,12 @@ class PartieImpl implements Partie {
 		return indexReelJoueur == numJoueur;
 	}
 
+	@Override
     public MessagePartie annulerDerniereAction(int indexJoueur) {
 		return executerActionNonCommande(indexJoueur, TypeAction.ANNULER_COMMANDE);
     }
 
+	@Override
     public MessagePartie terminerTour(int indexJoueur) {
 		return executerActionNonCommande(indexJoueur, TypeAction.TERMINER_TOUR);
     }

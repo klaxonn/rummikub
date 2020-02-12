@@ -6,6 +6,9 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
+/**
+ * Représentation HATEAOS pour les actions pendant une partie.
+ */
 @Component
 public class ModeleControleurPartie implements RepresentationModelAssembler<MessagePartie, EntityModel<MessagePartie>> {
 

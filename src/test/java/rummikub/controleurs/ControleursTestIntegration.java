@@ -2,24 +2,33 @@ package rummikub.controleurs;
 
 import rummikub.core.api.MessagePartie;
 import static rummikub.core.api.MessagePartie.TypeMessage.*;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.util.ResourceUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import static org.junit.jupiter.api.Assertions.*;
 import org.skyscreamer.jsonassert.JSONAssert;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.net.ssl.SSLContext ;
 import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.client.HttpClient;
 
 @Disabled
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -28,8 +37,30 @@ public class ControleursTestIntegration {
 	@LocalServerPort
     private int port;
 
-    private static final String ADRESSE = "http://localhost:";
-    private TestRestTemplate template = new TestRestTemplate();
+    @Value("${server.ssl.key-password}")
+	private String mdp;
+
+	@Value("${server.ssl.key-store}")
+	private String keyStore;
+
+    private static final String ADRESSE = "https://localhost:";
+    private TestRestTemplate template;
+
+    @BeforeEach
+    public void init() throws Exception{
+		SSLContext sslContext = SSLContextBuilder
+								.create()
+								.loadTrustMaterial(ResourceUtils.getFile(keyStore), mdp.toCharArray())
+								.build();
+		HttpClient client = HttpClients.custom()
+                                .setSSLContext(sslContext)
+                                .build();
+		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+		requestFactory.setHttpClient(client);
+		RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
+		restTemplateBuilder.requestFactory(() -> {return requestFactory;});
+		template = new TestRestTemplate(restTemplateBuilder);
+	}
 
     @Test
 	public void creerPartieTest() throws Exception {

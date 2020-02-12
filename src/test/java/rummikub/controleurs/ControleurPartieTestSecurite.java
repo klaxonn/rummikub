@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -49,13 +50,14 @@ public class ControleurPartieTestSecurite {
 			0, 0, "", "", 0, "", "Opération non autorisée");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.creerNouvelleSequence(1, Arrays.asList(1,2,3))).thenReturn(messageTest);
-		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",1));
+		when(serviceJwtMock.parseToken("bb")).thenReturn(new JoueurConnecte(2,"Katya",1, "192.168.1.1"));
 
 		String argument = asJsonString(Arrays.asList(1,2,3));
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/creerSequence")
 									.content(argument).contentType("application/json")
-									.header("Authorization", "Bearer bb"))
+									.header("Authorization", "Bearer bb")
+									.secure(true))
 									.andExpect(status().isUnauthorized())
 									.andReturn();
 
@@ -69,13 +71,14 @@ public class ControleurPartieTestSecurite {
 			0, 0, "", "", 0, "", "Opération non autorisée");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.creerNouvelleSequence(1, Arrays.asList(1,2,3))).thenReturn(messageTest);
-		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",2));
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",2, "192.168.1.1"));
 
 		String argument = asJsonString(Arrays.asList(1,2,3));
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/creerSequence")
 									.content(argument).contentType("application/json")
-									.header("Authorization", "Bearer aa"))
+									.header("Authorization", "Bearer aa")
+									.secure(true))
 									.andExpect(status().isUnauthorized())
 									.andReturn();
 
@@ -95,7 +98,8 @@ public class ControleurPartieTestSecurite {
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/creerSequence")
 									.content(argument).contentType("application/json")
-									.header("Authorization", "Bearer cc"))
+									.header("Authorization", "Bearer cc")
+									.secure(true))
 									.andExpect(status().isUnauthorized())
 									.andReturn();
 
@@ -115,7 +119,8 @@ public class ControleurPartieTestSecurite {
 
 		MvcResult resultat = mockMvc.perform(post("/1/1/creerSequence")
 									.content(argument).contentType("application/json")
-									.header("Authorization", "cc"))
+									.header("Authorization", "cc")
+									.secure(true))
 									.andExpect(status().isUnauthorized())
 									.andReturn();
 
@@ -128,18 +133,42 @@ public class ControleurPartieTestSecurite {
 		MessagePartie messageTest = new MessagePartie(ERREUR,
 			0, 0, "", "", 0, "", "Opération non autorisée");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
-		JoueurConnecte joueur = new JoueurConnecte(1,"Vincent",1);
+		JoueurConnecte joueur = new JoueurConnecte(1,"Vincent",1, "192.168.1.1");
 		joueur.desactive();
 		when(serviceJwtMock.parseToken("aa")).thenReturn(joueur);
 
 		MvcResult resultat = mockMvc.perform(get("/1/1/afficherPartie")
-										.header("Authorization", "Bearer aa"))
+										.header("Authorization", "Bearer aa")
+										.secure(true))
 										.andDo(print())
 										.andExpect(status().isUnauthorized())
 										.andReturn();
 
 		String resultatTest = asJsonString(messageTest);
 		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
+	}
+
+	@Test
+	public void afficherPartieTestMauvaiseAdresseFail() throws Exception {
+		MessagePartie messageTest = new MessagePartie(ERREUR,
+			0, 0, "", "", 0, "", "Opération non autorisée");
+		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
+		when(partieMock.afficherPartie(1)).thenReturn(messageTest);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1,"192.168.1.1"));
+
+		MvcResult resultat = mockMvc.perform(get("/1/1/afficherPartie")
+										.contentType("application/json")
+										.header("Authorization", "Bearer aa")
+										.secure(true)
+										.with((MockHttpServletRequest r) -> {r.setLocalAddr("192.168.1.2");
+																			return r;}))
+										.andDo(print())
+										.andExpect(status().isUnauthorized())
+										.andReturn();
+
+		String resultatTest = asJsonString(messageTest);
+		JSONAssert.assertEquals(resultatTest, resultat.getResponse().getContentAsString(Charset.defaultCharset()), false);
+
 	}
 
 	private static String asJsonString(final Object obj) {

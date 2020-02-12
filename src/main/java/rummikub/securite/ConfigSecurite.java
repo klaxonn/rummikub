@@ -8,6 +8,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Configure la sécurité de l'application.
+ */
 @Configuration
 @EnableWebSecurity
 public class ConfigSecurite extends WebSecurityConfigurerAdapter {
@@ -19,6 +22,10 @@ public class ConfigSecurite extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
             .csrf().disable()
+            .requiresChannel()
+            .anyRequest()
+            .requiresSecure()
+            .and()
             .authorizeRequests()
             .antMatchers("/0/*").permitAll()
             .antMatchers("/*/ajouterJoueur").permitAll()

@@ -12,6 +12,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.net.MalformedURLException;
 
+/**
+ * Gestion de l'autorisation.
+ *
+ * Donne une autorisation aux joueurs et vérifie leur identité et autorisation.
+ */
 public class FiltreAutorisationJwt extends OncePerRequestFilter {
 
 	private ServiceJwt serviceJwt;
@@ -47,8 +52,9 @@ public class FiltreAutorisationJwt extends OncePerRequestFilter {
 			String[] elements = url.getPath().substring(1).split("/");
 			int idPartieAdresse = Integer.parseInt(elements[0]);
 			int idJoueurAdresse = Integer.parseInt(elements[1]);
+			String adresseIP = requete.getLocalAddr();
 			if(joueur.getId() == idJoueurAdresse && joueur.getIdPartie() == idPartieAdresse
-			  && !joueur.isDesactive()) {
+			  && !joueur.isDesactive() && joueur.getAdresseIP().equals(adresseIP)) {
 				return new UsernamePasswordAuthenticationToken(joueur.getNom(), null, new ArrayList<>());
 			}
 			else {
