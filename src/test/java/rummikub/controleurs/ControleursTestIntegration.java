@@ -34,7 +34,7 @@ public class ControleursTestIntegration {
 	@LocalServerPort
     private int port;
 
-    @Value("${server.ssl.key-password}")
+    @Value("${server.ssl.key-store-password}")
 	private String mdp;
 
 	@Value("${server.ssl.key-store}")
