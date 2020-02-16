@@ -41,10 +41,10 @@ public class ListePartiesTest {
     @Test
 	public void partieTermineeTest(){
 		int idPartie = listeParties.creerPartie();
-		Partie partie = listeParties.getPartie(idPartie);
+		listeParties.getPartie(idPartie);
 		assertNotNull(listeParties.getPartie(idPartie));
 		listeParties.setPartieTerminee(idPartie);
-		partie = listeParties.getPartie(idPartie);
+		listeParties.getPartie(idPartie);
 		assertNull(listeParties.getPartie(idPartie));
 		assertTrue(listeParties.isPartieTerminee(idPartie));
 	}
@@ -52,17 +52,17 @@ public class ListePartiesTest {
     @Test
 	public void arreterPartieTest(){
 		int idPartie = listeParties.creerPartie();
-		Partie partie = listeParties.getPartie(idPartie);
+		listeParties.getPartie(idPartie);
 		assertNotNull(listeParties.getPartie(idPartie));
 		assertTrue(listeParties.arreterPartie(idPartie));
-		partie = listeParties.getPartie(idPartie);
+		listeParties.getPartie(idPartie);
 		assertNull(listeParties.getPartie(idPartie));
 		assertTrue(listeParties.isPartieTerminee(idPartie));
 	}
 
 	@Test
 	public void arreterPartieMauvaiseFail(){
-		int idPartie = listeParties.creerPartie();
+		listeParties.creerPartie();
 		assertFalse(listeParties.arreterPartie(-1));
 	}
 

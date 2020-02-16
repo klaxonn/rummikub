@@ -190,7 +190,7 @@ public abstract class SequenceAbstraite {
                 }
             }
         }
-        throw new UnsupportedOperationException("Remplacememnt impossible");
+        throw new UnsupportedOperationException("Remplacemement impossible");
     }
 
     /**

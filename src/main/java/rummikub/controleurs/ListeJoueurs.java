@@ -7,7 +7,6 @@ import rummikub.securite.JoueurConnecte;
 import rummikub.securite.ServiceJwt;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -82,16 +81,8 @@ public class ListeJoueurs {
 	 * @return <code>true</code> si le joueur a été supprimé
 	 */
 	public boolean retirerJoueur(int idPartie, int idJoueur) {
-		return joueurs.stream().filter(i -> i.getId() == idJoueur &&
-											i.getIdPartie() == idPartie)
-							   .findFirst()
-							   .map(i -> supprimeJoueur(i))
-							   .isPresent();
-	}
-
-	private boolean supprimeJoueur(JoueurConnecte joueur) {
-		joueur.desactive();
-		return joueurs.remove(joueur);
+		return joueurs.removeIf(i -> i.getIdPartie() == idPartie &&
+									 i.getId() == idJoueur);
 	}
 
 	/**
@@ -101,8 +92,19 @@ public class ListeJoueurs {
 	 * @return <code>true</code> si tous les joueurs ont été supprimés
 	 */
 	public boolean retirerTousJoueurs(int idPartie) {
-		joueurs.stream().filter(i -> i.getIdPartie() == idPartie)
-						.forEach(i-> i.desactive());
 		return joueurs.removeIf(i -> i.getIdPartie() == idPartie);
 	}
+
+	/**
+	 * Détermine si un joueur est présent dans la partie.
+	 *
+	 * @param idPartie l'id de la partie dont appartient le joueur
+	 * @param idJoueur l'id du joueur
+	 * @return <code>true</code> si le joueur est présent
+	 */
+	public boolean isJoueurPartie(int idPartie, int idJoueur) {
+		return joueurs.stream().anyMatch(i -> i.getId() == idJoueur &&
+											  i.getIdPartie() == idPartie);
+	}
+
 }

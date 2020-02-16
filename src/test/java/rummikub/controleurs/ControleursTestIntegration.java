@@ -2,7 +2,6 @@ package rummikub.controleurs;
 
 import rummikub.core.api.MessagePartie;
 import static rummikub.core.api.MessagePartie.TypeMessage.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -20,9 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import static org.junit.jupiter.api.Assertions.*;
-import org.skyscreamer.jsonassert.JSONAssert;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.net.ssl.SSLContext ;
+import javax.net.ssl.SSLContext;
 import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
@@ -30,7 +27,7 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.client.HttpClient;
 
-@Disabled
+//@Disabled
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ControleursTestIntegration {
 

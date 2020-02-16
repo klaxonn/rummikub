@@ -445,5 +445,6 @@ public class PartieImplTest {
 		MessagePartie message = partie.terminerTour(JOUEUR1);
 		MessagePartie messageTest = new MessagePartie(FIN_DE_PARTIE,
 			0, 1, "Vincent", "", JOUEUR1, "10bleu 11bleu 12bleu 13bleu", "");
+		assertEquals(messageTest, message);
     }
 }

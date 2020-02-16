@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import javax.validation.ConstraintViolationException;
 import javax.servlet.http.HttpServletResponse;
 
@@ -37,8 +38,8 @@ class ErreursControleurs {
 		return "Type accepté : " + MediaType.APPLICATION_JSON_VALUE + "\n";
 	}
 
-	@ExceptionHandler(java.lang.NullPointerException.class)
-	ResponseEntity<EntityModel> argumentIncorrect(java.lang.NullPointerException ex) {
+	@ExceptionHandler(NullPointerException.class)
+	ResponseEntity<EntityModel> argumentIncorrect(NullPointerException ex) {
 		MessagePartie message = new MessagePartie();
 		message.setTypeMessage(ERREUR);
 		message.setMessageErreur("Argument incorrect");
@@ -55,6 +56,17 @@ class ErreursControleurs {
 		EntityModel<MessagePartie> reponseAjout = new EntityModel<>(message);
 		return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.METHOD_NOT_ALLOWED);
 	}
+
+	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+	ResponseEntity<EntityModel> methodePasAuthorisee(HttpMediaTypeNotSupportedException ex) {
+		MessagePartie message = new MessagePartie();
+		message.setTypeMessage(ERREUR);
+		String messageErreur = "Type " + ex.getContentType() + " non autorisé";
+		message.setMessageErreur(messageErreur);
+		EntityModel<MessagePartie> reponseAjout = new EntityModel<>(message);
+		return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+	}
+
 
 	@ExceptionHandler(ConstraintViolationException.class)
 	ResponseEntity<EntityModel> mauvaiseTailleTableau(ConstraintViolationException ex) {

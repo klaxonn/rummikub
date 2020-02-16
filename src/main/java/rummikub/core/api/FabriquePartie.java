@@ -1,6 +1,5 @@
 package rummikub.core.api;
 
-import rummikub.core.jeu.Joueur;
 import rummikub.core.jeu.Pioche;
 import rummikub.core.plateau.Plateau;
 import rummikub.core.plateau.PlateauImpl;

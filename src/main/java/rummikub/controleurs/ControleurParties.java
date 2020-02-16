@@ -17,7 +17,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.HttpHeaders;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.Size;
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +46,7 @@ public class ControleurParties {
 		this.listeJoueurs = listeJoueurs;
 	}
 
-	@PostMapping(value = "/0/creerPartie")
+	@PostMapping("/0/creerPartie")
 	public ResponseEntity<EntityModel> creerPartie(
 	  @Size(min=1, max = 15, message = "Le nom doit avoir entre 1 et 15 caractéres")
 	  @RequestBody String nom, HttpServletRequest requete) {
@@ -55,14 +54,14 @@ public class ControleurParties {
 		return ajouterJoueur(idPartie, nom, requete);
     }
 
-    @GetMapping(value = "/0/listerPartiesDispos")
+    @GetMapping(value = "/0/listerPartiesDispos", consumes = "*/*")
 	public ResponseEntity<CollectionModel> listerPartiesDispos() {
 		List<PartieDispo> message = listeParties.listerPartiesDispos();
 		CollectionModel<EntityModel<PartieDispo>> body = modeleAfficherParties.toCollectionModel(message);
 		return new ResponseEntity<CollectionModel>(body, HttpStatus.OK);
     }
 
-    @PostMapping(value = "{idPartie}/ajouterJoueur")
+    @PostMapping("{idPartie}/ajouterJoueur")
 	public ResponseEntity<EntityModel> ajouterJoueur(@PathVariable int idPartie,
 	  @Size(min=1, max = 15, message = "Le nom doit avoir entre 1 et 15 caractéres")
 	  @RequestBody String nom, HttpServletRequest requete) {
@@ -85,7 +84,7 @@ public class ControleurParties {
 		}
     }
 
-    @PostMapping(value = "{idPartie}/{idJoueur}/demarrerPartie")
+    @PostMapping("{idPartie}/{idJoueur}/demarrerPartie")
 	public ResponseEntity<EntityModel> demarrerPartie(@PathVariable int idPartie, @PathVariable int idJoueur) {
 		Partie partie = listeParties.getPartie(idPartie);
 		MessagePartie message = new MessagePartie();
@@ -104,7 +103,7 @@ public class ControleurParties {
 		}
 	}
 
-	@DeleteMapping(value = "{idPartie}/{idJoueur}/quitterPartie")
+	@DeleteMapping("{idPartie}/{idJoueur}/quitterPartie")
 	public ResponseEntity<EntityModel> quitterPartie(@PathVariable int idPartie, @PathVariable int idJoueur) {
 		Partie partie = listeParties.getPartie(idPartie);
 		MessagePartie message = new MessagePartie();
@@ -123,20 +122,29 @@ public class ControleurParties {
 		}
 	}
 
-	@DeleteMapping(value = "{idPartie}/{idJoueur}/arreterPartie")
+	@DeleteMapping("{idPartie}/{idJoueur}/arreterPartie")
 	public ResponseEntity<EntityModel> arreterPartie(@PathVariable int idPartie, @PathVariable int idJoueur) {
 		MessagePartie message = new MessagePartie();
 		Partie partie = listeParties.getPartie(idPartie);
 		if(partie != null) {
-			if(listeParties.arreterPartie(idPartie)) {
-				listeJoueurs.retirerTousJoueurs(idPartie);
-				message.setTypeMessage(FIN_DE_PARTIE);
-				EntityModel<MessagePartie> body = modeleControleurParties.toModel(message);
-				return new ResponseEntity<EntityModel>(body, HttpStatus.OK);
+			if(listeJoueurs.isJoueurPartie(idPartie, idJoueur)) {
+				if(listeParties.arreterPartie(idPartie)) {
+					listeJoueurs.retirerTousJoueurs(idPartie);
+					message.setTypeMessage(FIN_DE_PARTIE);
+					EntityModel<MessagePartie> body = modeleControleurParties.toModel(message);
+					return new ResponseEntity<EntityModel>(body, HttpStatus.OK);
+				}
+				else {
+					message = partie.afficherPartie(idJoueur);
+					message.setTypeMessage(ERREUR);
+					message.setMessageErreur("Trop de joueurs pour supprimer la partie");
+					message.setIdPartie(idPartie);
+					throw new ControleurErreurException(message, modeleControleurPartie, HttpStatus.FORBIDDEN);
+				}
 			}
 			else {
-				message.setMessageErreur("Trop de joueurs pour supprimer la partie");
-				throw new ControleurErreurException(message, modeleControleurPartie, HttpStatus.FORBIDDEN);
+				message.setMessageErreur("Opération non autorisée");
+				throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.UNAUTHORIZED);
 			}
 		}
 		else {

@@ -19,16 +19,14 @@ public class ModeleAfficherParties implements RepresentationModelAssembler<Parti
 	public EntityModel<PartieDispo> toModel(PartieDispo partie) {
 		int idPartie = partie.getId();
 
-		EntityModel<PartieDispo> resultat = new EntityModel<>(partie,
+		return new EntityModel<>(partie,
 		  linkTo(methodOn(ControleurParties.class).ajouterJoueur(idPartie, null, null)).withRel("ajouterJoueur"));
-
-		return resultat;
 	}
 
 	public CollectionModel<EntityModel<PartieDispo>> toCollectionModel(List<PartieDispo> liste) {
-		List<EntityModel<PartieDispo>> ListeEntity = liste.stream().map(element -> toModel(element))
+		List<EntityModel<PartieDispo>> listeEntity = liste.stream().map(element -> toModel(element))
 															.collect(Collectors.toList());
-		CollectionModel<EntityModel<PartieDispo>> collection = new CollectionModel<>(ListeEntity);
+		CollectionModel<EntityModel<PartieDispo>> collection = new CollectionModel<>(listeEntity);
 		collection.add(linkTo(methodOn(ControleurParties.class).creerPartie(null, null)).withRel("creerPartie"),
 						linkTo(methodOn(ControleurParties.class).listerPartiesDispos()).withRel("listerPartiesDispos"));
 		return collection;

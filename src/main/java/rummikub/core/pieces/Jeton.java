@@ -1,6 +1,5 @@
 package rummikub.core.pieces;
 
-import java.util.Objects;
 import lombok.Getter;
 import lombok.EqualsAndHashCode;
 

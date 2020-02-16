@@ -37,6 +37,5 @@ public class ConfigSecurite extends WebSecurityConfigurerAdapter {
                 UsernamePasswordAuthenticationFilter.class)
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        ;
     }
 }

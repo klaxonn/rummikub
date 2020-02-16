@@ -26,10 +26,11 @@ public class GestionAccesInterdit implements AuthenticationEntryPoint {
 		message.setMessageErreur("Opération non autorisée");
 		reponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		reponse.setContentType("application/json");
-        OutputStream out = reponse.getOutputStream();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(out, message);
-        out.flush();
+        try (OutputStream out = reponse.getOutputStream()) {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(out, message);
+			out.flush();
+		}
     }
 }
 

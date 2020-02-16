@@ -6,7 +6,7 @@ import rummikub.core.jeu.Joueur;
 
 /**
  * Repésentation d'un joueur connecté.
- * Un joueur connecté est specifique à une partie et peut-être désactivé.
+ * Un joueur connecté est specifique à une partie
  */
 @Data
 @EqualsAndHashCode (callSuper = false)
@@ -15,7 +15,6 @@ public class JoueurConnecte extends Joueur {
     private int idPartie;
     private String nom;
     private String adresseIP;
-    private boolean desactive = false;
 
 	/**
 	 * Construit un joueur connecté.
@@ -44,22 +43,5 @@ public class JoueurConnecte extends Joueur {
 		this.idPartie = idPartie;
 		this.nom = nom;
 		this.adresseIP = adresseIP;
-	}
-
-	/**
-	 * Détermine si le joueur est toujours membre de la partie.
-	 *
-	 * @return <code>true</code> si c'est le cas
-	 */
-	public boolean isDesactive() {
-		return desactive;
-	}
-
-	/**
-	 * Désactive le joueur.
-	 * Il n'est plus membre de la partie.
-	 */
-	public void desactive() {
-		desactive = true;
 	}
 }

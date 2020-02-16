@@ -17,8 +17,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    compile 'org.springdoc:springdoc-openapi-core:1.1.44'
-    compile 'org.springdoc:springdoc-openapi-ui:1.1.44'
     compile 'io.jsonwebtoken:jjwt-api:0.10.7'
     runtime 'io.jsonwebtoken:jjwt-impl:0.10.7'
 	runtime 'io.jsonwebtoken:jjwt-jackson:0.10.7'

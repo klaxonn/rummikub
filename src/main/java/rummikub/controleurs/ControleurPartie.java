@@ -5,7 +5,6 @@ import rummikub.core.api.MessagePartie;
 import static rummikub.core.api.MessagePartie.TypeMessage.*;
 import static rummikub.core.api.FabriquePartie.VALEUR_MAX;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.reflect.Method;
 import org.springframework.http.HttpStatus;
@@ -43,12 +42,12 @@ public class ControleurPartie {
 		this.modeleControleurParties = modeleControleurParties;
 	}
 
-    @GetMapping("{idPartie}/{idJoueur}/afficherPartie")
+    @GetMapping(value = "{idPartie}/{idJoueur}/afficherPartie", consumes = "*/*")
     public ResponseEntity<EntityModel> afficherPartie(@PathVariable int idPartie, @PathVariable int idJoueur){
 		return executerAction("afficherPartie", idPartie, idJoueur, null);
 	}
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/creerSequence")
+	@PostMapping("{idPartie}/{idJoueur}/creerSequence")
 	public ResponseEntity<EntityModel> creerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody
 	  @Size(min=1, max = VALEUR_MAX, message = "Au moins 1 jeton nécessaire")
@@ -56,47 +55,47 @@ public class ControleurPartie {
 		return executerAction("creerNouvelleSequence", idPartie, idJoueur, indexes);
     }
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/ajouterJeton")
+	@PostMapping("{idPartie}/{idJoueur}/ajouterJeton")
 	public ResponseEntity<EntityModel> ajouterJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody ParametresAction param) {
 		return executerAction("ajouterJeton", idPartie, idJoueur,
 		  Arrays.asList(param.getIndexJeton(), param.getIndexSequenceArrivee()));
     }
 
-    @PostMapping(value = "{idPartie}/{idJoueur}/fusionnerSequence")
+    @PostMapping("{idPartie}/{idJoueur}/fusionnerSequence")
 	public ResponseEntity<EntityModel> fusionnerSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody ParametresAction param) {
 		return executerAction("fusionnerSequence", idPartie, idJoueur,
 		  Arrays.asList(param.getIndexSequenceDepart(), param.getIndexSequenceArrivee()));
     }
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/couperSequence")
+	@PostMapping("{idPartie}/{idJoueur}/couperSequence")
 	public ResponseEntity<EntityModel> couperSequence(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody ParametresAction param) {
 		return executerAction("couperSequence", idPartie, idJoueur,
 		  Arrays.asList(param.getIndexSequenceDepart(), param.getIndexJeton()));
     }
 
-	@PostMapping(value = "{idPartie}/{idJoueur}/deplacerJeton")
+	@PostMapping("{idPartie}/{idJoueur}/deplacerJeton")
 	public ResponseEntity<EntityModel> deplacerJeton(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody ParametresAction param) {
 		return executerAction("deplacerJeton", idPartie, idJoueur,
 		  Arrays.asList(param.getIndexSequenceDepart(), param.getIndexJeton(), param.getIndexSequenceArrivee()));
     }
 
-    @PostMapping(value = "{idPartie}/{idJoueur}/remplacerJoker")
+    @PostMapping("{idPartie}/{idJoueur}/remplacerJoker")
 	public ResponseEntity<EntityModel> remplacerJoker(@PathVariable int idPartie, @PathVariable int idJoueur,
 	  @RequestBody ParametresAction param) {
 		return executerAction("remplacerJoker", idPartie, idJoueur,
 		  Arrays.asList(param.getIndexJeton(), param.getIndexSequenceArrivee()));
     }
 
-    @PostMapping(value = "{idPartie}/{idJoueur}/annulerDerniereAction")
+    @PostMapping("{idPartie}/{idJoueur}/annulerDerniereAction")
 	public ResponseEntity<EntityModel> annulerDerniereAction(@PathVariable int idPartie, @PathVariable int idJoueur) {
 		return executerAction("annulerDerniereAction", idPartie, idJoueur, null);
     }
 
-    @PostMapping(value = "{idPartie}/{idJoueur}/terminerTour")
+    @PostMapping("{idPartie}/{idJoueur}/terminerTour")
 	public ResponseEntity<EntityModel> terminerTour(@PathVariable int idPartie, @PathVariable int idJoueur) {
 		return executerAction("terminerTour", idPartie, idJoueur, null);
     }
@@ -106,7 +105,7 @@ public class ControleurPartie {
 		if(listeParties.isPartieTerminee(idPartie)) {
 			message.setMessageErreur("La partie est terminée");
 			message.setTypeMessage(FIN_DE_PARTIE);
-			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.FORBIDDEN);
+			throw new ControleurErreurException(message, modeleControleurParties, HttpStatus.GONE);
 		}
 		Partie partie = listeParties.getPartie(idPartie);
 		if(partie != null){
