@@ -19,6 +19,11 @@ public class JetonNormal extends Jeton {
         super.couleur = couleur;
     }
 
+    /**
+     * Renvoie la forme textuelle d'un jeton.
+     *
+     * le format est valeurcouleur Exemple : "7rouge".
+     */
     @Override
     public String toString() {
         return "" + super.valeur + super.couleur.toString().toLowerCase();

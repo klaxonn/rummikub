@@ -2,10 +2,15 @@ package rummikub.core.plateau;
 
 import rummikub.core.pieces.Couleur;
 import rummikub.core.pieces.Jeton;
+<<<<<<< HEAD:src/main/java/rummikub/core/plateau/Suite.java
 import rummikub.core.jeu.Pioche;
+=======
+import static rummikub.core.api.FabriquePartie.VALEUR_MAX;
+>>>>>>> web:src/main/java/rummikub/core/plateau/Suite.java
 import rummikub.core.pieces.Joker;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Représentation d'une suite.
@@ -18,26 +23,31 @@ class Suite extends SequenceAbstraite {
     /**
      * Crée une nouvelle suite.
      *
-     * Si la suite contient un joker libre, ses valeurs seront calculées pour
+     * Si la suite contient un joker libre, sa valeur sera calculée pour
      * obtenir une suite valide si possible.
      *
      * @param collectionJetons la liste de jetons constituant la suite
+     * @param fabrique la fabrique de séquences
      * @throws UnsupportedOperationException si les jetons ne forment pas une
      * suite valide
      */
-    public Suite(List<Jeton> collectionJetons) {
-        super(collectionJetons);
+    public Suite(List<Jeton> collectionJetons, FabriqueSequence fabrique) {
+        super(collectionJetons, fabrique);
         Collections.sort(sequence);
     }
 
     @Override
     public boolean isCorrectSequence(List<Jeton> collectionJetons) {
+<<<<<<< HEAD:src/main/java/rummikub/core/plateau/Suite.java
         if (!collectionJetons.isEmpty()) {
+=======
+        if (collectionJetons.isEmpty()) {
+            return false;
+        } else {
+>>>>>>> web:src/main/java/rummikub/core/plateau/Suite.java
             Collections.sort(collectionJetons);
             parcoursJokers(collectionJetons);
             return isMemeCouleur(collectionJetons) && isValeursASuite(collectionJetons);
-        } else {
-            return false;
         }
     }
 
@@ -83,14 +93,14 @@ class Suite extends SequenceAbstraite {
         int valeurJoker = -1;
         if (valeurPremierElement(collectionJetons) > 1) {
             valeurJoker = valeurPremierElement(collectionJetons) - 1;
-        } else if (valeurDernierElement(collectionJetons) < Pioche.VALEUR_MAX) {
+        } else if (valeurDernierElement(collectionJetons) < VALEUR_MAX) {
             valeurJoker = valeurDernierElement(collectionJetons) + 1;
         }
         return valeurJoker;
     }
 
     private int valeurPremierElement(List<Jeton> collectionJetons) {
-        return SequenceAbstraite.premierJetonNonJoker(collectionJetons).getValeur();
+		return premierJeton(collectionJetons).getValeur();
     }
 
     private int valeurDernierElement(List<Jeton> collectionJetons) {
@@ -98,7 +108,16 @@ class Suite extends SequenceAbstraite {
     }
 
     private Couleur couleurDeSequence(List<Jeton> collectionJetons) {
-        return SequenceAbstraite.premierJetonNonJoker(collectionJetons).getCouleur();
+		return premierJeton(collectionJetons).getCouleur();
+    }
+
+    private Jeton premierJeton(List<Jeton> collectionJetons) {
+		try {
+			return SequenceAbstraite.premierJetonNonJoker(collectionJetons);
+		}
+		catch(NoSuchElementException e) {
+			throw new UnsupportedOperationException("La séquence ne peut contenir que des jokers");
+		}
     }
 
     private boolean isMemeCouleur(List<Jeton> collectionJetons) {

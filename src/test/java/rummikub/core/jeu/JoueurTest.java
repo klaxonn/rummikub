@@ -1,6 +1,10 @@
 package rummikub.core.jeu;
 
+<<<<<<< HEAD:src/test/java/rummikub/core/jeu/JoueurTest.java
 import rummikub.core.pieces.Couleur;
+=======
+import static rummikub.core.pieces.Couleur.*;
+>>>>>>> web:src/test/java/rummikub/core/jeu/JoueurTest.java
 import rummikub.core.pieces.Jeton;
 import rummikub.core.pieces.JetonNormal;
 import rummikub.core.pieces.Joker;
@@ -18,11 +22,11 @@ public class JoueurTest {
 
     @BeforeEach
     public void initialisation() {
-        Jeton jeton1 = new JetonNormal(1, Couleur.ROUGE);
-        Jeton jeton2 = new JetonNormal(10, Couleur.BLEU);
-        Jeton jeton3 = new JetonNormal(11, Couleur.JAUNE);
-        Jeton jeton4 = new JetonNormal(12, Couleur.VERT);
-        jeton5 = new JetonNormal(1, Couleur.ROUGE);
+        Jeton jeton1 = new JetonNormal(1, ROUGE);
+        Jeton jeton2 = new JetonNormal(10, BLEU);
+        Jeton jeton3 = new JetonNormal(11, JAUNE);
+        Jeton jeton4 = new JetonNormal(12, VERT);
+        jeton5 = new JetonNormal(1, ROUGE);
         Jeton joker = new Joker();
         joueur = new Joueur("Kate");
         joueur.setPiocheInitiale(Arrays.asList(
@@ -30,7 +34,7 @@ public class JoueurTest {
     }
 
     @Test
-    public void nouveauJoueur() {
+    public void nouveauJoueurTest() {
         assertEquals("Kate", joueur.getNom());
         assertEquals("1rouge 10bleu 11jaune * 12vert 1rouge", joueur.afficheJetonsJoueur());
         assertEquals("Kate\n1rouge 10bleu 11jaune * 12vert 1rouge", joueur.toString());
@@ -38,7 +42,14 @@ public class JoueurTest {
     }
 
     @Test
-    public void utiliseJeton() {
+    public void nouveauJoueurFail() {
+		assertThrows(IllegalArgumentException.class, () -> {
+            new Joueur("*:*");
+        });
+    }
+
+    @Test
+    public void utiliseJetonTest() {
         Jeton jeton = joueur.utiliseJeton(5);
         assertEquals("1rouge 10bleu 11jaune * 1rouge", joueur.afficheJetonsJoueur());
         assertEquals("12vert", jeton.toString());
@@ -46,7 +57,15 @@ public class JoueurTest {
     }
 
     @Test
-    public void utiliseJetonMauvaisIndexes() {
+    public void retireTouslesJetonsTest() {
+        List<Jeton> jetons = joueur.retireTouslesJetons();
+        assertEquals("", joueur.afficheJetonsJoueur());
+        assertEquals(0, joueur.nombreJetonsRestants());
+        assertEquals(6, jetons.size());
+    }
+
+    @Test
+    public void utiliseJetonMauvaisIndexesFail() {
         assertThrows(IndexOutOfBoundsException.class, () -> {
             joueur.utiliseJeton(0);
         });
@@ -58,7 +77,7 @@ public class JoueurTest {
     }
 
     @Test
-    public void utiliseJetons() {
+    public void utiliseJetonsTest() {
         List<Jeton> jetons = joueur.utiliseJetons(Arrays.asList(1, 4, 5));
         assertEquals("10bleu 11jaune 1rouge", joueur.afficheJetonsJoueur());
         assertEquals("[12vert, *, 1rouge]", jetons.toString());
@@ -66,7 +85,7 @@ public class JoueurTest {
     }
 
     @Test
-    public void utiliseJetonsMauvaisIndexes() {
+    public void utiliseJetonsMauvaisIndexesFail() {
         assertThrows(IndexOutOfBoundsException.class, () -> {
             joueur.utiliseJetons(Arrays.asList(1, 0, 7));
         });
@@ -75,17 +94,17 @@ public class JoueurTest {
     }
 
     @Test
-    public void ajouteJeton() {
-        Jeton jeton = new JetonNormal(7, Couleur.ROUGE);
+    public void ajouteJetonTest() {
+        Jeton jeton = new JetonNormal(7, ROUGE);
         joueur.ajouteJeton(jeton);
         assertEquals("1rouge 10bleu 11jaune * 12vert 1rouge 7rouge", joueur.afficheJetonsJoueur());
         assertEquals(42, joueur.getScore());
     }
 
     @Test
-    public void ajouteJetons() {
-        Jeton jeton1 = new JetonNormal(7, Couleur.ROUGE);
-        Jeton jeton2 = new JetonNormal(12, Couleur.BLEU);
+    public void ajouteJetonsTest() {
+        Jeton jeton1 = new JetonNormal(7, ROUGE);
+        Jeton jeton2 = new JetonNormal(12, BLEU);
         List<Jeton> jetons = new ArrayList<>(Arrays.asList(jeton1, jeton2));
         joueur.ajouteJetons(jetons);
         assertEquals("1rouge 10bleu 11jaune * 12vert 1rouge 7rouge 12bleu", joueur.afficheJetonsJoueur());
@@ -93,35 +112,35 @@ public class JoueurTest {
     }
 
     @Test
-    public void getScore() {
+    public void getScoreTest() {
         assertEquals(35, joueur.getScore());
     }
 
     @Test
-    public void aGagne() {
-        List<Jeton> jetons = joueur.utiliseJetons(Arrays.asList(1, 2, 3, 4, 5, 6));
+    public void aGagneTest() {
+        joueur.utiliseJetons(Arrays.asList(1, 2, 3, 4, 5, 6));
         assertTrue(joueur.aGagne());
         assertEquals(0, joueur.getScore());
     }
 
     @Test
-    public void estAutoriseATerminerleTour() {
+    public void estAutoriseATerminerleTourTest() {
         assertFalse(joueur.isAutoriseAterminerLeTour());
-        List<Jeton> jetons = joueur.utiliseJetons(Arrays.asList(2, 3, 5));
+        joueur.utiliseJetons(Arrays.asList(2, 3, 5));
         assertTrue(joueur.isAutoriseAterminerLeTour());
         assertTrue(joueur.aJoueAuMoins1Jeton());
     }
 
     @Test
-    public void pasAutoriseATerminerleTour() {
-        List<Jeton> jetons = joueur.utiliseJetons(Arrays.asList(2, 3));
+    public void pasAutoriseATerminerleTourFail() {
+        joueur.utiliseJetons(Arrays.asList(2, 3));
         assertFalse(joueur.isAutoriseAterminerLeTour());
         assertEquals(9, joueur.pointsRestantsNecessaires());
     }
 
     @Test
-    public void plusBesoinAutorisation() {
-        List<Jeton> jetons = joueur.utiliseJetons(Arrays.asList(2, 3, 5));
+    public void plusBesoinAutorisationTest() {
+        joueur.utiliseJetons(Arrays.asList(2, 3, 5));
         assertTrue(joueur.aJoueAuMoins1Jeton());
         assertTrue(joueur.isAutoriseAterminerLeTour());
         joueur.initialiserNouveauTour();

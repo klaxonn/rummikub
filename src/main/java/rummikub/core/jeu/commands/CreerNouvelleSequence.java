@@ -3,7 +3,10 @@ package rummikub.core.jeu.commands;
 import rummikub.core.plateau.Plateau;
 import rummikub.core.jeu.Joueur;
 import rummikub.core.pieces.Jeton;
+<<<<<<< HEAD:src/main/java/rummikub/core/jeu/commands/CreerNouvelleSequence.java
 import rummikub.ihm.ControleurAbstrait;
+=======
+>>>>>>> web:src/main/java/rummikub/core/jeu/commands/CreerNouvelleSequence.java
 import java.util.List;
 
 /**
@@ -13,7 +16,7 @@ public class CreerNouvelleSequence implements Command {
 
     private final Joueur joueur;
     private final Plateau plateau;
-    private final ControleurAbstrait controleur;
+    private final List<Integer> listeIndexJetons;
     private int indexSequence = 0;
 
     /**
@@ -21,31 +24,24 @@ public class CreerNouvelleSequence implements Command {
      *
      * @param plateau le plateau de jeu
      * @param joueur le joueur qui fait l'action
-     * @param controleur le controleur qui s'occupe de l'IHM
+     * @param listeIndexJetons les indexes des jetons constituant la nouvelle séquence
      */
-    public CreerNouvelleSequence(Plateau plateau, Joueur joueur, ControleurAbstrait controleur) {
+    public CreerNouvelleSequence(Plateau plateau, Joueur joueur, List<Integer> listeIndexJetons) {
         this.plateau = plateau;
         this.joueur = joueur;
-        this.controleur = controleur;
+        this.listeIndexJetons = listeIndexJetons;
+
     }
 
     @Override
-    public boolean doCommand() {
-        List<Integer> listeIndexJetons = controleur.obtenirListeJetons();
+    public void doCommand() {
         List<Jeton> listeJetons;
-        try {
-            listeJetons = joueur.utiliseJetons(listeIndexJetons);
-        } catch (IndexOutOfBoundsException e) {
-            controleur.afficherMessage(e.getMessage());
-            return false;
-        }
+        listeJetons = joueur.utiliseJetons(listeIndexJetons);
         try {
             indexSequence = plateau.creerSequence(listeJetons);
-            return true;
         } catch (Exception e) {
             joueur.ajouteJetons(listeJetons);
-            controleur.afficherMessage(e.getMessage());
-            return false;
+            throw e;
         }
     }
 

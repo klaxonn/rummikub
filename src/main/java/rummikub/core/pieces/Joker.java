@@ -4,7 +4,7 @@ package rummikub.core.pieces;
  * Représentation d'un joker.
  *
  * Un joker est un jeton qui peut prendre n'importe quelle valeur et couleur. Il
- * peut etre libre ou utilisé.
+ * peut être libre ou utilisé.
  */
 public class Joker extends Jeton {
 
@@ -30,12 +30,15 @@ public class Joker extends Jeton {
      *
      * @param valeur valeur à donner au joker
      * @param couleur couleur à donner au joker
+     * @return <code>true</code> si l'action a été effectuée
      */
-    public void setValeurAndCouleur(int valeur, Couleur couleur) {
+    public boolean setValeurAndCouleur(int valeur, Couleur couleur) {
         if (!isUtilise()) {
             super.valeur = valeur;
             super.couleur = couleur;
+            return true;
         }
+		return false;
     }
 
     /**
@@ -47,6 +50,12 @@ public class Joker extends Jeton {
         return super.valeur != LIBRE;
     }
 
+    /**
+     * Renvoie la forme textuelle d'un joker.
+     *
+     * S'il est libre : *
+     * Sinon : valeurvouleur* ex: 5rouge*
+     */
     @Override
     public String toString() {
         if (isUtilise()) {

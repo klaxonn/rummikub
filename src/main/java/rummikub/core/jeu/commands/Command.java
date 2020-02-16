@@ -7,10 +7,12 @@ public interface Command {
 
     /**
      * Exécute la commande.
-     *
-     * @return <code>true</code> si la commande a réussi
      */
+<<<<<<< HEAD:src/main/java/rummikub/core/jeu/commands/Command.java
     boolean doCommand();
+=======
+    void doCommand();
+>>>>>>> web:src/main/java/rummikub/core/jeu/commands/Command.java
 
     /**
      * Annule les effets de la commande.

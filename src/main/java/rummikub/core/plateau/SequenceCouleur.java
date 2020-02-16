@@ -5,6 +5,7 @@ import rummikub.core.pieces.Jeton;
 import rummikub.core.pieces.Joker;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Représentation d'une séquence de couleurs.
@@ -17,23 +18,33 @@ class SequenceCouleur extends SequenceAbstraite {
     /**
      * Crée une nouvelle séquence de couleurs.
      *
-     * Si la séquence de couleurs contient un joker libre, ses valeurs seront
-     * calculées pour obtenir une séquence valide si possible.
+     * Si la séquence de couleurs contient un joker libre, sa valeur sera
+     * calculée pour obtenir une séquence valide si possible.
      *
      * @param collectionJetons la liste de jetons constituant la séquence
+     * @param fabrique la fabrique de séquences
      * @throws UnsupportedOperationException si les jetons ne forment pas une
      * séquence de couleurs valide
      */
-    public SequenceCouleur(List<Jeton> collectionJetons) {
-        super(collectionJetons);
+    public SequenceCouleur(List<Jeton> collectionJetons, FabriqueSequence fabrique) {
+        super(collectionJetons, fabrique);
     }
 
     @Override
     public boolean isCorrectSequence(List<Jeton> collectionJetons) {
         if (collectionJetons.size() > Couleur.values().length) {
             return false;
+<<<<<<< HEAD:src/main/java/rummikub/core/plateau/SequenceCouleur.java
         } else if (!collectionJetons.isEmpty()) {
             int[] indexJokers = SequenceAbstraite.indexJokersSiExiste(collectionJetons);
+=======
+        }
+		else if (collectionJetons.isEmpty()) {
+			return false;
+        }
+		else {
+			int[] indexJokers = SequenceAbstraite.indexJokersSiExiste(collectionJetons);
+>>>>>>> web:src/main/java/rummikub/core/plateau/SequenceCouleur.java
             for (int indexJoker : indexJokers) {
                 Joker joker = (Joker) collectionJetons.get(indexJoker);
                 if (!joker.isUtilise()) {
@@ -41,8 +52,6 @@ class SequenceCouleur extends SequenceAbstraite {
                 }
             }
             return isMemeValeur(collectionJetons) && allColorsDifferent(collectionJetons);
-        } else {
-            return false;
         }
     }
 
@@ -53,7 +62,8 @@ class SequenceCouleur extends SequenceAbstraite {
 
     private Couleur calculerCouleurJoker(List<Jeton> collectionJetons) {
         List<Couleur> couleursDansSequence = couleursDeLaSequence(collectionJetons);
-        Couleur couleurJoker = null;
+		//Couleur par défaut, si toutes les couleurs sont déjà présentes, le test échouera
+        Couleur couleurJoker = Couleur.BLEU;
         for (Couleur couleurPossible : Couleur.values()) {
             if (!couleursDansSequence.contains(couleurPossible)) {
                 couleurJoker = couleurPossible;
@@ -72,7 +82,12 @@ class SequenceCouleur extends SequenceAbstraite {
     }
 
     private int valeurDeSequence(List<Jeton> collectionJetons) {
-        return SequenceAbstraite.premierJetonNonJoker(collectionJetons).getValeur();
+		try {
+			return SequenceAbstraite.premierJetonNonJoker(collectionJetons).getValeur();
+		}
+		catch(NoSuchElementException e) {
+			throw new UnsupportedOperationException("La séquence ne peut contenir que des jokers");
+		}
     }
 
     private boolean isMemeValeur(List<Jeton> collectionJetons) {
