@@ -51,14 +51,19 @@ public class FiltreAutorisationJwt extends OncePerRequestFilter {
 			URL url = new URL(requete.getRequestURL().toString());
 			String[] elements = url.getPath().substring(1).split("/");
 			int idPartieAdresse = Integer.parseInt(elements[0]);
-			int idJoueurAdresse = Integer.parseInt(elements[1]);
-			String adresseIP = requete.getLocalAddr();
-			if(joueur.getId() == idJoueurAdresse && joueur.getIdPartie() == idPartieAdresse
-			  && joueur.getAdresseIP().equals(adresseIP)) {
-				return new UsernamePasswordAuthenticationToken(joueur.getNom(), null, new ArrayList<>());
+			if(idPartieAdresse > 0) {
+				int idJoueurAdresse = Integer.parseInt(elements[1]);
+				String adresseIP = requete.getLocalAddr();
+				if(joueur.getId() == idJoueurAdresse && joueur.getIdPartie() == idPartieAdresse
+				  && joueur.getAdresseIP().equals(adresseIP)) {
+					return new UsernamePasswordAuthenticationToken(joueur.getNom(), null, new ArrayList<>());
+				}
+				else {
+					return null;
+				}
 			}
 			else {
-				return null;
+				return new UsernamePasswordAuthenticationToken(joueur.getNom(), null, new ArrayList<>());
 			}
         }
         return null;

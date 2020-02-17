@@ -234,6 +234,26 @@ public class ControleurPartiesTest {
 	}
 
 	@Test
+	public void listerPartiesDisposAvecTokenTest() throws Exception {
+		List<PartieDispo> resultatList = new ArrayList<>();
+		PartieDispo joueur1 = new PartieDispo(1, Arrays.asList("Vincent","Kate"));
+		PartieDispo joueur2 = new PartieDispo(2, Arrays.asList("Benoit","Emie"));
+		resultatList.add(joueur1);
+		resultatList.add(joueur2);
+
+		when(listePartiesMock.listerPartiesDispos()).thenReturn(resultatList);
+		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1,ADRESSE_IP_1));
+
+		MvcResult resultat = mockMvc.perform(get("/0/listerPartiesDispos")
+						.contentType("application/json")
+						.header("Authorization", "Bearer aa")
+						.secure(true))
+						.andDo(print())
+						.andExpect(status().isOk())
+						.andReturn();
+	}
+
+	@Test
 	public void mauvaisTypeAccepteTest() throws Exception {
 		MvcResult resultat = mockMvc.perform(get("/0/listerPartiesDispos")
 										.contentType("application/json")
