@@ -126,7 +126,8 @@ public class ControleursTestIntegration {
 
 		messageReponse = creerMessageReponse((Map) reponse.getBody().getContent());
 		MessagePartie messageTest = new MessagePartie(DEBUT_NOUVEAU_TOUR,
-			idPartie, 0, "", "",  1, "", "");
+			idPartie, 1, "Vincent", "",  1, "", "");
+		messageTest.setJeuJoueur(messageReponse.getJeuJoueur());
 		assertEquals(messageTest, messageReponse);
 	}
 

@@ -167,11 +167,11 @@ public class PartieImplTest {
 		when(plateauMock.toString()).thenReturn("");
 		MessagePartie message = partie.commencerPartie(JOUEUR1);
 		MessagePartie messageTest = new MessagePartie(DEBUT_NOUVEAU_TOUR,
-			0, 0, "", "",  JOUEUR1, "", "");
+			0, 1, "Vincent", "10bleu 11bleu 12bleu 13bleu", JOUEUR1, "", "");
 		assertEquals(messageTest, message);
-        message = partie.commencerPartie(JOUEUR1);
-		messageTest = new MessagePartie(ERREUR,
-			0, 0, "", "", 0, "", "Partie déjà commencée");
+        message = partie.commencerPartie(JOUEUR2);
+		messageTest = new MessagePartie(DEBUT_NOUVEAU_TOUR,
+			0, JOUEUR2, "Katya", "4jaune 9bleu", JOUEUR1, "", "");
 		assertEquals(messageTest, message);
 		assertEquals("[]", partie.listeJoueursPrets().toString());
 		assertEquals(2, partie.nombreJoueurs());
@@ -207,7 +207,7 @@ public class PartieImplTest {
 		partie.quitterPartie(1);
 		MessagePartie message = partie.commencerPartie(JOUEUR2);
 		MessagePartie messageTest = new MessagePartie(DEBUT_NOUVEAU_TOUR,
-			0, 0, "", "",  JOUEUR2, "", "");
+			0, JOUEUR2, "Katya", "4jaune 9bleu", JOUEUR2, "", "");
 		assertEquals(messageTest, message);
 	}
 

@@ -67,7 +67,6 @@ class ErreursControleurs {
 		return new ResponseEntity<EntityModel>(reponseAjout, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
 	}
 
-
 	@ExceptionHandler(ConstraintViolationException.class)
 	ResponseEntity<EntityModel> mauvaiseTailleTableau(ConstraintViolationException ex) {
 		MessagePartie message = new MessagePartie();

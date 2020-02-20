@@ -164,32 +164,35 @@
                       "plateau": "",
                       "messageErreur": "",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/1/1/quitterPartie"
-                        },
-                        "afficherPartie": {
+                        "Afficher la partie": {
                           "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "creerSequence": {
+                        "Créer une séquence": {
                           "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "fusionnerSequence": {
+                        "Fusionner deux séquences": {
                           "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "couperSequence": {
+                        "Couper une séquence": {
                           "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "deplacerJeton": {
+                        "Déplacer un jeton": {
                           "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "remplacerJoker": {
+                        "Remplacer un joker": {
                           "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "annulerDerniereAction": {
+                        "Annuler la dernière action": {
                           "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "terminerTour": {
+                        "Terminer le tour": {
                           "href": "https://localhost:8443/1/1/terminerTour"
+                        },
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -206,10 +209,10 @@
                       "plateau": "",
                       "messageErreur": "La partie est terminée",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -560,10 +563,10 @@
                       "plateau": "",
                       "messageErreur": "La partie est terminée",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -744,32 +747,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/1/1/quitterPartie"
-                        },
-                        "afficherPartie": {
+                        "Afficher la partie": {
                           "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "creerSequence": {
+                        "Créer une séquence": {
                           "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "fusionnerSequence": {
+                        "Fusionner deux séquences": {
                           "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "couperSequence": {
+                        "Couper une séquence": {
                           "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "deplacerJeton": {
+                        "Déplacer un jeton": {
                           "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "remplacerJoker": {
+                        "Remplacer un joker": {
                           "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "annulerDerniereAction": {
+                        "Annuler la dernière action": {
                           "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "terminerTour": {
+                        "Terminer le tour": {
                           "href": "https://localhost:8443/1/1/terminerTour"
+                        },
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -1131,34 +1137,36 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "Aucune séquence possible",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/1/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/1/afficherPartie"
+                        "Créer une séquence": {
+                          "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "creerSequence": {
-                          "href": "https://localhost:8443/0/1/creerSequence"
+                        "Fusionner deux séquences": {
+                          "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "fusionnerSequence": {
-                          "href": "https://localhost:8443/0/1/fusionnerSequence"
+                        "Couper une séquence": {
+                          "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "couperSequence": {
-                          "href": "https://localhost:8443/0/1/couperSequence"
+                        "Déplacer un jeton": {
+                          "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "deplacerJeton": {
-                          "href": "https://localhost:8443/0/1/deplacerJeton"
+                        "Remplacer un joker": {
+                          "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "remplacerJoker": {
-                          "href": "https://localhost:8443/0/1/remplacerJoker"
+                        "Annuler la dernière action": {
+                          "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "annulerDerniereAction": {
-                          "href": "https://localhost:8443/0/1/annulerDerniereAction"
+                        "Terminer le tour": {
+                          "href": "https://localhost:8443/1/1/terminerTour"
                         },
-                        "terminerTour": {
-                          "href": "https://localhost:8443/0/1/terminerTour"
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
-                      }
                     }
                   },
                   "Partie non commencée": {
@@ -1186,11 +1194,14 @@
                       "plateau": "",
                       "messageErreur": "Ce n'est pas votre tour",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/3/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/3/afficherPartie"
+                        }
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/3/quitterPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/3/afficherPartie"
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/3/arreterPartie"
                         }
                       }
                     }
@@ -1309,10 +1320,10 @@
                       "plateau": "",
                       "messageErreur": "La partie est terminée",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -1625,32 +1636,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/1/1/quitterPartie"
-                        },
-                        "afficherPartie": {
+                        "Afficher la partie": {
                           "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "creerSequence": {
+                        "Créer une séquence": {
                           "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "fusionnerSequence": {
+                        "Fusionner deux séquences": {
                           "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "couperSequence": {
+                        "Couper une séquence": {
                           "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "deplacerJeton": {
+                        "Déplacer un jeton": {
                           "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "remplacerJoker": {
+                        "Remplacer un joker": {
                           "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "annulerDerniereAction": {
+                        "Annuler la dernière action": {
                           "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "terminerTour": {
+                        "Terminer le tour": {
                           "href": "https://localhost:8443/1/1/terminerTour"
+                        },
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -1999,32 +2013,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "Aucune séquence possible",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/1/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/1/afficherPartie"
+                        "Créer une séquence": {
+                          "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "creerSequence": {
-                          "href": "https://localhost:8443/0/1/creerSequence"
+                        "Fusionner deux séquences": {
+                          "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "fusionnerSequence": {
-                          "href": "https://localhost:8443/0/1/fusionnerSequence"
+                        "Couper une séquence": {
+                          "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "couperSequence": {
-                          "href": "https://localhost:8443/0/1/couperSequence"
+                        "Déplacer un jeton": {
+                          "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "deplacerJeton": {
-                          "href": "https://localhost:8443/0/1/deplacerJeton"
+                        "Remplacer un joker": {
+                          "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "remplacerJoker": {
-                          "href": "https://localhost:8443/0/1/remplacerJoker"
+                        "Annuler la dernière action": {
+                          "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "annulerDerniereAction": {
-                          "href": "https://localhost:8443/0/1/annulerDerniereAction"
+                        "Terminer le tour": {
+                          "href": "https://localhost:8443/1/1/terminerTour"
                         },
-                        "terminerTour": {
-                          "href": "https://localhost:8443/0/1/terminerTour"
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -2041,32 +2058,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "Index séquence non correct",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/1/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/1/afficherPartie"
+                        "Créer une séquence": {
+                          "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "creerSequence": {
-                          "href": "https://localhost:8443/0/1/creerSequence"
+                        "Fusionner deux séquences": {
+                          "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "fusionnerSequence": {
-                          "href": "https://localhost:8443/0/1/fusionnerSequence"
+                        "Couper une séquence": {
+                          "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "couperSequence": {
-                          "href": "https://localhost:8443/0/1/couperSequence"
+                        "Déplacer un jeton": {
+                          "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "deplacerJeton": {
-                          "href": "https://localhost:8443/0/1/deplacerJeton"
+                        "Remplacer un joker": {
+                          "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "remplacerJoker": {
-                          "href": "https://localhost:8443/0/1/remplacerJoker"
+                        "Annuler la dernière action": {
+                          "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "annulerDerniereAction": {
-                          "href": "https://localhost:8443/0/1/annulerDerniereAction"
+                        "Terminer le tour": {
+                          "href": "https://localhost:8443/1/1/terminerTour"
                         },
-                        "terminerTour": {
-                          "href": "https://localhost:8443/0/1/terminerTour"
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -2083,32 +2103,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "Index jeton hors limite",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/1/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/1/afficherPartie"
+                        "Créer une séquence": {
+                          "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "creerSequence": {
-                          "href": "https://localhost:8443/0/1/creerSequence"
+                        "Fusionner deux séquences": {
+                          "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "fusionnerSequence": {
-                          "href": "https://localhost:8443/0/1/fusionnerSequence"
+                        "Couper une séquence": {
+                          "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "couperSequence": {
-                          "href": "https://localhost:8443/0/1/couperSequence"
+                        "Déplacer un jeton": {
+                          "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "deplacerJeton": {
-                          "href": "https://localhost:8443/0/1/deplacerJeton"
+                        "Remplacer un joker": {
+                          "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "remplacerJoker": {
-                          "href": "https://localhost:8443/0/1/remplacerJoker"
+                        "Annuler la dernière action": {
+                          "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "annulerDerniereAction": {
-                          "href": "https://localhost:8443/0/1/annulerDerniereAction"
+                        "Terminer le tour": {
+                          "href": "https://localhost:8443/1/1/terminerTour"
                         },
-                        "terminerTour": {
-                          "href": "https://localhost:8443/0/1/terminerTour"
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -2138,11 +2161,14 @@
                       "plateau": "",
                       "messageErreur": "Ce n'est pas votre tour",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/3/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/3/afficherPartie"
+                        }
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/3/quitterPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/3/afficherPartie"
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/3/arreterPartie"
                         }
                       }
                     }
@@ -2261,10 +2287,10 @@
                       "plateau": "",
                       "messageErreur": "La partie est terminée",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -2577,32 +2603,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/1/1/quitterPartie"
-                        },
-                        "afficherPartie": {
+                        "Afficher la partie": {
                           "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "creerSequence": {
+                        "Créer une séquence": {
                           "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "fusionnerSequence": {
+                        "Fusionner deux séquences": {
                           "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "couperSequence": {
+                        "Couper une séquence": {
                           "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "deplacerJeton": {
+                        "Déplacer un jeton": {
                           "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "remplacerJoker": {
+                        "Remplacer un joker": {
                           "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "annulerDerniereAction": {
+                        "Annuler la dernière action": {
                           "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "terminerTour": {
+                        "Terminer le tour": {
                           "href": "https://localhost:8443/1/1/terminerTour"
+                        },
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -2951,32 +2980,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "Aucune séquence possible",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/1/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/1/afficherPartie"
+                        "Créer une séquence": {
+                          "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "creerSequence": {
-                          "href": "https://localhost:8443/0/1/creerSequence"
+                        "Fusionner deux séquences": {
+                          "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "fusionnerSequence": {
-                          "href": "https://localhost:8443/0/1/fusionnerSequence"
+                        "Couper une séquence": {
+                          "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "couperSequence": {
-                          "href": "https://localhost:8443/0/1/couperSequence"
+                        "Déplacer un jeton": {
+                          "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "deplacerJeton": {
-                          "href": "https://localhost:8443/0/1/deplacerJeton"
+                        "Remplacer un joker": {
+                          "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "remplacerJoker": {
-                          "href": "https://localhost:8443/0/1/remplacerJoker"
+                        "Annuler la dernière action": {
+                          "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "annulerDerniereAction": {
-                          "href": "https://localhost:8443/0/1/annulerDerniereAction"
+                        "Terminer le tour": {
+                          "href": "https://localhost:8443/1/1/terminerTour"
                         },
-                        "terminerTour": {
-                          "href": "https://localhost:8443/0/1/terminerTour"
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -3006,11 +3038,14 @@
                       "plateau": "",
                       "messageErreur": "Ce n'est pas votre tour",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/3/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/3/afficherPartie"
+                        }
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/3/quitterPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/3/afficherPartie"
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/3/arreterPartie"
                         }
                       }
                     }
@@ -3129,10 +3164,10 @@
                       "plateau": "",
                       "messageErreur": "La partie est terminée",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -3445,32 +3480,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/1/1/quitterPartie"
-                        },
-                        "afficherPartie": {
+                        "Afficher la partie": {
                           "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "creerSequence": {
+                        "Créer une séquence": {
                           "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "fusionnerSequence": {
+                        "Fusionner deux séquences": {
                           "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "couperSequence": {
+                        "Couper une séquence": {
                           "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "deplacerJeton": {
+                        "Déplacer un jeton": {
                           "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "remplacerJoker": {
+                        "Remplacer un joker": {
                           "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "annulerDerniereAction": {
+                        "Annuler la dernière action": {
                           "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "terminerTour": {
+                        "Terminer le tour": {
                           "href": "https://localhost:8443/1/1/terminerTour"
+                        },
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -3819,32 +3857,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "Impossible de couper la suite",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/1/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/1/afficherPartie"
+                        "Créer une séquence": {
+                          "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "creerSequence": {
-                          "href": "https://localhost:8443/0/1/creerSequence"
+                        "Fusionner deux séquences": {
+                          "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "fusionnerSequence": {
-                          "href": "https://localhost:8443/0/1/fusionnerSequence"
+                        "Couper une séquence": {
+                          "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "couperSequence": {
-                          "href": "https://localhost:8443/0/1/couperSequence"
+                        "Déplacer un jeton": {
+                          "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "deplacerJeton": {
-                          "href": "https://localhost:8443/0/1/deplacerJeton"
+                        "Remplacer un joker": {
+                          "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "remplacerJoker": {
-                          "href": "https://localhost:8443/0/1/remplacerJoker"
+                        "Annuler la dernière action": {
+                          "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "annulerDerniereAction": {
-                          "href": "https://localhost:8443/0/1/annulerDerniereAction"
+                        "Terminer le tour": {
+                          "href": "https://localhost:8443/1/1/terminerTour"
                         },
-                        "terminerTour": {
-                          "href": "https://localhost:8443/0/1/terminerTour"
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -3874,11 +3915,14 @@
                       "plateau": "",
                       "messageErreur": "Ce n'est pas votre tour",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/3/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/3/afficherPartie"
+                        }
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/3/quitterPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/3/afficherPartie"
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/3/arreterPartie"
                         }
                       }
                     }
@@ -3997,10 +4041,10 @@
                       "plateau": "",
                       "messageErreur": "La partie est terminée",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -4313,32 +4357,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/1/1/quitterPartie"
-                        },
-                        "afficherPartie": {
+                        "Afficher la partie": {
                           "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "creerSequence": {
+                        "Créer une séquence": {
                           "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "fusionnerSequence": {
+                        "Fusionner deux séquences": {
                           "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "couperSequence": {
+                        "Couper une séquence": {
                           "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "deplacerJeton": {
+                        "Déplacer un jeton": {
                           "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "remplacerJoker": {
+                        "Remplacer un joker": {
                           "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "annulerDerniereAction": {
+                        "Annuler la dernière action": {
                           "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "terminerTour": {
+                        "Terminer le tour": {
                           "href": "https://localhost:8443/1/1/terminerTour"
+                        },
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -4687,32 +4734,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "Impossible de déplacer ce jeton",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/1/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/1/afficherPartie"
+                        "Créer une séquence": {
+                          "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "creerSequence": {
-                          "href": "https://localhost:8443/0/1/creerSequence"
+                        "Fusionner deux séquences": {
+                          "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "fusionnerSequence": {
-                          "href": "https://localhost:8443/0/1/fusionnerSequence"
+                        "Couper une séquence": {
+                          "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "couperSequence": {
-                          "href": "https://localhost:8443/0/1/couperSequence"
+                        "Déplacer un jeton": {
+                          "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "deplacerJeton": {
-                          "href": "https://localhost:8443/0/1/deplacerJeton"
+                        "Remplacer un joker": {
+                          "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "remplacerJoker": {
-                          "href": "https://localhost:8443/0/1/remplacerJoker"
+                        "Annuler la dernière action": {
+                          "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "annulerDerniereAction": {
-                          "href": "https://localhost:8443/0/1/annulerDerniereAction"
+                        "Terminer le tour": {
+                          "href": "https://localhost:8443/1/1/terminerTour"
                         },
-                        "terminerTour": {
-                          "href": "https://localhost:8443/0/1/terminerTour"
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -4742,11 +4792,14 @@
                       "plateau": "",
                       "messageErreur": "Ce n'est pas votre tour",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/3/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/3/afficherPartie"
+                        }
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/3/quitterPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/3/afficherPartie"
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/3/arreterPartie"
                         }
                       }
                     }
@@ -4865,10 +4918,10 @@
                       "plateau": "",
                       "messageErreur": "La partie est terminée",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -5181,32 +5234,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/1/1/quitterPartie"
-                        },
-                        "afficherPartie": {
+                        "Afficher la partie": {
                           "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "creerSequence": {
+                        "Créer une séquence": {
                           "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "fusionnerSequence": {
+                        "Fusionner deux séquences": {
                           "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "couperSequence": {
+                        "Couper une séquence": {
                           "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "deplacerJeton": {
+                        "Déplacer un jeton": {
                           "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "remplacerJoker": {
+                        "Remplacer un joker": {
                           "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "annulerDerniereAction": {
+                        "Annuler la dernière action": {
                           "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "terminerTour": {
+                        "Terminer le tour": {
                           "href": "https://localhost:8443/1/1/terminerTour"
+                        },
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -5555,32 +5611,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "Impossible de remplacer le joker",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/1/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/1/afficherPartie"
+                        "Créer une séquence": {
+                          "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "creerSequence": {
-                          "href": "https://localhost:8443/0/1/creerSequence"
+                        "Fusionner deux séquences": {
+                          "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "fusionnerSequence": {
-                          "href": "https://localhost:8443/0/1/fusionnerSequence"
+                        "Couper une séquence": {
+                          "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "couperSequence": {
-                          "href": "https://localhost:8443/0/1/couperSequence"
+                        "Déplacer un jeton": {
+                          "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "deplacerJeton": {
-                          "href": "https://localhost:8443/0/1/deplacerJeton"
+                        "Remplacer un joker": {
+                          "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "remplacerJoker": {
-                          "href": "https://localhost:8443/0/1/remplacerJoker"
+                        "Annuler la dernière action": {
+                          "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "annulerDerniereAction": {
-                          "href": "https://localhost:8443/0/1/annulerDerniereAction"
+                        "Terminer le tour": {
+                          "href": "https://localhost:8443/1/1/terminerTour"
                         },
-                        "terminerTour": {
-                          "href": "https://localhost:8443/0/1/terminerTour"
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -5610,11 +5669,14 @@
                       "plateau": "",
                       "messageErreur": "Ce n'est pas votre tour",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/3/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/3/afficherPartie"
+                        }
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/3/quitterPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/3/afficherPartie"
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/3/arreterPartie"
                         }
                       }
                     }
@@ -5739,10 +5801,10 @@
                       "plateau": "",
                       "messageErreur": "La partie est terminée",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -6021,32 +6083,35 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/1/1/quitterPartie"
-                        },
-                        "afficherPartie": {
+                        "Afficher la partie": {
                           "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "creerSequence": {
+                        "Créer une séquence": {
                           "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "fusionnerSequence": {
+                        "Fusionner deux séquences": {
                           "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "couperSequence": {
+                        "Couper une séquence": {
                           "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "deplacerJeton": {
+                        "Déplacer un jeton": {
                           "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "remplacerJoker": {
+                        "Remplacer un joker": {
                           "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "annulerDerniereAction": {
+                        "Annuler la dernière action": {
                           "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "terminerTour": {
+                        "Terminer le tour": {
                           "href": "https://localhost:8443/1/1/terminerTour"
+                        },
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -6293,11 +6358,14 @@
                       "plateau": "",
                       "messageErreur": "Ce n'est pas votre tour",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/3/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/3/afficherPartie"
+                        }
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/3/quitterPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/3/afficherPartie"
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/3/arreterPartie"
                         }
                       }
                     }
@@ -6416,10 +6484,10 @@
                       "plateau": "",
                       "messageErreur": "La partie est terminée",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -6584,11 +6652,14 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/3/afficherPartie"
+                        }
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/3/quitterPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/1/1/afficherPartie"
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/3/arreterPartie"
                         }
                       }
                     }
@@ -6605,10 +6676,10 @@
                       "plateau": "12bleu 12vert 12rouge",
                       "messageErreur": "",
                       "_links": {
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         },
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         }
                       }
@@ -6843,32 +6914,35 @@
                       "plateau": "12bleu 12vert",
                       "messageErreur": "plateau non valide",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/1/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/1/afficherPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/1/afficherPartie"
+                        "Créer une séquence": {
+                          "href": "https://localhost:8443/1/1/creerSequence"
                         },
-                        "creerSequence": {
-                          "href": "https://localhost:8443/0/1/creerSequence"
+                        "Fusionner deux séquences": {
+                          "href": "https://localhost:8443/1/1/fusionnerSequence"
                         },
-                        "fusionnerSequence": {
-                          "href": "https://localhost:8443/0/1/fusionnerSequence"
+                        "Couper une séquence": {
+                          "href": "https://localhost:8443/1/1/couperSequence"
                         },
-                        "couperSequence": {
-                          "href": "https://localhost:8443/0/1/couperSequence"
+                        "Déplacer un jeton": {
+                          "href": "https://localhost:8443/1/1/deplacerJeton"
                         },
-                        "deplacerJeton": {
-                          "href": "https://localhost:8443/0/1/deplacerJeton"
+                        "Remplacer un joker": {
+                          "href": "https://localhost:8443/1/1/remplacerJoker"
                         },
-                        "remplacerJoker": {
-                          "href": "https://localhost:8443/0/1/remplacerJoker"
+                        "Annuler la dernière action": {
+                          "href": "https://localhost:8443/1/1/annulerDerniereAction"
                         },
-                        "annulerDerniereAction": {
-                          "href": "https://localhost:8443/0/1/annulerDerniereAction"
+                        "Terminer le tour": {
+                          "href": "https://localhost:8443/1/1/terminerTour"
                         },
-                        "terminerTour": {
-                          "href": "https://localhost:8443/0/1/terminerTour"
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/1/arreterPartie"
                         }
                       }
                     }
@@ -6898,11 +6972,14 @@
                       "plateau": "",
                       "messageErreur": "Ce n'est pas votre tour",
                       "_links": {
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/0/3/quitterPartie"
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/3/afficherPartie"
+                        }
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/1/3/quitterPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/0/3/afficherPartie"
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/3/arreterPartie"
                         }
                       }
                     }
@@ -7021,10 +7098,10 @@
                       "plateau": "",
                       "messageErreur": "La partie est terminée",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -7170,17 +7247,14 @@
                       "plateau": "",
                       "messageErreur": "",
                       "_links": {
-                        "creerPartie": {
-                          "href": "https://localhost:8443/0/creerPartie"
-                        },
-                        "listerPartiesDispos": {
-                          "href": "https://localhost:8443/0/listerPartiesDispos"
-                        },
-                        "demarrerPartie": {
+                        "Démarrer la partie": {
                           "href": "https://localhost:8443/2/1/demarrerPartie"
                         },
-                        "quitterPartie": {
+                        "Quitter la partie": {
                           "href": "https://localhost:8443/2/1/quitterPartie"
+                        },
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/2/1/arreterPartie"
                         }
                       }
                     }
@@ -7299,14 +7373,11 @@
                       "plateau": "",
                       "messageErreur": "Nom non valide",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
-                        },
-                        "demarrerPartie": {
-                          "href": "https://localhost:8443/0/0/demarrerPartie"
                         }
                       }
                     }
@@ -7537,7 +7608,7 @@
                               "Vincent"
                             ],
                             "_links": {
-                              "ajouterJoueur": {
+                              "Joindre la partie": {
                                 "href": "https://localhost:8443/2/ajouterJoueur"
                               }
                             }
@@ -7548,7 +7619,7 @@
                               "Vincent"
                             ],
                             "_links": {
-                              "ajouterJoueur": {
+                              "Joindre la partie": {
                                 "href": "https://localhost:8443/3/ajouterJoueur"
                               }
                             }
@@ -7556,11 +7627,8 @@
                         ]
                       },
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
-                        },
-                        "listerPartiesDispos": {
-                          "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
                     }
@@ -7718,17 +7786,14 @@
                       "plateau": "",
                       "messageErreur": "",
                       "_links": {
-                        "creerPartie": {
-                          "href": "https://localhost:8443/0/creerPartie"
+                        "Démarrer la partie": {
+                          "href": "https://localhost:8443/2/1/demarrerPartie"
                         },
-                        "listerPartiesDispos": {
-                          "href": "https://localhost:8443/0/listerPartiesDispos"
+                        "Quitter la partie": {
+                          "href": "https://localhost:8443/2/1/quitterPartie"
                         },
-                        "demarrerPartie": {
-                          "href": "https://localhost:8443/1/2/demarrerPartie"
-                        },
-                        "quitterPartie": {
-                          "href": "https://localhost:8443/1/2/quitterPartie"
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/2/1/arreterPartie"
                         }
                       }
                     }
@@ -7847,10 +7912,10 @@
                       "plateau": "",
                       "messageErreur": "Nom non valide",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -7970,10 +8035,10 @@
                       "plateau": "",
                       "messageErreur": "Partie déjà commencée",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -7991,10 +8056,10 @@
                       "plateau": "",
                       "messageErreur": "Partie Pleine",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -8114,10 +8179,10 @@
                       "plateau": "",
                       "messageErreur": "La partie n'existe pas",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -8385,20 +8450,75 @@
                   }
                 },
                 "examples": {
-                  "Partie démarrée": {
+                  "Partie démarrée par premier joueur": {
                     "value": {
                       "typeMessage": "DEBUT_NOUVEAU_TOUR",
-                      "idPartie": 1,
-                      "idJoueur": 0,
-                      "nomJoueur": "",
-                      "token": "",
-                      "jeuJoueur": "",
-                      "idJoueurCourant": 1,
-                      "plateau": "",
-                      "messageErreur": ""
+					  "idPartie": 1,
+					  "idJoueur": 1,
+					  "nomJoueur": "Bob",
+					  "token": "",
+					  "jeuJoueur": "3bleu 7bleu 4bleu 1jaune 10vert 2bleu 11bleu 12vert 5jaune 3rouge 6jaune 7vert 7jaune 12jaune",
+					  "idJoueurCourant": 1,
+					  "plateau": "",
+					  "messageErreur": "",
+					  "_links": {
+					     "Afficher la partie": {
+						  "href": "https://localhost:8443/1/1/afficherPartie"
+						},
+						"Créer une séquence": {
+						  "href": "https://localhost:8443/1/1/creerSequence"
+						},
+						"Fusionner deux séquences": {
+						  "href": "https://localhost:8443/1/1/fusionnerSequence"
+						},
+						"Couper une séquence": {
+						  "href": "https://localhost:8443/1/1/couperSequence"
+						},
+						"Déplacer un jeton": {
+						  "href": "https://localhost:8443/1/1/deplacerJeton"
+						},
+						"Remplacer un joker": {
+						  "href": "https://localhost:8443/1/1/remplacerJoker"
+						},
+						"Annuler la dernière action": {
+						  "href": "https://localhost:8443/1/1/annulerDerniereAction"
+						},
+						"Terminer le tour": {
+						  "href": "https://localhost:8443/1/1/terminerTour"
+						},
+						"Quitter la partie": {
+						  "href": "https://localhost:8443/1/1/quitterPartie"
+						},
+						"Arrêter la partie": {
+						  "href": "https://localhost:8443/1/1/arreterPartie"
+						}
+					  }
                     }
-                  }
-                }
+                  },
+                  "Partie démarrée par autre que premier joueur": {
+				    "value":{
+					  "typeMessage": "DEBUT_NOUVEAU_TOUR",
+					  "idPartie": 1,
+					  "idJoueur": 2,
+					  "nomJoueur": "Alice",
+					  "token": "",
+					  "jeuJoueur": "5rouge 7jaune 5bleu 13jaune 7rouge 4rouge 10vert 8bleu 4vert 13vert 13bleu 4vert 7bleu 10jaune",
+					  "idJoueurCourant": 1,
+					  "plateau": "",
+					  "messageErreur": "",
+					  "_links": {
+					    "Afficher la partie": {
+						  "href": "https://localhost:8443/1/2/afficherPartie"
+						},
+						"Quitter la partie": {
+						  "href": "https://localhost:8443/1/2/quitterPartie"
+						},
+						"Arrêter la partie": {
+						  "href": "https://localhost:8443/1/2/arreterPartie"
+						}
+					  }
+					}
+				  }
               }
             }
           },
@@ -8518,7 +8638,7 @@
             }
           },
           "403": {
-            "description": "Cas : la partie est déjà commencée, il n'y a pas assez de joueurs pour démarrer une partie",
+            "description": "Cas : il n'y a pas assez de joueurs pour démarrer une partie",
             "content": {
               "application/json": {
                 "schema": {
@@ -8727,10 +8847,10 @@
                       "plateau": "",
                       "messageErreur": "La partie n'existe pas",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -9010,10 +9130,10 @@
                       "plateau": "",
                       "messageErreur": "",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -9363,10 +9483,10 @@
                       "plateau": "",
                       "messageErreur": "La partie n'existe pas",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -9645,10 +9765,10 @@
                       "plateau": "",
                       "messageErreur": "",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }
@@ -9881,11 +10001,14 @@
                       "plateau": "",
                       "messageErreur": "Trop de joueurs pour supprimer la partie",
                       "_links": {
-                        "quitterPartie": {
+                        "Afficher la partie": {
+                          "href": "https://localhost:8443/1/3/afficherPartie"
+                        }
+                        "Quitter la partie": {
                           "href": "https://localhost:8443/1/3/quitterPartie"
                         },
-                        "afficherPartie": {
-                          "href": "https://localhost:8443/1/3/afficherPartie"
+                        "Arrêter la partie": {
+                          "href": "https://localhost:8443/1/3/arreterPartie"
                         }
                       }
                     }
@@ -10004,10 +10127,10 @@
                       "plateau": "",
                       "messageErreur": "La partie n'existe pas",
                       "_links": {
-                        "creerPartie": {
+                        "Créer une partie": {
                           "href": "https://localhost:8443/0/creerPartie"
                         },
-                        "listerPartiesDispos": {
+                        "Lister les parties disponibles": {
                           "href": "https://localhost:8443/0/listerPartiesDispos"
                         }
                       }

@@ -17,27 +17,21 @@ public class ModeleControleurPartie implements RepresentationModelAssembler<Mess
 		int idPartie = message.getIdPartie();
 		int idJoueur = message.getIdJoueur();
 
-		if(idJoueur == 0) {
-			return new EntityModel<>(message);
-		}
-
 		EntityModel<MessagePartie> resultat = new EntityModel<>(message,
-		  linkTo(methodOn(ControleurParties.class).quitterPartie(idPartie, idJoueur)).withRel("quitterPartie"));
+		  linkTo(methodOn(ControleurPartie.class).afficherPartie(idPartie, idJoueur)).withRel("Afficher la partie"));
 
 		if(idJoueur == message.getIdJoueurCourant()) {
-			resultat.add(linkTo(methodOn(ControleurPartie.class).afficherPartie(idPartie, idJoueur)).withRel("afficherPartie"),
-			  linkTo(methodOn(ControleurPartie.class).creerSequence(idPartie, idJoueur, null)).withRel("creerSequence"),
-			  linkTo(methodOn(ControleurPartie.class).fusionnerSequence(idPartie, idJoueur, null)).withRel("fusionnerSequence"),
-			  linkTo(methodOn(ControleurPartie.class).couperSequence(idPartie, idJoueur, null)).withRel("couperSequence"),
-			  linkTo(methodOn(ControleurPartie.class).deplacerJeton(idPartie, idJoueur, null)).withRel("deplacerJeton"),
-			  linkTo(methodOn(ControleurPartie.class).remplacerJoker(idPartie, idJoueur, null)).withRel("remplacerJoker"),
-			  linkTo(methodOn(ControleurPartie.class).annulerDerniereAction(idPartie, idJoueur)).withRel("annulerDerniereAction"),
-			  linkTo(methodOn(ControleurPartie.class).terminerTour(idPartie, idJoueur)).withRel("terminerTour"));
+			resultat.add(linkTo(methodOn(ControleurPartie.class).creerSequence(idPartie, idJoueur, null)).withRel("Créer une séquence"),
+			  linkTo(methodOn(ControleurPartie.class).fusionnerSequence(idPartie, idJoueur, null)).withRel("Fusionner deux séquences"),
+			  linkTo(methodOn(ControleurPartie.class).couperSequence(idPartie, idJoueur, null)).withRel("Couper une séquence"),
+			  linkTo(methodOn(ControleurPartie.class).deplacerJeton(idPartie, idJoueur, null)).withRel("Déplacer un jeton"),
+			  linkTo(methodOn(ControleurPartie.class).remplacerJoker(idPartie, idJoueur, null)).withRel("Remplacer un joker"),
+			  linkTo(methodOn(ControleurPartie.class).annulerDerniereAction(idPartie, idJoueur)).withRel("Annuler la dernière action"),
+			  linkTo(methodOn(ControleurPartie.class).terminerTour(idPartie, idJoueur)).withRel("Terminer le tour"));
 		}
-		else {
-			resultat.add(
-			  linkTo(methodOn(ControleurPartie.class).afficherPartie(idPartie, idJoueur)).withRel("afficherPartie"));
-		}
+
+		resultat.add(linkTo(methodOn(ControleurParties.class).quitterPartie(idPartie, idJoueur)).withRel("Quitter la partie"),
+		  linkTo(methodOn(ControleurParties.class).arreterPartie(idPartie, idJoueur)).withRel("Arrêter la partie"));
 
 		return resultat;
 	}

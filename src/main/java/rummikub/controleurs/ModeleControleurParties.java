@@ -12,19 +12,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class ModeleControleurParties implements RepresentationModelAssembler<MessagePartie, EntityModel<MessagePartie>> {
 
-  @Override
-  public EntityModel<MessagePartie> toModel(MessagePartie message) {
-	int idPartie = message.getIdPartie();
-	int idJoueur = message.getIdJoueur();
+	@Override
+	public EntityModel<MessagePartie> toModel(MessagePartie message) {
+		int idPartie = message.getIdPartie();
+		int idJoueur = message.getIdJoueur();
 
-	EntityModel<MessagePartie> resultat = new EntityModel<>(message,
-      linkTo(methodOn(ControleurParties.class).creerPartie(null, null)).withRel("creerPartie"),
-      linkTo(methodOn(ControleurParties.class).listerPartiesDispos()).withRel("listerPartiesDispos"));
-
-	if(idPartie > 0) {
-		resultat.add(linkTo(methodOn(ControleurParties.class).demarrerPartie(idPartie, idJoueur)).withRel("demarrerPartie"),
-					 linkTo(methodOn(ControleurParties.class).quitterPartie(idPartie, idJoueur)).withRel("quitterPartie"));
+		if(idPartie > 0) {
+			return new EntityModel<>(message,
+			  linkTo(methodOn(ControleurParties.class).demarrerPartie(idPartie, idJoueur)).withRel("Démarrer la partie"),
+			  linkTo(methodOn(ControleurParties.class).quitterPartie(idPartie, idJoueur)).withRel("Quitter la partie"),
+			  linkTo(methodOn(ControleurParties.class).arreterPartie(idPartie, idJoueur)).withRel("Arrêter la partie"));
+		}
+		else {
+			return new EntityModel<>(message,
+			  linkTo(methodOn(ControleurParties.class).creerPartie(null, null)).withRel("Créer une partie"),
+			  linkTo(methodOn(ControleurParties.class).listerPartiesDispos()).withRel("Lister les parties disponibles"));
+		}
 	}
-	return resultat;
-  }
 }

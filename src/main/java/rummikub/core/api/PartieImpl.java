@@ -81,15 +81,15 @@ class PartieImpl implements Partie {
 		if(!correctIndex(indexReelJoueur)) {
 			messageErreur = "Joueur inexistant";
 		}
-		else if(partieCommence) {
-			messageErreur = "Partie déjà commencée";
-		}
 		else if(nombreJoueurs() < NOMBRE_MIN_JOUEURS_PARTIE) {
 			messageErreur = "Nombre de joueurs insuffisant";
 		}
+		else if(partieCommence) {
+			return creerNouveauMessage(indexReelJoueur, DEBUT_NOUVEAU_TOUR, "");
+		}
 		else {
 			partieCommence = true;
-			return debutDuTour();
+			return debutDuTour(indexReelJoueur);
 		}
 		return creerNouveauMessage(INDEX_JOUEUR_ERREUR, ERREUR, messageErreur);
     }
@@ -108,8 +108,8 @@ class PartieImpl implements Partie {
 		}
 	}
 
-    private MessagePartie debutDuTour() {
-		MessagePartie message = creerNouveauMessage(numJoueur, DEBUT_NOUVEAU_TOUR, "");
+    private MessagePartie debutDuTour(int indexReelJoueur) {
+		MessagePartie message = creerNouveauMessage(indexReelJoueur, DEBUT_NOUVEAU_TOUR, "");
 		do {
 			numJoueur = (numJoueur + 1) % listeJoueurs.size();
 			joueurEnCours = listeJoueurs.get(numJoueur);
@@ -254,7 +254,7 @@ class PartieImpl implements Partie {
 			if (joueurEnCours.aJoueAuMoins1Jeton()) {
 				return joueurAJoue(indexReelJoueur);
 			} else {
-				return piocher();
+				return piocher(indexReelJoueur);
 			}
 		} else {
 			return creerNouveauMessage(indexReelJoueur, ERREUR, "plateau non valide");
@@ -267,7 +267,7 @@ class PartieImpl implements Partie {
 				return creerNouveauMessage(indexReelJoueur, FIN_DE_PARTIE, "");
 			}
 			else {
-				return debutDuTour();
+				return debutDuTour(indexReelJoueur);
 			}
         }
         else {
@@ -276,13 +276,13 @@ class PartieImpl implements Partie {
         }
     }
 
-    private MessagePartie piocher() {
+    private MessagePartie piocher(int indexReelJoueur) {
 		try{
         	joueurEnCours.ajouteJeton(pioche.piocher1Jeton());
-			return debutDuTour();
+			return debutDuTour(indexReelJoueur);
 		}
 		catch(Exception e){
-			return debutDuTour();
+			return debutDuTour(indexReelJoueur);
 		}
     }
 }

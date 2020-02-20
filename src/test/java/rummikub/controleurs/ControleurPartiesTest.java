@@ -197,7 +197,7 @@ public class ControleurPartiesTest {
 	@Test
 	public void demarrerPartieDemarreeFail() throws Exception {
 		MessagePartie messageTest = new MessagePartie(ERREUR,
-			0, 0, "", "", 0, "", "Partie déjà commencée");
+			0, 0, "", "", 0, "", "Nombre de joueurs insuffisant");
 		when(listePartiesMock.getPartie(1)).thenReturn(partieMock);
 		when(partieMock.commencerPartie(1)).thenReturn(messageTest);
 		when(serviceJwtMock.parseToken("aa")).thenReturn(new JoueurConnecte(1,"Vincent",1, ADRESSE_IP_1));
